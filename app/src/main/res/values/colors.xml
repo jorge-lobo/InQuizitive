@@ -1,5 +1,134 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="black">#FF000000</color>
+    <color name="transparent">#00FFFFFF</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="onyx">#3B3936</color>
+    <color name="stormCloud">#486966</color>
+    <color name="dolphin">#889C9B</color>
+    <color name="silver">#B2BEBF</color>
+    <color name="ice">#D5DFE0</color>
+    <color name="dodgerBlue">#3399FF</color>
+    <color name="azure">#0A84FF</color>
+    <color name="lemonLime">#29FF5F</color>
+    <color name="malachite">#1FCF48</color>
+    <color name="fireBrick">#BD2A2E</color>
+    <color name="coralRed">#FF3B30</color>
+
+    <!-- Common -->
+    <color name="background_top">@color/stormCloud</color>
+    <color name="background_bottom">@color/dolphin</color>
+    <color name="display_primary_bg">@color/white</color>
+    <color name="display_secondary_bg">@color/dolphin</color>
+    <color name="icon_primary">@color/white</color>
+    <color name="icon_secondary">@color/onyx</color>
+    <color name="status_bar">@color/stormCloud</color>
+
+    <!-- Text -->
+    <color name="text_primary">@color/white</color>
+    <color name="text_secondary">@color/onyx</color>
+    <color name="text_warning">@color/fireBrick</color>
+
+    <!-- Header -->
+    <color name="header_default_bg">@color/silver</color>
+    <color name="header_warning_bg">@color/fireBrick</color>
+    <color name="header_default_title">@color/white</color>
+    <color name="header_warning_title">@color/coralRed</color>
+    <color name="header_primary_txt">@color/white</color>
+    <color name="header_secondary_txt">@color/stormCloud</color>
+
+    <!-- Timer -->
+    <color name="timer_default_bg">@color/white</color>
+    <color name="timer_default_txt">@color/onyx</color>
+    <color name="timer_warning_bg">@color/coralRed</color>
+    <color name="timer_warning_txt">@color/white</color>
+
+    <!-- Dialogs -->
+    <color name="dialog_default_primary">@color/stormCloud</color>
+    <color name="dialog_default_secondary">@color/dolphin</color>
+    <color name="dialog_success_primary">@color/malachite</color>
+    <color name="dialog_success_secondary">@color/lemonLime</color>
+    <color name="dialog_failure_primary">@color/fireBrick</color>
+    <color name="dialog_failure_secondary">@color/coralRed</color>
+
+    <!-- Buttons -->
+    <color name="button_inactive_bg">@color/stormCloud</color>
+    <color name="button_inactive_txt">@color/dolphin</color>
+    <color name="button_inactive_stroke">@color/dolphin</color>
+    <color name="button_primary_bg">@color/azure</color>
+    <color name="button_primary_txt">@color/white</color>
+    <color name="button_primary_stroke">@color/dodgerBlue</color>
+    <color name="button_secondary_bg">@color/white</color>
+    <color name="button_secondary_txt">@color/onyx</color>
+    <color name="button_secondary_stroke">@color/ice</color>
+    <color name="button_error_bg">@color/fireBrick</color>
+    <color name="button_error_txt">@color/coralRed</color>
+    <color name="button_error_stroke">@color/coralRed</color>
+    <color name="button_text_bg">@color/transparent</color>
+    <color name="button_text_txt">@color/white</color>
+    <color name="button_text_stroke">@color/transparent</color>
+    <color name="button_back_bg">@color/dolphin</color>
+
+    <color name="check_box_unchecked_bg">@color/transparent</color>
+    <color name="check_box_unchecked_stroke">@color/white</color>
+    <color name="check_box_checked_bg">@color/azure</color>
+    <color name="check_box_checked_stroke">@color/dodgerBlue</color>
+
+    <!-- Quiz Options -->
+    <color name="option_default_bg">@color/white</color>
+    <color name="option_default_stroke">@color/ice</color>
+    <color name="option_default_txt">@color/onyx</color>
+    <color name="option_default_box">@color/ice</color>
+    <color name="option_default_letter">@color/white</color>
+    <color name="option_inactive_bg">@color/silver</color>
+    <color name="option_inactive_stroke">@color/ice</color>
+    <color name="option_inactive_txt">@color/stormCloud</color>
+    <color name="option_inactive_box">@color/ice</color>
+    <color name="option_inactive_letter">@color/silver</color>
+    <color name="option_selected_bg">@color/dodgerBlue</color>
+    <color name="option_selected_stroke">@color/azure</color>
+    <color name="option_selected_txt">@color/white</color>
+    <color name="option_selected_box">@color/azure</color>
+    <color name="option_selected_letter">@color/dodgerBlue</color>
+    <color name="option_correct_bg">@color/malachite</color>
+    <color name="option_correct_stroke">@color/lemonLime</color>
+    <color name="option_correct_txt">@color/white</color>
+    <color name="option_correct_box">@color/lemonLime</color>
+    <color name="option_correct_letter">@color/malachite</color>
+    <color name="option_correct_icon">@color/white</color>
+    <color name="option_wrong_bg">@color/fireBrick</color>
+    <color name="option_wrong_stroke">@color/coralRed</color>
+    <color name="option_wrong_txt">@color/white</color>
+    <color name="option_wrong_box">@color/coralRed</color>
+    <color name="option_wrong_letter">@color/fireBrick</color>
+    <color name="option_wrong_icon">@color/white</color>
+
+    <!-- Auth Input -->
+    <color name="input_bg">@color/white</color>
+    <color name="input_hint">@color/dolphin</color>
+    <color name="input_txt">@color/onyx</color>
+    <color name="input_icon_box">@color/ice</color>
+
+    <color name="button_password_view_inactive_bg">@color/ice</color>
+    <color name="button_password_view_active_bg">@color/stormCloud</color>
+
+    <!-- Progress Bar -->
+    <color name="progress_bar_bg">@color/white</color>
+    <color name="progress_bar_stroke">@color/dolphin</color>
+    <color name="progress_bar_progress">@color/azure</color>
+
+    <!-- Avatar -->
+    <color name="avatar_default_bg">@color/white</color>
+    <color name="avatar_default_stroke">@color/silver</color>
+    <color name="avatar_selected_bg">@color/transparent</color>
+    <color name="avatar_selected_stroke">@color/azure</color>
+
+    <!-- Help Cards -->
+    <color name="help_card_bg">@color/stormCloud</color>
+    <color name="help_card_txt">@color/dolphin</color>
+
+    <!-- New Record -->
+    <color name="new_record_bg">@color/onyx</color>
+    <color name="new_record_txt">@color/dodgerBlue</color>
+
 </resources>

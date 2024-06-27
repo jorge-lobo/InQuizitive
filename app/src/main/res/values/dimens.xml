@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Common -->
+    <dimen name="height_primary">48dp</dimen>
+    <dimen name="height_secondary">32dp</dimen>
+    <dimen name="small_box_container">40dp</dimen>
+    <dimen name="progress_bar_height">8dp</dimen>
+
+    <!-- Margins -->
+    <dimen name="margin_big">32dp</dimen>
+    <dimen name="margin_large">24dp</dimen>
+    <dimen name="margin_medium">16dp</dimen>
+    <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_extra_small">4dp</dimen>
+
+    <!-- Corners -->
+    <dimen name="corner_large">16dp</dimen>
+    <dimen name="corner_medium">8dp</dimen>
+    <dimen name="corner_small">4dp</dimen>
+    <dimen name="corner_extra_small">2dp</dimen>
+
+    <!-- Headers -->
+    <dimen name="header_narrow">64dp</dimen>
+    <dimen name="header_small">96dp</dimen>
+    <dimen name="header_medium">144dp</dimen>
+    <dimen name="header_large">240dp</dimen>
+
+    <!-- Dialog -->
+    <dimen name="dialog_height">208dp</dimen>
+    <dimen name="dialog_icon_box">64dp</dimen>
+
+    <!-- Display -->
+    <dimen name="display_width">80dp</dimen>
+    <dimen name="display_height">32dp</dimen>
+
+    <!-- Help Card -->
+    <dimen name="help_card_width">96dp</dimen>
+    <dimen name="help_card_height">64dp</dimen>
+    <dimen name="help_card_display_width">48dp</dimen>
+    <dimen name="help_card_display_height">24dp</dimen>
+
+    <!-- Buttons -->
+    <dimen name="button_back_width">64dp</dimen>
+    <dimen name="button_help_width">80dp</dimen>
+    <dimen name="switch_button_width">96dp</dimen>
+    <dimen name="check_box">16dp</dimen>
+
+    <!-- Icons -->
+    <dimen name="icon_button">24dp</dimen>
+    <dimen name="icon_dialog">32dp</dimen>
+    <dimen name="icon_button_back">32dp</dimen>
+    <dimen name="icon_display">16dp</dimen>
+    <dimen name="icon_help_card">24dp</dimen>
+    <dimen name="icon_input">24dp</dimen>
+    <dimen name="icon_option">24dp</dimen>
+
+    <!-- Avatar -->
+    <dimen name="avatar_large">64dp</dimen>
+    <dimen name="avatar_small">32dp</dimen>
+
+    <!-- Images -->
+    <dimen name="pic_home_default">160dp</dimen>
+    <dimen name="pic_home_warning">128dp</dimen>
+    <dimen name="pic_category">64dp</dimen>
+    <dimen name="pic_coins">16dp</dimen>
+
+    <!-- Text -->
+    <dimen name="txt_title">48sp</dimen>
+    <dimen name="txt_category">32sp</dimen>
+    <dimen name="txt_new_record">32sp</dimen>
+    <dimen name="txt_primary_text">24sp</dimen>
+    <dimen name="txt_small_button">20sp</dimen>
+    <dimen name="txt_secondary_text">16sp</dimen>
+    <dimen name="txt_progress">12sp</dimen>
+    <dimen name="txt_coins">12sp</dimen>
+
+
+</resources>

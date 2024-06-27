@@ -1,3 +1,215 @@
 <resources>
     <string name="app_name">InQuizitive</string>
+
+    <!-- Buttons -->
+    <string name="button_home">Home</string>
+    <string name="button_login">Login</string>
+    <string name="button_logout">Logout</string>
+    <string name="button_sign_up">Sign Up</string>
+    <string name="button_leaderboards">Leaderboards</string>
+    <string name="button_play">Play Quiz</string>
+    <string name="button_play_again">Play Again</string>
+    <string name="button_next">Next</string>
+    <string name="button_finish">Finish</string>
+    <string name="button_enter">Enter</string>
+    <string name="button_yes">Yes</string>
+    <string name="button_cancel">Cancel</string>
+    <string name="button_create_account">Create Account</string>
+    <string name="button_female">Female</string>
+    <string name="button_male">Male</string>
+    <string name="button_update_avatar">Update Avatar</string>
+    <string name="button_help">Help</string>
+
+    <!-- Categories -->
+    <string name="film_and_tv">Film and TV</string>
+    <string name="geography">Geography</string>
+    <string name="society_and_culture">Society and Culture</string>
+    <string name="food_and_drink">Food and Drink</string>
+    <string name="arts_and_literature">Arts and Literature</string>
+    <string name="general_knowledge">General Knowledge</string>
+    <string name="history">History</string>
+    <string name="science">Science</string>
+    <string name="sport_and_leisure">Sport and Leisure</string>
+    <string name="music">Music</string>
+
+    <!-- Difficulties -->
+    <string name="level_easy">Easy</string>
+    <string name="level_medium">Medium</string>
+    <string name="level_hard">Hard</string>
+
+    <!-- Headers -->
+    <string name="header_label_total_quizzes">Quizzes Played</string>
+    <string name="header_label_total_points">Total Points</string>
+    <string name="header_label_personal_best">Personal Best</string>
+    <string name="header_title_login">Welcome back!</string>
+    <string name="header_title_sign_up">New user</string>
+    <string name="header_message_login">Please enter your account details</string>
+    <string name="header_message_avatar">Click on the image to define your avatar</string>
+
+    <!-- Dialogs -->
+    <string name="dialog_success_message">New user created successfully!</string>
+    <string name="dialog_failure_message">Oops! Something wrong happened.</string>
+    <string name="dialog_logout_title">Logout</string>
+    <string name="dialog_logout_message">Are you sure you want to logout?</string>
+
+    <!-- Home -->
+    <string name="home_message">Test your knowledge in this fast-paced challenge, answering each question correctly before time run over.</string>
+    <string name="internet_connection">No Internet Connection\nIt looks like your device is not connected to the internet. This application requires an active internet connection to access the API and start the quiz.\nPlease check your connection and try again.</string>
+
+    <!-- Auth -->
+    <string name="auth_username">Username</string>
+    <string name="auth_password">Password</string>
+    <string name="auth_logged">Remember me</string>
+    <string name="auth_hint_username_sign_up">Create username</string>
+    <string name="auth_hint_password_sign_up">Create a password</string>
+    <string name="auth_hint_confirm_password_sign_up">Confirm your password</string>
+    <string name="auth_question_login">Are you a new user?</string>
+    <string name="auth_question_sign_up">Already have an account?</string>
+
+    <!-- User Profile -->
+    <string name="profile_title">Personal Stats</string>
+    <string name="profile_label_total_quizzes">Quizzes played</string>
+    <string name="profile_label_correct_answers">Correct answers</string>
+    <string name="profile_label_best_result">Best result</string>
+    <string name="profile_label_total_points">Points earned</string>
+    <string name="profile_label_total_coins">Coins earned</string>
+    <string name="profile_label_spent_coins">Coins spent</string>
+    <string name="profile_label_spent_time">time spent</string>
+
+    <!-- Help Cards -->
+    <string name="help_card_dismiss_one">- 1 option</string>
+    <string name="help_card_dismiss_two">50/50</string>
+
+    <!-- Results -->
+    <string name="results_title">Results</string>
+    <string name="results_new_record">New Record !!</string>
+    <string name="results_new_personal_best">New Personal Best !!</string>
+    <string name="results_label_answers">Correct answers:</string>
+    <string name="results_label_time">Time spent:</string>
+    <string name="results_label_coins">Coins earned:</string>
+    <string name="results_label_points">Points earned:</string>
+
+    <!-- Correct Answers Messages -->
+    <string name="correct_answers_message_0_1">Oops! Not a single one right. It can only get better from here!</string>
+    <string name="correct_answers_message_0_2">Zero for ten! Maybe try your luck in a game of dice?</string>
+    <string name="correct_answers_message_0_3">No correct answers? Time to brush up on those trivia skills!</string>
+    <string name="correct_answers_message_0_4">0 out of 10 – Tough luck! Tomorrow’s another day.</string>
+    <string name="correct_answers_message_0_5">None correct. But hey, even geniuses have off days!</string>
+    <string name="correct_answers_message_0_6">Zero answers right – Let\'s just call it a warm-up round!</string>
+    <string name="correct_answers_message_1_1">Well, at least you got one! Keep going, you\'ll get there!</string>
+    <string name="correct_answers_message_1_2">One out of ten! You know something, at least!</string>
+    <string name="correct_answers_message_1_3">1 right answer! Every expert starts somewhere.</string>
+    <string name="correct_answers_message_1_4">One correct! That’s a start, keep it up!</string>
+    <string name="correct_answers_message_1_5">1 out of 10 – A beginning to build on!</string>
+    <string name="correct_answers_message_1_6">One right! Not great, but better than none!</string>
+    <string name="correct_answers_message_2_1">Two right! That\'s twice as good as zero!</string>
+    <string name="correct_answers_message_2_2">2 correct! Slow and steady wins the race!</string>
+    <string name="correct_answers_message_2_3">Two out of ten – better than none, keep it up!</string>
+    <string name="correct_answers_message_2_4">Two answers right! Double the fun next time!</string>
+    <string name="correct_answers_message_2_5">2 out of 10 – A small step for your brain, a giant leap for trivia-kind!</string>
+    <string name="correct_answers_message_2_6">Two right answers – You\'re finding your groove!</string>
+    <string name="correct_answers_message_3_1">Three correct! Looks like you\'re warming up!</string>
+    <string name="correct_answers_message_3_2">3 right answers! You\'re getting the hang of it!</string>
+    <string name="correct_answers_message_3_3">Three correct! Not too shabby, keep going!</string>
+    <string name="correct_answers_message_3_4">Three out of ten – on the way to greatness!</string>
+    <string name="correct_answers_message_3_5">3 right – A trilogy of trivia triumphs!</string>
+    <string name="correct_answers_message_3_6">Three correct! That\'s a hat-trick of knowledge!</string>
+    <string name="correct_answers_message_4_1">Four correct! You\'re halfway to being halfway there!</string>
+    <string name="correct_answers_message_4_2">4 right! You\'re picking up speed!</string>
+    <string name="correct_answers_message_4_3">Four out of ten – you\'ve got potential!</string>
+    <string name="correct_answers_message_4_4">Four correct answers – halfway to halfway!</string>
+    <string name="correct_answers_message_4_5">4 out of 10 – Things are looking up!</string>
+    <string name="correct_answers_message_4_6">Four right – Steadily climbing the trivia ladder!</string>
+    <string name="correct_answers_message_5_1">Five right! Halfway there, good job!</string>
+    <string name="correct_answers_message_5_2">5 out of 10! You\'re at the midpoint!</string>
+    <string name="correct_answers_message_5_3">Halfway correct! You\'re 50% awesome!</string>
+    <string name="correct_answers_message_5_4">Five out of ten – balanced and poised for more!</string>
+    <string name="correct_answers_message_5_5">5 right – You\'ve hit the halfway milestone!</string>
+    <string name="correct_answers_message_5_6">Five correct – You\'re at the tipping point!</string>
+    <string name="correct_answers_message_6_1">Six correct! Over the halfway mark, well done!</string>
+    <string name="correct_answers_message_6_2">6 right answers! You\'re on a roll!</string>
+    <string name="correct_answers_message_6_3">Six out of ten – impressive!</string>
+    <string name="correct_answers_message_6_4">Six correct! You\'re on the right path!</string>
+    <string name="correct_answers_message_6_5">6 out of 10 – You\'re getting close to perfection!</string>
+    <string name="correct_answers_message_6_6">Six right – You\'re more than halfway brilliant!</string>
+    <string name="correct_answers_message_7_1">Seven right! You\'re showing some serious knowledge!</string>
+    <string name="correct_answers_message_7_2">7 out of 10! Almost a trivia master!</string>
+    <string name="correct_answers_message_7_3">Seven correct! You\'re in the top tier now!</string>
+    <string name="correct_answers_message_7_4">Seven out of ten – Great job!</string>
+    <string name="correct_answers_message_7_5">7 right answers – You\'re nearly at the summit!</string>
+    <string name="correct_answers_message_7_6">Seven correct – You\'re a trivia force to be reckoned with!</string>
+    <string name="correct_answers_message_8_1">Eight right! Almost perfect, great job!</string>
+    <string name="correct_answers_message_8_2">8 correct answers! You\'re just two away from perfection!</string>
+    <string name="correct_answers_message_8_3">Eight out of ten – you\'re on fire!</string>
+    <string name="correct_answers_message_8_4">Eight correct! Fantastic effort!</string>
+    <string name="correct_answers_message_8_5">8 out of 10 – You\'re knocking it out of the park!</string>
+    <string name="correct_answers_message_8_6">Eight right – A stellar performance!</string>
+    <string name="correct_answers_message_9_1">Nine correct! So close to perfect, fantastic!</string>
+    <string name="correct_answers_message_9_2">9 out of 10! Nearly a flawless round!</string>
+    <string name="correct_answers_message_9_3">Nine correct! Just one step away from genius!</string>
+    <string name="correct_answers_message_9_4">Nine out of ten – Outstanding work!</string>
+    <string name="correct_answers_message_9_5">9 right answers – Almost perfect, you rock!</string>
+    <string name="correct_answers_message_9_6">Nine correct – You\'re at the pinnacle of quizzing!</string>
+    <string name="correct_answers_message_10_1">Perfect score! You\'re a trivia champion!</string>
+    <string name="correct_answers_message_10_2">10 out of 10! Absolutely flawless, amazing!</string>
+    <string name="correct_answers_message_10_3">Perfect! You\'re the quiz master now!</string>
+    <string name="correct_answers_message_10_4">A perfect ten! You\'ve got all the answers!</string>
+    <string name="correct_answers_message_10_5">10 right answers – You\'re a trivia superstar!</string>
+    <string name="correct_answers_message_10_6">Perfect score – You\'re the guru of quizzes!</string>
+    <string name="correct_answers_message_error">Error: Invalid number of correct answers</string>
+
+    <!-- Time Spent Messages -->
+    <string name="time_response_message_1_20_1">Blazing fast! Did you have the answers before the questions?</string>
+    <string name="time_response_message_1_20_2">Speedy Gonzalez would be proud!</string>
+    <string name="time_response_message_1_20_3">Are you sure you\'re not a time traveler? That was quick!</string>
+    <string name="time_response_message_1_20_4">Wow! Did you even have time to read the questions?</string>
+    <string name="time_response_message_1_20_5">You’re faster than a quiz in fast-forward mode!</string>
+    <string name="time_response_message_21_40_1">Quick draw! Are you part quizzer, part superhero?</string>
+    <string name="time_response_message_21_40_2">Quick thinking! You must have caffeine in your veins!</string>
+    <string name="time_response_message_21_40_3">You raced through that! Did you see the speed limit?</string>
+    <string name="time_response_message_21_40_4">Nicely done! You answered faster than I could blink!</string>
+    <string name="time_response_message_21_40_5">Swift and sure! Your brain must be on turbo mode!</string>
+    <string name="time_response_message_41_60_1">Balanced approach! You’re a quiz ninja in disguise.</string>
+    <string name="time_response_message_41_60_2">You nailed it with just the right amount of speed!</string>
+    <string name="time_response_message_41_60_3">Perfect pacing! You’re like a wise old quiz master.</string>
+    <string name="time_response_message_41_60_4">Steady as she goes! You’ve got the quiz rhythm down.</string>
+    <string name="time_response_message_41_60_5">Mid-speed maestro! You\'ve got the timing just right.</string>
+    <string name="time_response_message_61_80_1">Taking your time, I see! Did you stop for a snack break?</string>
+    <string name="time_response_message_61_80_2">Thinking it through, huh? Did you write a novel while you were at it?</string>
+    <string name="time_response_message_61_80_3">Patience is a virtue! Did you use a sundial for timing?</string>
+    <string name="time_response_message_61_80_4">Slow and steady! Did you take a nap in between questions?</string>
+    <string name="time_response_message_61_80_5">Almost there! Are you consulting the oracle for each answer?</string>
+    <string name="time_response_message_81_100_1">Well, you took your time. Was that a marathon or a quiz?</string>
+    <string name="time_response_message_81_100_2">Finally done! Were you writing an essay with each answer?</string>
+    <string name="time_response_message_81_100_3">Time\'s up! Did you need to consult the library for those answers?</string>
+    <string name="time_response_message_81_100_4">Slow and steady wins… eventually! Are you sure the clock wasn\'t broken?</string>
+    <string name="time_response_message_81_100_5">Just made it! Did you age a bit while pondering those answers?</string>
+    <string name="time_response_message_error">Error: Invalid time percentage used</string>
+
+    <!-- Description Images -->
+    <string name="description_logo">App Logo</string>
+    <string name="description_avatar">Avatar</string>
+    <string name="description_icon">Icon image</string>
+    <string name="description_button_icon">Icon button</string>
+    <string name="description_image_home">Home Image</string>
+    <string name="description_image_warning">Warning Image</string>
+    <string name="description_image_coins">Coins Image</string>
+    <string name="description_image_category">Category Image</string>
+
+    <!-- Server error -->
+    <string name="dialog_error_title">Error</string>
+    <string name="dialog_error_message_unknown">Internal error, contact the support</string>
+    <string name="dialog_button_okay">OK</string>
+
+    <string name="error_generic_message">Try the operation again!</string>
+    <string name="error_network_error">There is no connection to the server. Check if the wi-fi is active!</string>
+    <string name="error_network_server_timeout">Server timeout, try later!</string>
+    <string name="error_server_internal">Internal error, contact the support!</string>
+    <string name="error_invalid_url">Invalid URL</string>
+
+    <!-- Error Messages -->
+    <string name="error_generic">An error has occurred, contact the administrator.</string>
+    <string name="error_internal_server">An internal server error has occurred, contact the administrator.</string>
+    <string name="error_session_timed_out">Your session has expired, please start a new one.</string>
+
 </resources>
