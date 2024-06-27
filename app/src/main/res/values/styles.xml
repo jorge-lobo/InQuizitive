@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="buttonPrimary">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/height_primary</item>
+        <item name="android:background">@drawable/shape_button</item>
+        <item name="android:backgroundTint">@color/button_primary_bg</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:fontFamily">@font/roboto_cn_bold</item>
+        <item name="android:textSize">@dimen/txt_primary_text</item>
+        <item name="android:textColor">@color/button_primary_txt</item>
+    </style>
+
+    <style name="buttonSecondary">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/height_primary</item>
+        <item name="android:background">@drawable/shape_button</item>
+        <item name="android:backgroundTint">@color/button_secondary_bg</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:fontFamily">@font/roboto_cn_bold</item>
+        <item name="android:textSize">@dimen/txt_primary_text</item>
+        <item name="android:textColor">@color/button_secondary_txt</item>
+    </style>
+    
+    <style name="textPrimary">
+        <item name="android:fontFamily">@font/agency_fb_bold</item>
+        <item name="android:textColor">@color/text_primary</item>
+    </style>
+</resources>

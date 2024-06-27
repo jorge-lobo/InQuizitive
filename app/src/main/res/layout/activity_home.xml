@@ -1,19 +1,112 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.home.HomeActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Hello World!"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background_gradient"
+        tools:context=".ui.home.HomeActivity">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <FrameLayout
+            android:id="@+id/home_fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/header_large"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <LinearLayout
+            android:id="@+id/game_description_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_big"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/margin_medium"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@id/btn_play"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:id="@+id/iv_game_description"
+                android:layout_width="@dimen/pic_home_default"
+                android:layout_height="@dimen/pic_home_default"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/margin_huge"
+                android:contentDescription="@string/description_image_home"
+                android:src="@drawable/ic_pic_sand_clock" />
+
+            <TextView
+                android:id="@+id/tv_game_description"
+                style="@style/textPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="@string/home_message"
+                android:textSize="@dimen/txt_secondary_text" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/internet_connection_warning_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_big"
+            android:orientation="vertical"
+            android:paddingHorizontal="@dimen/margin_medium"
+            android:visibility="gone"
+            app:layout_constraintBottom_toTopOf="@id/btn_play"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="UseCompoundDrawables">
+
+            <ImageView
+                android:id="@+id/iv_warning"
+                android:layout_width="@dimen/pic_home_warning"
+                android:layout_height="@dimen/pic_home_warning"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginBottom="@dimen/margin_huge"
+                android:contentDescription="@string/description_image_home"
+                android:src="@drawable/ic_pic_warning" />
+
+            <TextView
+                android:id="@+id/tv_internet_connection_warning"
+                style="@style/textPrimary"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:text="@string/internet_connection"
+                android:textSize="@dimen/txt_secondary_text" />
+
+        </LinearLayout>
+
+
+        <Button
+            android:id="@+id/btn_play"
+            style="@style/buttonPrimary"
+            android:layout_marginHorizontal="@dimen/margin_medium"
+            android:layout_marginBottom="@dimen/margin_medium"
+            android:enabled="true"
+            android:text="@string/button_play"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@id/btn_leaderboards"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:visibility="visible" />
+
+        <Button
+            android:id="@+id/btn_leaderboards"
+            style="@style/buttonSecondary"
+            android:layout_marginHorizontal="@dimen/margin_medium"
+            android:layout_marginBottom="@dimen/margin_big"
+            android:text="@string/button_leaderboards"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

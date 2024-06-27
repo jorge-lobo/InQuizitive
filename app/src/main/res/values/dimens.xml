@@ -8,6 +8,7 @@
     <dimen name="progress_bar_height">8dp</dimen>
 
     <!-- Margins -->
+    <dimen name="margin_huge">48dp</dimen>
     <dimen name="margin_big">32dp</dimen>
     <dimen name="margin_large">24dp</dimen>
     <dimen name="margin_medium">16dp</dimen>
