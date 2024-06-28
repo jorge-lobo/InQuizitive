@@ -211,5 +211,7 @@
     <string name="error_generic">An error has occurred, contact the administrator.</string>
     <string name="error_internal_server">An internal server error has occurred, contact the administrator.</string>
     <string name="error_session_timed_out">Your session has expired, please start a new one.</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

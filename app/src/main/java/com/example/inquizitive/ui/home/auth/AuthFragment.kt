@@ -1,31 +1,51 @@
 package com.example.inquizitive.ui.home.auth
 
-import androidx.fragment.app.viewModels
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.Fragment
 import com.example.inquizitive.R
+import com.example.inquizitive.databinding.FragmentAuthBinding
+import com.example.inquizitive.ui.auth.AuthActivity
+import com.example.inquizitive.utils.Utils
 
 class AuthFragment : Fragment() {
 
-    companion object {
-        fun newInstance() = AuthFragment()
-    }
-
-    private val viewModel: AuthViewModel by viewModels()
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        // TODO: Use the ViewModel
-    }
+    private lateinit var binding: FragmentAuthBinding
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        return inflater.inflate(R.layout.fragment_auth, container, false)
+        binding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.fragment_auth,
+            container,
+            false
+        )
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        setupListeners()
+    }
+
+    private fun setupListeners() {
+        binding.apply {
+            btnHomeLogin.setOnClickListener {
+                Utils.startActivity(requireContext(), AuthActivity::class.java)
+                Utils.showToast(requireContext(), "Login")
+            }
+
+            btnHomeSignUp.setOnClickListener {
+                Utils.startActivity(requireContext(), AuthActivity::class.java)
+                Utils.showToast(requireContext(), "Sign up")
+            }
+        }
     }
 }
