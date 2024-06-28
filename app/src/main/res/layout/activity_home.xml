@@ -42,7 +42,7 @@
 
             <TextView
                 android:id="@+id/tv_game_description"
-                style="@style/textPrimary"
+                style="@style/textPrimaryLight"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
@@ -75,7 +75,7 @@
 
             <TextView
                 android:id="@+id/tv_internet_connection_warning"
-                style="@style/textPrimary"
+                style="@style/textPrimaryLight"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"

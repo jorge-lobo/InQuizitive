@@ -1,6 +1,7 @@
 package com.example.inquizitive.ui.common
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import com.example.inquizitive.MyApplication
@@ -50,5 +51,15 @@ abstract class BaseViewModel(application: Application) : AndroidViewModel(applic
 
     override fun onSessionExpired() {
         sessionState.value = AuthenticationState.UNAUTHENTICATED
+    }
+
+    protected fun handleError(message: String?, validationErrors: Map<String, ArrayList<String>>?) {
+        // Common error handling logic
+        // You can customize this method based on your application's needs
+        // For example, you might want to show a generic error message or handle specific errors differently.
+        // You can also use LiveData to notify the UI about the error.
+
+        // Log the error for debugging purposes
+        Log.e("BaseViewModel", "Error: $message")
     }
 }

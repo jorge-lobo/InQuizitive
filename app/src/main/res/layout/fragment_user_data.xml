@@ -1,14 +1,199 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.home.userData.UserDataFragment">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.example.inquizitive.ui.home.userData.UserDataViewModel" />
+
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="@dimen/header_large"
+        android:background="@drawable/background_common_header"
+        android:paddingHorizontal="@dimen/margin_medium"
+        android:paddingTop="@dimen/margin_medium"
+        android:paddingBottom="@dimen/margin_big"
+        tools:context=".ui.home.userData.UserDataFragment">
 
-</FrameLayout>
+        <ImageButton
+            android:id="@+id/btn_icon_user"
+            android:layout_width="@dimen/icon_button"
+            android:layout_height="@dimen/icon_button"
+            android:background="@color/transparent"
+            android:contentDescription="@string/description_button_icon"
+            android:src="@drawable/ic_svg_user_profile"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/icon_primary" />
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/cv_user_data_avatar_container"
+            android:layout_width="@dimen/avatar_large"
+            android:layout_height="@dimen/avatar_large"
+            app:cardCornerRadius="@dimen/corner_medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <include
+                android:id="@+id/image_avatar"
+                layout="@layout/common_avatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </androidx.cardview.widget.CardView>
+
+        <include
+            android:id="@+id/user_coins_display"
+            layout="@layout/common_coins_display"
+            android:layout_width="@dimen/display_width"
+            android:layout_height="@dimen/display_height"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_username_message"
+            style="@style/textSecondaryLight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/margin_small"
+            android:textSize="@dimen/txt_primary_text"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/cv_user_data_avatar_container"
+            tools:text="Hello, username!" />
+
+        <LinearLayout
+            android:id="@+id/ll_user_stats_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_medium"
+            android:baselineAligned="false"
+            android:orientation="horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+            <RelativeLayout
+                android:id="@+id/rl_quizzes_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/tv_label_quizzes"
+                    style="@style/textPrimaryLight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:gravity="center"
+                    android:text="@string/header_label_total_quizzes"
+                    android:textAllCaps="true"
+                    android:textSize="@dimen/txt_secondary_text" />
+
+                <TextView
+                    android:id="@+id/tv_input_quizzes"
+                    style="@style/textPrimaryLight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_label_quizzes"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:gravity="center"
+                    android:textSize="@dimen/txt_secondary_text"
+                    tools:text="13" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="@dimen/margin_medium"
+                android:layout_height="match_parent" />
+
+            <RelativeLayout
+                android:id="@+id/rl_points_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/tv_label_points"
+                    style="@style/textPrimaryLight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:gravity="center"
+                    android:text="@string/header_label_total_points"
+                    android:textAllCaps="true"
+                    android:textSize="@dimen/txt_secondary_text" />
+
+                <TextView
+                    android:id="@+id/tv_input_points"
+                    style="@style/textPrimaryLight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_label_points"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:gravity="center"
+                    android:textSize="@dimen/txt_secondary_text"
+                    tools:text="12010" />
+
+            </RelativeLayout>
+
+            <View
+                android:layout_width="@dimen/margin_medium"
+                android:layout_height="match_parent" />
+
+            <RelativeLayout
+                android:id="@+id/rl_personal_best_container"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <TextView
+                    android:id="@+id/tv_label_personal_best"
+                    style="@style/textPrimaryLight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentTop="true"
+                    android:layout_alignParentEnd="true"
+                    android:gravity="center"
+                    android:text="@string/header_label_personal_best"
+                    android:textAllCaps="true"
+                    android:textSize="@dimen/txt_secondary_text" />
+
+                <TextView
+                    android:id="@+id/tv_input_personal_best"
+                    style="@style/textPrimaryLight"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_label_personal_best"
+                    android:layout_alignParentStart="true"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="@dimen/margin_medium"
+                    android:gravity="center"
+                    android:textSize="@dimen/txt_secondary_text"
+                    tools:text="930" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

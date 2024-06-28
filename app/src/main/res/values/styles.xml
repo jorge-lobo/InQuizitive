@@ -25,8 +25,24 @@
         <item name="android:textColor">@color/button_secondary_txt</item>
     </style>
     
-    <style name="textPrimary">
+    <style name="textPrimaryLight">
         <item name="android:fontFamily">@font/agency_fb_bold</item>
         <item name="android:textColor">@color/text_primary</item>
     </style>
+
+    <style name="textPrimaryDark">
+        <item name="android:fontFamily">@font/agency_fb_bold</item>
+        <item name="android:textColor">@color/text_secondary</item>
+    </style>
+
+    <style name="textSecondaryLight">
+        <item name="android:fontFamily">@font/roboto_cn_bold</item>
+        <item name="android:textColor">@color/text_primary</item>
+    </style>
+
+    <style name="textSecondaryDark">
+        <item name="android:fontFamily">@font/roboto_cn_bold</item>
+        <item name="android:textColor">@color/text_secondary</item>
+    </style>
+
 </resources>

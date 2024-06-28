@@ -1,30 +1,30 @@
 package com.example.inquizitive.ui.common
 
 import android.content.Context
-import android.os.Bundle
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import com.example.inquizitive.R
 
 abstract class BaseFragment : Fragment() {
-    protected lateinit var mViewModel: BaseViewModel
+    private lateinit var mViewModel: BaseViewModel
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+    protected fun setupBaseViewModel(viewModel: BaseViewModel) {
+        mViewModel = viewModel
+        observeErrorMessage()
+    }
 
+    private fun observeErrorMessage() {
         // Show error message
         context?.let { observerContext ->
             mViewModel.errorMessage.observe(
-                viewLifecycleOwner,
-                Observer { message ->
-                    if (message != null){
-                        displayErrorMessage(observerContext, message)
-                    } else {
-                        displayErrorMessage(observerContext, getString(R.string.error_internal_server))
-                    }
+                viewLifecycleOwner
+            ) { message ->
+                if (message != null) {
+                    displayErrorMessage(observerContext, message)
+                } else {
+                    displayErrorMessage(observerContext, getString(R.string.error_internal_server))
                 }
-            )
+            }
         }
     }
 
