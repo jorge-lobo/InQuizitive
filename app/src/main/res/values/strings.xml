@@ -65,6 +65,7 @@
     <string name="auth_hint_confirm_password_sign_up">Confirm your password</string>
     <string name="auth_question_login">Are you a new user?</string>
     <string name="auth_question_sign_up">Already have an account?</string>
+    <string name="auth_warning_avatar_missing">You must define your avatar first!</string>
 
     <!-- User Profile -->
     <string name="profile_title">Personal Stats</string>

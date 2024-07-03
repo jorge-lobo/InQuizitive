@@ -1,10 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ui.auth.AuthActivity">
+    xmlns:tools="http://schemas.android.com/tools">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.example.inquizitive.ui.auth.AuthViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background_gradient"
+        tools:context=".ui.auth.AuthActivity">
+
+        <FrameLayout
+            android:id="@+id/fl_auth_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_auth_question"
+            style="@style/textPrimaryLight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:gravity="start"
+            android:textSize="@dimen/txt_secondary_text"
+            app:layout_constraintBottom_toTopOf="@id/btn_auth_alternative"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="@string/auth_question_login" />
+
+        <Button
+            android:id="@+id/btn_auth_alternative"
+            style="@style/buttonTransparent"
+            android:layout_marginHorizontal="@dimen/margin_medium"
+            android:layout_marginBottom="@dimen/margin_large"
+            app:layout_constraintBottom_toTopOf="@id/btn_authenticate"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="@string/button_sign_up" />
+
+        <TextView
+            android:id="@+id/tv_warning_avatar_missing"
+            style="@style/textPrimaryWarning"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:gravity="start"
+            android:textSize="@dimen/txt_secondary_text"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@id/btn_authenticate"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="@string/auth_warning_avatar_missing"
+            tools:visibility="visible" />
+
+        <Button
+            android:id="@+id/btn_authenticate"
+            style="@style/buttonPrimary"
+            android:layout_marginHorizontal="@dimen/margin_medium"
+            android:layout_marginBottom="@dimen/margin_medium"
+            android:enabled="false"
+            app:layout_constraintBottom_toTopOf="@id/btn_auth_cancel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="@string/button_enter" />
+
+        <Button
+            android:id="@+id/btn_auth_cancel"
+            style="@style/buttonSecondary"
+            android:layout_marginHorizontal="@dimen/margin_medium"
+            android:layout_marginBottom="@dimen/margin_big"
+            android:text="@string/button_cancel"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

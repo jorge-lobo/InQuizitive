@@ -105,6 +105,7 @@
 
     <!-- Auth Input -->
     <color name="input_bg">@color/white</color>
+    <color name="input_stroke">@color/ice</color>
     <color name="input_hint">@color/dolphin</color>
     <color name="input_txt">@color/onyx</color>
     <color name="input_icon_box">@color/ice</color>

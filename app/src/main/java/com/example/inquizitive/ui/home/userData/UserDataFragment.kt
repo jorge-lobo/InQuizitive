@@ -11,7 +11,6 @@ import com.example.inquizitive.databinding.FragmentUserDataBinding
 import com.example.inquizitive.ui.common.BaseFragment
 import com.example.inquizitive.utils.Utils
 
-
 class UserDataFragment : BaseFragment() {
     private lateinit var binding: FragmentUserDataBinding
     private val mUserDataViewModel by lazy { ViewModelProvider(this)[UserDataViewModel::class.java] }

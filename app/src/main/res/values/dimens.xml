@@ -68,6 +68,7 @@
 
     <!-- Text -->
     <dimen name="txt_title">48sp</dimen>
+    <dimen name="txt_char">40sp</dimen>
     <dimen name="txt_category">32sp</dimen>
     <dimen name="txt_new_record">32sp</dimen>
     <dimen name="txt_primary_text">24sp</dimen>

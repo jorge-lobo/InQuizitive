@@ -1,11 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+    <!-- Buttons -->
     <style name="buttonPrimary">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/height_primary</item>
         <item name="android:background">@drawable/shape_button</item>
         <item name="android:backgroundTint">@color/button_primary_bg</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="strokeColor">@color/button_primary_stroke</item>
         <item name="android:gravity">center</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:fontFamily">@font/roboto_cn_bold</item>
@@ -18,13 +21,36 @@
         <item name="android:layout_height">@dimen/height_primary</item>
         <item name="android:background">@drawable/shape_button</item>
         <item name="android:backgroundTint">@color/button_secondary_bg</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="strokeColor">@color/button_secondary_stroke</item>
         <item name="android:gravity">center</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:fontFamily">@font/roboto_cn_bold</item>
         <item name="android:textSize">@dimen/txt_primary_text</item>
         <item name="android:textColor">@color/button_secondary_txt</item>
     </style>
-    
+
+    <style name="buttonTransparent">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/height_primary</item>
+        <item name="android:background">@drawable/shape_button</item>
+        <item name="android:backgroundTint">@color/transparent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:fontFamily">@font/roboto_cn_bold</item>
+        <item name="android:textSize">@dimen/txt_primary_text</item>
+        <item name="android:textColor">@color/button_primary_txt</item>
+    </style>
+
+    <!-- Input -->
+    <style name="form_input_text" parent="Widget.AppCompat.EditText">
+        <item name="textInputStyle">@style/textPrimaryLight</item>
+        <item name="android:textColorHint">@color/input_hint</item>
+        <item name="android:textSize">@dimen/txt_secondary_text</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <!-- Text -->
     <style name="textPrimaryLight">
         <item name="android:fontFamily">@font/agency_fb_bold</item>
         <item name="android:textColor">@color/text_primary</item>
@@ -35,6 +61,16 @@
         <item name="android:textColor">@color/text_secondary</item>
     </style>
 
+    <style name="textPrimaryHint">
+        <item name="android:fontFamily">@font/agency_fb_bold</item>
+        <item name="android:textColor">@color/input_hint</item>
+    </style>
+
+    <style name="textPrimaryWarning">
+        <item name="android:fontFamily">@font/agency_fb_bold</item>
+        <item name="android:textColor">@color/text_warning</item>
+    </style>
+
     <style name="textSecondaryLight">
         <item name="android:fontFamily">@font/roboto_cn_bold</item>
         <item name="android:textColor">@color/text_primary</item>
@@ -43,6 +79,10 @@
     <style name="textSecondaryDark">
         <item name="android:fontFamily">@font/roboto_cn_bold</item>
         <item name="android:textColor">@color/text_secondary</item>
+    </style>
+
+    <style name="loggedCheckBox">
+        <item name="colorOnSurface">@color/check_box_checked_bg</item>
     </style>
 
 </resources>
