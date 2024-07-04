@@ -44,9 +44,10 @@
 
     <!-- Input -->
     <style name="form_input_text" parent="Widget.AppCompat.EditText">
-        <item name="textInputStyle">@style/textPrimaryLight</item>
+        <item name="android:fontFamily">@font/agency_fb_bold</item>
+        <item name="android:textColor">@color/text_secondary</item>
         <item name="android:textColorHint">@color/input_hint</item>
-        <item name="android:textSize">@dimen/txt_secondary_text</item>
+        <item name="android:textSize">@dimen/txt_input_text</item>
         <item name="android:gravity">center_vertical</item>
     </style>
 
@@ -81,8 +82,5 @@
         <item name="android:textColor">@color/text_secondary</item>
     </style>
 
-    <style name="loggedCheckBox">
-        <item name="colorOnSurface">@color/check_box_checked_bg</item>
-    </style>
 
 </resources>

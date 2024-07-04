@@ -91,7 +91,9 @@
             android:layout_marginHorizontal="@dimen/margin_medium"
             android:layout_marginTop="@dimen/margin_extra_small"
             android:background="@drawable/background_common_rectangular_normal"
+            android:gravity="center_vertical"
             android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/margin_small_box"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_label_username">
@@ -146,6 +148,7 @@
             android:layout_marginHorizontal="@dimen/margin_medium"
             android:layout_marginTop="@dimen/margin_extra_small"
             android:background="@drawable/background_common_rectangular_normal"
+            android:paddingTop="@dimen/margin_small_box"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/tv_label_password">
@@ -156,7 +159,7 @@
                 android:layout_height="@dimen/small_box_container"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentBottom="true"
+                android:layout_marginTop="2dp"
                 android:background="@drawable/background_common_square_normal">
 
                 <ImageView
@@ -177,7 +180,7 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginHorizontal="@dimen/height_primary"
+                android:layout_marginHorizontal="40dp"
                 android:autofillHints=""
                 android:hint="@string/auth_hint_password_sign_up"
                 android:inputType="textPassword" />
@@ -188,7 +191,7 @@
                 android:layout_height="@dimen/small_box_container"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
+                android:layout_marginTop="2dp"
                 android:background="@drawable/background_common_square_normal">
 
                 <ImageView
@@ -211,6 +214,7 @@
             android:layout_marginHorizontal="@dimen/margin_medium"
             android:layout_marginTop="@dimen/margin_medium"
             android:background="@drawable/background_common_rectangular_normal"
+            android:paddingTop="@dimen/margin_small_box"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rl_sign_up_input_password">
@@ -221,7 +225,7 @@
                 android:layout_height="@dimen/small_box_container"
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true"
-                android:layout_alignParentBottom="true"
+                android:layout_marginTop="2dp"
                 android:background="@drawable/background_common_square_normal">
 
                 <ImageView
@@ -242,7 +246,7 @@
                 android:layout_height="match_parent"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentBottom="true"
-                android:layout_marginHorizontal="@dimen/height_primary"
+                android:layout_marginHorizontal="40dp"
                 android:autofillHints=""
                 android:hint="@string/auth_hint_confirm_password_sign_up"
                 android:inputType="textPassword" />
@@ -253,7 +257,7 @@
                 android:layout_height="@dimen/small_box_container"
                 android:layout_alignParentTop="true"
                 android:layout_alignParentEnd="true"
-                android:layout_alignParentBottom="true"
+                android:layout_marginTop="2dp"
                 android:background="@drawable/background_common_square_normal">
 
                 <ImageView
@@ -284,7 +288,8 @@
                 android:id="@+id/cb_sign_up_remember"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/check_box"
-                app:buttonTint="@color/check_box_unchecked_stroke" />
+                android:buttonTint="@color/checkbox_color_selector"
+                android:checked="false" />
 
             <TextView
                 android:id="@+id/tv_label_logged"
@@ -297,6 +302,16 @@
                 android:textSize="@dimen/txt_secondary_text" />
 
         </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_sign_up_reset"
+            style="@style/buttonTransparent"
+            android:layout_marginHorizontal="@dimen/margin_medium"
+            android:layout_marginTop="@dimen/margin_small"
+            android:gravity="end"
+            android:text="@string/button_reset"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rl_sign_up_input_confirmation" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

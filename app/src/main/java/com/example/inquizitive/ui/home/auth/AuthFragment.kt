@@ -1,5 +1,6 @@
 package com.example.inquizitive.ui.home.auth
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -38,14 +39,19 @@ class AuthFragment : Fragment() {
     private fun setupListeners() {
         binding.apply {
             btnHomeLogin.setOnClickListener {
-                Utils.startActivity(requireContext(), AuthActivity::class.java)
-                Utils.showToast(requireContext(), "Login")
+                openAuthActivity(isLogin = true)
             }
 
             btnHomeSignUp.setOnClickListener {
-                Utils.startActivity(requireContext(), AuthActivity::class.java)
-                Utils.showToast(requireContext(), "Sign up")
+                openAuthActivity(isLogin = false)
             }
         }
+    }
+
+    private fun openAuthActivity(isLogin: Boolean) {
+        val i = Intent(activity, AuthActivity::class.java)
+            .putExtra("isLogin", isLogin)
+
+        startActivity(i)
     }
 }
