@@ -1,6 +1,7 @@
 package com.example.inquizitive.ui.auth
 
 import android.content.Context
+import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.activity.viewModels
@@ -11,13 +12,11 @@ import com.example.inquizitive.databinding.ActivityAuthBinding
 import com.example.inquizitive.ui.auth.login.LoginFragment
 import com.example.inquizitive.ui.auth.signUp.SignUpFragment
 import com.example.inquizitive.ui.home.HomeActivity
-import com.example.inquizitive.ui.home.auth.AuthFragment
-import com.example.inquizitive.ui.home.userData.UserDataFragment
 import com.example.inquizitive.utils.AppConstants
 import com.example.inquizitive.utils.Utils
 import kotlin.properties.Delegates
 
-class AuthActivity : AppCompatActivity() {
+class AuthActivity : AppCompatActivity(), LoginFragment.OnLoginDataListener {
 
     private lateinit var binding: ActivityAuthBinding
     private val mAuthViewModel: AuthViewModel by viewModels()
@@ -34,63 +33,69 @@ class AuthActivity : AppCompatActivity() {
 
         isLogin = intent.getBooleanExtra("isLogin", true)
 
-        setupViews()
+        setInitialFragment()
         setupObservers()
         setupListeners()
     }
 
-    private fun setupViews() {
-        if (isLogin) {
-            configureLoginUI()
-        } else {
-            configureSignUpUI()
-        }
+    private fun setInitialFragment() {
+        openFragment(if (isLogin) LoginFragment() else SignUpFragment())
+        updateUI()
     }
 
     private fun setupObservers() {
         mAuthViewModel.apply {
+            loginSuccessEvent.observe(this@AuthActivity) {
+                this@AuthActivity.navigateToHome()
+            }
 
+            loginFailureEvent.observe(this@AuthActivity) {
+                (supportFragmentManager.findFragmentById(R.id.fl_auth_container) as? LoginFragment)?.clearInputFields()
+                Utils.showToast(this@AuthActivity, "Login failed. Please check your credentials.")
+            }
         }
+    }
+
+    override fun onLoginDataReady(username: String, password: String) {
+        mAuthViewModel.login(username, password)
+    }
+
+    override fun onLoginDataStateChanged(isEnabled: Boolean) {
+        binding.btnAuthenticate.isEnabled = isEnabled
     }
 
     private fun setupListeners() {
         binding.apply {
             btnAuthAlternative.setOnClickListener {
-                isLogin = if (isLogin) {
-                    openFragment(SignUpFragment())
-                    configureSignUpUI()
-                    false
-                } else {
-                    openFragment(LoginFragment())
-                    configureLoginUI()
-                    true
-                }
+                isLogin = !isLogin
+                openFragment(if (isLogin) LoginFragment() else SignUpFragment())
+                updateUI()
             }
 
             btnAuthCancel.setOnClickListener {
                 Utils.startActivity(this@AuthActivity, HomeActivity::class.java)
                 finish()
             }
+
+            btnAuthenticate.setOnClickListener {
+                if (isLogin) {
+                    val fragment =
+                        supportFragmentManager.findFragmentById(R.id.fl_auth_container) as? LoginFragment
+                    fragment?.getLoginData()
+                } else {
+                    Utils.showToast(this@AuthActivity, "Sign Up")
+                }
+            }
         }
 
     }
 
-    private fun configureLoginUI() {
+    private fun updateUI() {
         binding.apply {
-            tvAuthQuestion.setText(R.string.auth_question_login)
-            btnAuthAlternative.setText(R.string.button_sign_up)
-            btnAuthenticate.text = getText(R.string.button_login)
+            tvAuthQuestion.setText(if (isLogin) R.string.auth_question_login else R.string.auth_question_sign_up)
+            btnAuthAlternative.setText(if (isLogin) R.string.button_sign_up else R.string.button_login)
+            btnAuthenticate.setText(if (isLogin) R.string.button_login else R.string.button_sign_up)
         }
-        openFragment(LoginFragment())
-    }
-
-    private fun configureSignUpUI() {
-        binding.apply {
-            tvAuthQuestion.setText(R.string.auth_question_sign_up)
-            btnAuthAlternative.setText(R.string.button_login)
-            btnAuthenticate.setText(R.string.button_create_account)
-        }
-        openFragment(SignUpFragment())
     }
 
     private fun openFragment(fragment: Fragment) {
@@ -99,4 +104,11 @@ class AuthActivity : AppCompatActivity() {
             .commit()
     }
 
+    private fun navigateToHome() {
+        Intent(this, HomeActivity::class.java).apply {
+            mAuthViewModel.getLoggedInUserId()?.let { putExtra(AppConstants.KEY_CURRENT_USER_ID, it) }
+            startActivity(this)
+        }
+        finish()
+    }
 }

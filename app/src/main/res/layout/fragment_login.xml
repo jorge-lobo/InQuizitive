@@ -102,6 +102,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/margin_extra_small"
                 android:autofillHints=""
+                android:background="@drawable/background_common_edit_text"
                 android:hint="@string/auth_username"
                 android:inputType="text" />
 
@@ -161,6 +162,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginHorizontal="40dp"
                 android:autofillHints=""
+                android:background="@drawable/background_common_edit_text"
                 android:hint="@string/auth_password"
                 android:inputType="textPassword" />
 
@@ -188,7 +190,7 @@
 
         <LinearLayout
             android:id="@+id/ll_login_cb_container"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_medium"
             android:layout_marginTop="@dimen/margin_medium"
@@ -198,7 +200,7 @@
             app:layout_constraintTop_toBottomOf="@id/rl_login_input_password">
 
             <CheckBox
-                android:id="@+id/cb_login_remember"
+                android:id="@+id/cb_login_remember_me"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/check_box"
                 android:buttonTint="@color/checkbox_color_selector"
@@ -219,10 +221,13 @@
         <Button
             android:id="@+id/btn_login_reset"
             style="@style/buttonTransparent"
+            android:layout_width="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_medium"
             android:layout_marginTop="@dimen/margin_small"
+            android:enabled="false"
             android:gravity="end"
             android:text="@string/button_reset"
+            android:textColor="@color/button_text_selector"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rl_login_input_password" />
 

@@ -6,14 +6,14 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/height_primary</item>
         <item name="android:background">@drawable/shape_button</item>
-        <item name="android:backgroundTint">@color/button_primary_bg</item>
+        <item name="android:backgroundTint">@color/button_primary_background_selector</item>
         <item name="strokeWidth">2dp</item>
-        <item name="strokeColor">@color/button_primary_stroke</item>
+        <item name="strokeColor">@color/button_primary_stroke_selector</item>
         <item name="android:gravity">center</item>
         <item name="android:textAllCaps">true</item>
         <item name="android:fontFamily">@font/roboto_cn_bold</item>
         <item name="android:textSize">@dimen/txt_primary_text</item>
-        <item name="android:textColor">@color/button_primary_txt</item>
+        <item name="android:textColor">@color/button_primary_text_selector</item>
     </style>
 
     <style name="buttonSecondary">

@@ -122,6 +122,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="@dimen/margin_extra_small"
                 android:autofillHints=""
+                android:background="@drawable/background_common_edit_text"
                 android:hint="@string/auth_hint_username_sign_up"
                 android:inputType="text" />
 
@@ -182,6 +183,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginHorizontal="40dp"
                 android:autofillHints=""
+                android:background="@drawable/background_common_edit_text"
                 android:hint="@string/auth_hint_password_sign_up"
                 android:inputType="textPassword" />
 
@@ -248,6 +250,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_marginHorizontal="40dp"
                 android:autofillHints=""
+                android:background="@drawable/background_common_edit_text"
                 android:hint="@string/auth_hint_confirm_password_sign_up"
                 android:inputType="textPassword" />
 
@@ -285,7 +288,7 @@
             app:layout_constraintTop_toBottomOf="@id/rl_sign_up_input_confirmation">
 
             <CheckBox
-                android:id="@+id/cb_sign_up_remember"
+                android:id="@+id/cb_sign_up_remember_me"
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/check_box"
                 android:buttonTint="@color/checkbox_color_selector"
@@ -306,6 +309,7 @@
         <Button
             android:id="@+id/btn_sign_up_reset"
             style="@style/buttonTransparent"
+            android:layout_width="wrap_content"
             android:layout_marginHorizontal="@dimen/margin_medium"
             android:layout_marginTop="@dimen/margin_small"
             android:gravity="end"

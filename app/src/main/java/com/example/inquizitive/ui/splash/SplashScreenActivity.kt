@@ -23,7 +23,10 @@ class SplashScreenActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         lifecycleScope.launch {
-            mSplashScreenViewModel.uploadJsonToInternalStorage()
+            mSplashScreenViewModel.apply {
+                checkRememberMeStatus()
+                uploadJsonToInternalStorage()
+            }
 
             delay(2000)
             startActivity(Intent(this@SplashScreenActivity, HomeActivity::class.java))

@@ -66,6 +66,7 @@
     <color name="button_error_stroke">@color/coralRed</color>
     <color name="button_text_bg">@color/transparent</color>
     <color name="button_text_txt">@color/white</color>
+    <color name="button_text_inactive_txt">@color/stormCloud</color>
     <color name="button_text_stroke">@color/transparent</color>
     <color name="button_back_bg">@color/dolphin</color>
 

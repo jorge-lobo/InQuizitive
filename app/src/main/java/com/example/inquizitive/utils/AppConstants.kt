@@ -5,4 +5,5 @@ object AppConstants {
     const val IS_LOGIN = "IsLogin"
     const val IS_LOGGED_IN = "IsLoggedIn"
     const val KEY_CURRENT_USER_ID = "current_user_id"
+    const val KEY_REMEMBER_ME = "key_remember_me"
 }
