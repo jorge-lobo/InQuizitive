@@ -90,7 +90,7 @@ class UserRepository(private val context: Context) {
         val userIndex = users.indexOfFirst { it.id == updatedUser.id }
         if (userIndex != -1) {
             users[userIndex] = updatedUser
-        }else {
+        } else {
             users.add(updatedUser)
         }
 

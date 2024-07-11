@@ -21,12 +21,20 @@ class AuthViewModel(application: Application) : BaseViewModel(application), Life
         application.getSharedPreferences(AppConstants.PREFS_KEY, Context.MODE_PRIVATE)
 
     private val _loggedInUser = MutableLiveData<User?>()
-
     private val _loginSuccessEvent = MutableLiveData<Unit>()
     private val _loginFailureEvent = MutableLiveData<Unit>()
+    private val _signUpSuccess = MutableLiveData<Boolean>()
+    private val _signUpSuccessEvent = MutableLiveData<Unit>()
+    private val _signUpFailureEvent = MutableLiveData<Unit>()
+    private val _isUsernameTaken = MutableLiveData<Boolean>()
+    private val _isPasswordsNotMatching = MutableLiveData<Boolean>()
 
     val loginSuccessEvent: LiveData<Unit> get() = _loginSuccessEvent
     val loginFailureEvent: LiveData<Unit> get() = _loginFailureEvent
+    val signUpSuccessEvent: LiveData<Unit> get() = _signUpSuccessEvent
+    val signUpFailureEvent: LiveData<Unit> get() = _signUpFailureEvent
+    val isUsernameTaken: LiveData<Boolean> get() = _isUsernameTaken
+    val isPasswordsNotMatching: LiveData<Boolean> get() = _isPasswordsNotMatching
 
     fun login(username: String, password: String) {
         viewModelScope.launch {
@@ -38,6 +46,47 @@ class AuthViewModel(application: Application) : BaseViewModel(application), Life
             } else {
                 _loggedInUser.value = null
                 handleLoginFailure()
+            }
+        }
+    }
+
+    fun signUp(username: String, password: String, confirmation: String) {
+        viewModelScope.launch {
+            val signUpSuccessful =
+                if (password == confirmation && userRepository.getUserByUsername(username) == null) {
+                    val newUser = User(
+                        id = userRepository.getNextUserId(),
+                        username = username,
+                        password = password,
+                        avatar = "",
+                        quizzesPlayed = 0,
+                        totalPoints = 0,
+                        bestResult = 0,
+                        totalCoins = 0,
+                        actualCoins = 0,
+                        spentCoins = 0,
+                        totalTime = 0,
+                        spentTime = 0,
+                        totalAnswers = 0,
+                        correctAnswers = 0
+                    )
+                    handleSignUpSuccess(newUser)
+                    true
+                } else {
+                    false
+                }
+
+            if (signUpSuccessful) {
+                _signUpSuccess.value = true
+            } else {
+                _signUpSuccess.value = false
+                handleSignUpFailure()
+                if (userRepository.getUserByUsername(username) != null) {
+                    _isUsernameTaken.value = true
+                }
+                if (password != confirmation) {
+                    _isPasswordsNotMatching.value = true
+                }
             }
         }
     }
@@ -67,6 +116,22 @@ class AuthViewModel(application: Application) : BaseViewModel(application), Life
         _loginSuccessEvent.value = Unit
     }
 
+    private fun handleLoginFailure() {
+        _loginFailureEvent.value = Unit
+    }
+
+    private fun handleSignUpSuccess(newUser: User) {
+        userRepository.saveUser(newUser)
+        setLoggedInUser(newUser)
+        saveUserToSharedPreferences(newUser)
+        userRepository.saveCurrentUserId(newUser.id!!)
+        _signUpSuccessEvent.value = Unit
+    }
+
+    private fun handleSignUpFailure() {
+        _signUpFailureEvent.value = Unit
+    }
+
     private fun setLoggedInUser(user: User) {
         user.id?.let { prefs.edit().putInt(AppConstants.KEY_CURRENT_USER_ID, it).apply() }
         _loggedInUser.value = user
@@ -76,9 +141,6 @@ class AuthViewModel(application: Application) : BaseViewModel(application), Life
         return prefs.getInt(AppConstants.KEY_CURRENT_USER_ID, -1).takeIf { it != -1 }
     }
 
-    private fun handleLoginFailure() {
-        _loginFailureEvent.value = Unit
-    }
 
     override fun onError(message: String?, validationErrors: Map<String, ArrayList<String>>?) {
         isLoading.value = false

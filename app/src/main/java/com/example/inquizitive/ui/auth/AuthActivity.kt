@@ -16,7 +16,8 @@ import com.example.inquizitive.utils.AppConstants
 import com.example.inquizitive.utils.Utils
 import kotlin.properties.Delegates
 
-class AuthActivity : AppCompatActivity(), LoginFragment.OnLoginDataListener {
+class AuthActivity : AppCompatActivity(), LoginFragment.OnLoginDataListener,
+    SignUpFragment.OnSignUpListener {
 
     private lateinit var binding: ActivityAuthBinding
     private val mAuthViewModel: AuthViewModel by viewModels()
@@ -53,6 +54,26 @@ class AuthActivity : AppCompatActivity(), LoginFragment.OnLoginDataListener {
                 (supportFragmentManager.findFragmentById(R.id.fl_auth_container) as? LoginFragment)?.clearInputFields()
                 Utils.showToast(this@AuthActivity, "Login failed. Please check your credentials.")
             }
+
+            signUpSuccessEvent.observe(this@AuthActivity) {
+                this@AuthActivity.navigateToHome()
+                Utils.showToast(this@AuthActivity, "New user created successfully!")
+            }
+
+            signUpFailureEvent.observe(this@AuthActivity) {
+                (supportFragmentManager.findFragmentById(R.id.fl_auth_container) as? SignUpFragment)?.clearInputFields()
+            }
+
+            isUsernameTaken.observe(this@AuthActivity) {
+                Utils.showToast(
+                    this@AuthActivity,
+                    "This username is already in use. Please choose another username."
+                )
+            }
+
+            isPasswordsNotMatching.observe(this@AuthActivity) {
+                Utils.showToast(this@AuthActivity, "Passwords don't match! Please try again.")
+            }
         }
     }
 
@@ -61,6 +82,14 @@ class AuthActivity : AppCompatActivity(), LoginFragment.OnLoginDataListener {
     }
 
     override fun onLoginDataStateChanged(isEnabled: Boolean) {
+        binding.btnAuthenticate.isEnabled = isEnabled
+    }
+
+    override fun onSignUpDataReady(username: String, password: String, confirmation: String) {
+        mAuthViewModel.signUp(username, password, confirmation)
+    }
+
+    override fun onSignUpDataStateChanged(isEnabled: Boolean) {
         binding.btnAuthenticate.isEnabled = isEnabled
     }
 
@@ -83,7 +112,9 @@ class AuthActivity : AppCompatActivity(), LoginFragment.OnLoginDataListener {
                         supportFragmentManager.findFragmentById(R.id.fl_auth_container) as? LoginFragment
                     fragment?.getLoginData()
                 } else {
-                    Utils.showToast(this@AuthActivity, "Sign Up")
+                    val fragment =
+                        supportFragmentManager.findFragmentById(R.id.fl_auth_container) as? SignUpFragment
+                    fragment?.getSignUpData()
                 }
             }
         }
@@ -106,7 +137,8 @@ class AuthActivity : AppCompatActivity(), LoginFragment.OnLoginDataListener {
 
     private fun navigateToHome() {
         Intent(this, HomeActivity::class.java).apply {
-            mAuthViewModel.getLoggedInUserId()?.let { putExtra(AppConstants.KEY_CURRENT_USER_ID, it) }
+            mAuthViewModel.getLoggedInUserId()
+                ?.let { putExtra(AppConstants.KEY_CURRENT_USER_ID, it) }
             startActivity(this)
         }
         finish()
