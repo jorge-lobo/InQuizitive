@@ -103,7 +103,7 @@ class AuthViewModel(application: Application) : BaseViewModel(application), Life
     private fun saveUserToSharedPreferences(user: User) {
         user.id?.let {
             prefs.edit()
-                .putBoolean(AppConstants.IS_LOGGED_IN, true)
+                .putBoolean(AppConstants.KEY_IS_LOGGED_IN, true)
                 .putInt(AppConstants.KEY_CURRENT_USER_ID, it)
                 .apply()
         }

@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import com.example.inquizitive.R
 import com.example.inquizitive.databinding.FragmentAuthBinding
 import com.example.inquizitive.ui.auth.AuthActivity
-import com.example.inquizitive.utils.Utils
+import com.example.inquizitive.utils.AppConstants
 
 class AuthFragment : Fragment() {
 
@@ -50,8 +50,7 @@ class AuthFragment : Fragment() {
 
     private fun openAuthActivity(isLogin: Boolean) {
         val i = Intent(activity, AuthActivity::class.java)
-            .putExtra("isLogin", isLogin)
-
+            .putExtra(AppConstants.KEY_IS_LOGIN, isLogin)
         startActivity(i)
     }
 }

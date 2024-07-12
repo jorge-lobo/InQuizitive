@@ -58,6 +58,7 @@
     <dimen name="icon_option">24dp</dimen>
 
     <!-- Avatar -->
+    <dimen name="avatar_grid">72dp</dimen>
     <dimen name="avatar_large">64dp</dimen>
     <dimen name="avatar_small">32dp</dimen>
 

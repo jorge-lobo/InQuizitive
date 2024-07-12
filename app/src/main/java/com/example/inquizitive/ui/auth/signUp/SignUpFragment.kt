@@ -1,6 +1,7 @@
 package com.example.inquizitive.ui.auth.signUp
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.InputFilter
 import android.text.method.PasswordTransformationMethod
@@ -14,7 +15,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.inquizitive.R
 import com.example.inquizitive.databinding.FragmentSignUpBinding
+import com.example.inquizitive.ui.avatar.AvatarActivity
 import com.example.inquizitive.ui.common.BaseFragment
+import com.example.inquizitive.utils.AppConstants
 
 class SignUpFragment : BaseFragment() {
 
@@ -23,6 +26,7 @@ class SignUpFragment : BaseFragment() {
 
     private var listener: OnSignUpListener? = null
     private var isPasswordVisible = false
+    private var isNewUser = true
 
     interface OnSignUpListener {
         fun onSignUpDataReady(username: String, password: String, confirmation: String)
@@ -94,6 +98,10 @@ class SignUpFragment : BaseFragment() {
             cbSignUpRememberMe.setOnClickListener {
                 checkCheckboxStatus()
             }
+
+            cvSignUpAvatarContainer.setOnClickListener {
+                openAvatarActivity()
+            }
         }
     }
 
@@ -123,6 +131,12 @@ class SignUpFragment : BaseFragment() {
 
             listener?.onSignUpDataReady(username, password, confirmation)
         }
+    }
+
+    private fun openAvatarActivity() {
+        val i = Intent(requireContext(), AvatarActivity::class.java)
+            .putExtra(AppConstants.KEY_IS_NEW_USER, isNewUser)
+        startActivity(i)
     }
 
     private fun checkButtonsState() {

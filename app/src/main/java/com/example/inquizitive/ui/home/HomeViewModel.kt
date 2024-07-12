@@ -11,7 +11,7 @@ class HomeViewModel(application: Application) : BaseViewModel(application), Life
     fun checkLoginStatus(): Boolean {
         val sharedPreferences = getApplication<Application>()
             .getSharedPreferences(AppConstants.PREFS_KEY, Context.MODE_PRIVATE)
-        return sharedPreferences.getBoolean(AppConstants.IS_LOGGED_IN, false)
+        return sharedPreferences.getBoolean(AppConstants.KEY_IS_LOGGED_IN, false)
     }
 
     override fun onError(message: String?, validationErrors: Map<String, ArrayList<String>>?) {

@@ -32,7 +32,10 @@ class AuthActivity : AppCompatActivity(), LoginFragment.OnLoginDataListener,
         sharedPreferences =
             application.getSharedPreferences(AppConstants.PREFS_KEY, Context.MODE_PRIVATE)
 
-        isLogin = intent.getBooleanExtra("isLogin", true)
+        isLogin = intent.getBooleanExtra(AppConstants.KEY_IS_LOGIN, true)
+        if (intent.getBooleanExtra(AppConstants.KEY_SHOW_SIGN_UP, false)) {
+            isLogin = false
+        }
 
         setInitialFragment()
         setupObservers()

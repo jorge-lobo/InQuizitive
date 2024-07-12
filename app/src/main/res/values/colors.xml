@@ -121,9 +121,7 @@
 
     <!-- Avatar -->
     <color name="avatar_default_bg">@color/white</color>
-    <color name="avatar_default_stroke">@color/silver</color>
-    <color name="avatar_selected_bg">@color/transparent</color>
-    <color name="avatar_selected_stroke">@color/azure</color>
+    <color name="avatar_selected_bg">@color/dodgerBlue</color>
 
     <!-- Help Cards -->
     <color name="help_card_bg">@color/stormCloud</color>

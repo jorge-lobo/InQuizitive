@@ -82,5 +82,11 @@
         <item name="android:textColor">@color/text_secondary</item>
     </style>
 
+    <style name="textSwitchButton">
+        <item name="android:fontFamily">@font/roboto_cn_bold</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/switch_button_text_selector</item>
+        <item name="android:textSize">@dimen/txt_input_text</item>
+    </style>
 
 </resources>
