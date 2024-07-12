@@ -10,6 +10,9 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -23,6 +26,7 @@ class SignUpFragment : BaseFragment() {
 
     private lateinit var binding: FragmentSignUpBinding
     private val mSignUpViewModel by lazy { ViewModelProvider(this)[SignUpViewModel::class.java] }
+    private lateinit var avatarResultLauncher: ActivityResultLauncher<Intent>
 
     private var listener: OnSignUpListener? = null
     private var isPasswordVisible = false
@@ -40,6 +44,21 @@ class SignUpFragment : BaseFragment() {
         } else {
             throw RuntimeException("$context must implement OnSignUpListener")
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        avatarResultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+                if (result.resultCode == AppCompatActivity.RESULT_OK) {
+                    val data = result.data
+                    data?.let {
+                        binding.etSignUpInputUsername.setText(it.getStringExtra(AppConstants.KEY_NEW_USERNAME))
+                        binding.etSignUpInputPassword.setText(it.getStringExtra(AppConstants.KEY_NEW_PASSWORD))
+                        binding.etSignUpInputConfirmation.setText(it.getStringExtra(AppConstants.KEY_NEW_CONFIRMATION))
+                    }
+                }
+            }
     }
 
     override fun onCreateView(
@@ -134,9 +153,16 @@ class SignUpFragment : BaseFragment() {
     }
 
     private fun openAvatarActivity() {
-        val i = Intent(requireContext(), AvatarActivity::class.java)
-            .putExtra(AppConstants.KEY_IS_NEW_USER, isNewUser)
-        startActivity(i)
+        val i = Intent(requireContext(), AvatarActivity::class.java).apply {
+            putExtra(AppConstants.KEY_IS_NEW_USER, isNewUser)
+            putExtra(AppConstants.KEY_NEW_USERNAME, binding.etSignUpInputUsername.text.toString())
+            putExtra(AppConstants.KEY_NEW_PASSWORD, binding.etSignUpInputPassword.text.toString())
+            putExtra(
+                AppConstants.KEY_NEW_CONFIRMATION,
+                binding.etSignUpInputConfirmation.text.toString()
+            )
+        }
+        avatarResultLauncher.launch(i)
     }
 
     private fun checkButtonsState() {

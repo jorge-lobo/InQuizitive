@@ -8,4 +8,8 @@ object AppConstants {
     const val KEY_CURRENT_USER_ID = "CurrentUserId"
     const val KEY_REMEMBER_ME = "RememberMe"
     const val KEY_SHOW_SIGN_UP = "KeyShowSignUp"
+    const val KEY_NEW_USERNAME = "KeyNewUsername"
+    const val KEY_NEW_PASSWORD = "KeyNewPassword"
+    const val KEY_NEW_CONFIRMATION = "KeyNewConfirmation"
+    const val REQUEST_CODE_AVATAR = 1001
 }

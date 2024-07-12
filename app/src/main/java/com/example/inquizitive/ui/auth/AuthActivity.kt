@@ -43,7 +43,8 @@ class AuthActivity : AppCompatActivity(), LoginFragment.OnLoginDataListener,
     }
 
     private fun setInitialFragment() {
-        openFragment(if (isLogin) LoginFragment() else SignUpFragment())
+        val showSignUp = intent.getBooleanExtra(AppConstants.KEY_SHOW_SIGN_UP, false)
+        openFragment(if (isLogin && !showSignUp) LoginFragment() else SignUpFragment())
         updateUI()
     }
 

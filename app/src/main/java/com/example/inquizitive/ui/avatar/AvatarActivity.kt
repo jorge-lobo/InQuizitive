@@ -4,10 +4,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import com.example.inquizitive.R
 import com.example.inquizitive.databinding.ActivityAvatarBinding
 import com.example.inquizitive.ui.auth.AuthActivity
-import com.example.inquizitive.ui.auth.signUp.SignUpFragment
 import com.example.inquizitive.ui.home.HomeActivity
 import com.example.inquizitive.utils.AppConstants
 import com.example.inquizitive.utils.Utils
@@ -19,13 +17,21 @@ class AvatarActivity : AppCompatActivity(), AvatarGridAdapter.OnItemClickListene
     private lateinit var adapter: AvatarGridAdapter
 
     private var isNewUser = false
-    private var isFemale = true
+    /*private var isFemale = true*/
     private var selectedAvatarPosition: Int = -1
+    private var username = ""
+    private var password = ""
+    private var confirmation = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAvatarBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        isNewUser = intent.getBooleanExtra(AppConstants.KEY_IS_NEW_USER, true)
+        username = intent.getStringExtra(AppConstants.KEY_NEW_USERNAME).toString()
+        password = intent.getStringExtra(AppConstants.KEY_NEW_PASSWORD).toString()
+        confirmation = intent.getStringExtra(AppConstants.KEY_NEW_CONFIRMATION).toString()
 
         setupAdapter()
         setupObservers()
@@ -112,9 +118,12 @@ class AvatarActivity : AppCompatActivity(), AvatarGridAdapter.OnItemClickListene
     }
 
     private fun navigateToSignUp() {
-        val i = Intent(this, AuthActivity::class.java)
-            .putExtra(AppConstants.KEY_SHOW_SIGN_UP, true)
-        startActivity(i)
+        val intent = Intent().apply {
+            putExtra(AppConstants.KEY_NEW_USERNAME, username)
+            putExtra(AppConstants.KEY_NEW_PASSWORD, password)
+            putExtra(AppConstants.KEY_NEW_CONFIRMATION, confirmation)
+        }
+        setResult(RESULT_OK, intent)
         finish()
     }
 }
