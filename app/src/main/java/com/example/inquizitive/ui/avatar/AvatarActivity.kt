@@ -1,11 +1,11 @@
 package com.example.inquizitive.ui.avatar
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.inquizitive.databinding.ActivityAvatarBinding
-import com.example.inquizitive.ui.auth.AuthActivity
 import com.example.inquizitive.ui.home.HomeActivity
 import com.example.inquizitive.utils.AppConstants
 import com.example.inquizitive.utils.Utils
@@ -17,11 +17,11 @@ class AvatarActivity : AppCompatActivity(), AvatarGridAdapter.OnItemClickListene
     private lateinit var adapter: AvatarGridAdapter
 
     private var isNewUser = false
-    /*private var isFemale = true*/
     private var selectedAvatarPosition: Int = -1
     private var username = ""
     private var password = ""
     private var confirmation = ""
+    private var isFemale = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,6 +50,7 @@ class AvatarActivity : AppCompatActivity(), AvatarGridAdapter.OnItemClickListene
             }
 
             isFemale.observe(this@AvatarActivity) { isFemale ->
+                this@AvatarActivity.isFemale = isFemale
                 toggleMode(isFemale)
             }
         }
@@ -105,8 +106,11 @@ class AvatarActivity : AppCompatActivity(), AvatarGridAdapter.OnItemClickListene
     }
 
     private fun updateAvatar() {
+        val avatarType = if (isFemale) "f" else "m"
+        val avatarString = "avatar_${avatarType}${selectedAvatarPosition + 1}"
+
         if (isNewUser) {
-            navigateToSignUp()
+            navigateToSignUp(avatarString)
         } else {
             Utils.startActivity(this, HomeActivity::class.java)
             finish()
@@ -117,13 +121,14 @@ class AvatarActivity : AppCompatActivity(), AvatarGridAdapter.OnItemClickListene
         binding.btnAvatarUpdate.isEnabled = isEnabled
     }
 
-    private fun navigateToSignUp() {
+    private fun navigateToSignUp(avatarString: String) {
         val intent = Intent().apply {
             putExtra(AppConstants.KEY_NEW_USERNAME, username)
             putExtra(AppConstants.KEY_NEW_PASSWORD, password)
             putExtra(AppConstants.KEY_NEW_CONFIRMATION, confirmation)
+            putExtra(AppConstants.KEY_SELECTED_AVATAR, avatarString)
         }
-        setResult(RESULT_OK, intent)
+        setResult(Activity.RESULT_OK, intent)
         finish()
     }
 }

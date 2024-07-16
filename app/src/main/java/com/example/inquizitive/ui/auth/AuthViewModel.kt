@@ -32,7 +32,7 @@ class AuthViewModel(application: Application) : BaseViewModel(application), Life
     val loginSuccessEvent: LiveData<Unit> get() = _loginSuccessEvent
     val loginFailureEvent: LiveData<Unit> get() = _loginFailureEvent
     val signUpSuccessEvent: LiveData<Unit> get() = _signUpSuccessEvent
-    val signUpFailureEvent: LiveData<Unit> get() = _signUpFailureEvent
+    /*val signUpFailureEvent: LiveData<Unit> get() = _signUpFailureEvent*/
     val isUsernameTaken: LiveData<Boolean> get() = _isUsernameTaken
     val isPasswordsNotMatching: LiveData<Boolean> get() = _isPasswordsNotMatching
 
@@ -50,15 +50,16 @@ class AuthViewModel(application: Application) : BaseViewModel(application), Life
         }
     }
 
-    fun signUp(username: String, password: String, confirmation: String) {
+    fun signUp(username: String, password: String, confirmation: String, avatarName: String) {
         viewModelScope.launch {
             val signUpSuccessful =
-                if (password == confirmation && userRepository.getUserByUsername(username) == null) {
+                if (password.isNotEmpty() && confirmation.isNotEmpty() && password == confirmation
+                    && userRepository.getUserByUsername(username) == null) {
                     val newUser = User(
                         id = userRepository.getNextUserId(),
                         username = username,
                         password = password,
-                        avatar = "",
+                        avatar = avatarName,
                         quizzesPlayed = 0,
                         totalPoints = 0,
                         bestResult = 0,

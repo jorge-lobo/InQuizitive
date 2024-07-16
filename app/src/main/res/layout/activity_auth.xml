@@ -58,11 +58,11 @@
             android:layout_marginStart="@dimen/margin_medium"
             android:layout_marginBottom="@dimen/margin_small"
             android:gravity="start"
+            android:text="@string/auth_warning_avatar_missing"
             android:textSize="@dimen/txt_secondary_text"
             android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@id/btn_authenticate"
             app:layout_constraintStart_toStartOf="parent"
-            tools:text="@string/auth_warning_avatar_missing"
             tools:visibility="visible" />
 
         <Button

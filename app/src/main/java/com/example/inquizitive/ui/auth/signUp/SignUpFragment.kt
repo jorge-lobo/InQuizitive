@@ -1,5 +1,7 @@
 package com.example.inquizitive.ui.auth.signUp
 
+import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -13,6 +15,7 @@ import android.widget.ImageView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.widget.addTextChangedListener
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -31,10 +34,18 @@ class SignUpFragment : BaseFragment() {
     private var listener: OnSignUpListener? = null
     private var isPasswordVisible = false
     private var isNewUser = true
+    private var selectedAvatar: String = ""
 
     interface OnSignUpListener {
-        fun onSignUpDataReady(username: String, password: String, confirmation: String)
+        fun onSignUpDataReady(
+            username: String,
+            password: String,
+            confirmation: String,
+            avatarName: String
+        )
+
         fun onSignUpDataStateChanged(isEnabled: Boolean)
+        fun onAvatarSelected(isAvatarSelected: Boolean)
     }
 
     override fun onAttach(context: Context) {
@@ -53,9 +64,12 @@ class SignUpFragment : BaseFragment() {
                 if (result.resultCode == AppCompatActivity.RESULT_OK) {
                     val data = result.data
                     data?.let {
+                        val avatarString = it.getStringExtra(AppConstants.KEY_SELECTED_AVATAR)
                         binding.etSignUpInputUsername.setText(it.getStringExtra(AppConstants.KEY_NEW_USERNAME))
                         binding.etSignUpInputPassword.setText(it.getStringExtra(AppConstants.KEY_NEW_PASSWORD))
                         binding.etSignUpInputConfirmation.setText(it.getStringExtra(AppConstants.KEY_NEW_CONFIRMATION))
+                        updateAvatar(avatarString)
+                        listener?.onAvatarSelected(true)
                     }
                 }
             }
@@ -82,6 +96,17 @@ class SignUpFragment : BaseFragment() {
 
         setupListeners()
         setupViews()
+    }
+
+    @Deprecated("Deprecated in Java")
+    @Suppress("DEPRECATION")
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == AppConstants.REQUEST_CODE_AVATAR && resultCode == Activity.RESULT_OK) {
+            selectedAvatar = data?.getStringExtra(AppConstants.KEY_SELECTED_AVATAR).toString()
+            updateAvatar(selectedAvatar)
+            listener?.onAvatarSelected(true)
+        }
     }
 
     private fun setupListeners() {
@@ -147,8 +172,9 @@ class SignUpFragment : BaseFragment() {
             val username = etSignUpInputUsername.text.toString()
             val password = etSignUpInputPassword.text.toString()
             val confirmation = etSignUpInputConfirmation.text.toString()
+            val avatarName = selectedAvatar
 
-            listener?.onSignUpDataReady(username, password, confirmation)
+            listener?.onSignUpDataReady(username, password, confirmation, avatarName)
         }
     }
 
@@ -229,9 +255,19 @@ class SignUpFragment : BaseFragment() {
         }
     }
 
-    fun clearInputFields() {
+    private fun clearInputFields() {
+        clearUsernameInput()
+        clearPasswordInputs()
+        updateMissingAvatarWarningUI(false)
+        listener?.onSignUpDataStateChanged(false)
+    }
+
+    fun clearUsernameInput() {
+        binding.etSignUpInputUsername.text.clear()
+    }
+
+    fun clearPasswordInputs() {
         binding.apply {
-            etSignUpInputUsername.text.clear()
             etSignUpInputPassword.text.clear()
             etSignUpInputConfirmation.text.clear()
         }
@@ -255,6 +291,38 @@ class SignUpFragment : BaseFragment() {
         } else {
             ""
         }
+    }
+
+    @SuppressLint("DiscouragedApi")
+    fun updateAvatar(selectedAvatar: String?) {
+        selectedAvatar?.let { avatarName ->
+            val drawableResourceId =
+                resources.getIdentifier(avatarName, "drawable", requireContext().packageName)
+            if (drawableResourceId != 0) {
+                binding.ivSignUpAvatar.ivAvatar.setImageResource(drawableResourceId)
+            }
+        }
+        listener?.onAvatarSelected(true)
+    }
+
+    fun updateMissingAvatarWarningUI(isAvatarMissing: Boolean) {
+        val header = binding.rlSignUpHeader
+        val title = binding.tvSignUpTitle
+        val message = binding.tvSignUpMessage
+
+        header.setBackgroundResource(if (isAvatarMissing) R.drawable.background_common_header_warning else R.drawable.background_common_header)
+        title.setTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                if (isAvatarMissing) R.color.header_warning_title else R.color.header_default_title
+            )
+        )
+        message.setTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                if (isAvatarMissing) R.color.header_primary_txt else R.color.header_secondary_txt
+            )
+        )
     }
 
     override fun onDetach() {

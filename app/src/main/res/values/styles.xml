@@ -64,7 +64,7 @@
 
     <style name="textPrimaryHint">
         <item name="android:fontFamily">@font/agency_fb_bold</item>
-        <item name="android:textColor">@color/input_hint</item>
+        <item name="android:textColor">@color/header_secondary_txt</item>
     </style>
 
     <style name="textPrimaryWarning">

@@ -11,5 +11,6 @@ object AppConstants {
     const val KEY_NEW_USERNAME = "KeyNewUsername"
     const val KEY_NEW_PASSWORD = "KeyNewPassword"
     const val KEY_NEW_CONFIRMATION = "KeyNewConfirmation"
+    const val KEY_SELECTED_AVATAR = "KeySelectedAvatar"
     const val REQUEST_CODE_AVATAR = 1001
 }
