@@ -1,9 +1,9 @@
 package com.example.inquizitive.ui.auth.signUp
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.text.InputFilter
 import android.text.method.PasswordTransformationMethod
@@ -21,41 +21,24 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.inquizitive.R
 import com.example.inquizitive.databinding.FragmentSignUpBinding
+import com.example.inquizitive.ui.auth.AuthActivity
+import com.example.inquizitive.ui.auth.login.LoginFragment
 import com.example.inquizitive.ui.avatar.AvatarActivity
 import com.example.inquizitive.ui.common.BaseFragment
+import com.example.inquizitive.ui.home.HomeActivity
 import com.example.inquizitive.utils.AppConstants
+import com.example.inquizitive.utils.Utils
 
 class SignUpFragment : BaseFragment() {
 
     private lateinit var binding: FragmentSignUpBinding
     private val mSignUpViewModel by lazy { ViewModelProvider(this)[SignUpViewModel::class.java] }
+    private lateinit var sharedPreferences: SharedPreferences
     private lateinit var avatarResultLauncher: ActivityResultLauncher<Intent>
 
-    private var listener: OnSignUpListener? = null
     private var isPasswordVisible = false
-    private var isNewUser = true
+    private var isAvatarSelected = false
     private var selectedAvatar: String = ""
-
-    interface OnSignUpListener {
-        fun onSignUpDataReady(
-            username: String,
-            password: String,
-            confirmation: String,
-            avatarName: String
-        )
-
-        fun onSignUpDataStateChanged(isEnabled: Boolean)
-        fun onAvatarSelected(isAvatarSelected: Boolean)
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is OnSignUpListener) {
-            listener = context
-        } else {
-            throw RuntimeException("$context must implement OnSignUpListener")
-        }
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,11 +48,14 @@ class SignUpFragment : BaseFragment() {
                     val data = result.data
                     data?.let {
                         val avatarString = it.getStringExtra(AppConstants.KEY_SELECTED_AVATAR)
-                        binding.etSignUpInputUsername.setText(it.getStringExtra(AppConstants.KEY_NEW_USERNAME))
-                        binding.etSignUpInputPassword.setText(it.getStringExtra(AppConstants.KEY_NEW_PASSWORD))
-                        binding.etSignUpInputConfirmation.setText(it.getStringExtra(AppConstants.KEY_NEW_CONFIRMATION))
+                        binding.apply {
+                            etSignUpInputUsername.setText(it.getStringExtra(AppConstants.KEY_NEW_USERNAME))
+                            etSignUpInputPassword.setText(it.getStringExtra(AppConstants.KEY_NEW_PASSWORD))
+                            etSignUpInputConfirmation.setText(it.getStringExtra(AppConstants.KEY_NEW_CONFIRMATION))
+                        }
                         updateAvatar(avatarString)
-                        listener?.onAvatarSelected(true)
+                        selectedAvatar = avatarString ?: ""
+                        isAvatarSelected = true
                     }
                 }
             }
@@ -94,25 +80,53 @@ class SignUpFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        sharedPreferences =
+            requireContext().getSharedPreferences(AppConstants.PREFS_KEY, Context.MODE_PRIVATE)
+
+        setupObservers()
         setupListeners()
         setupViews()
     }
 
-    @Deprecated("Deprecated in Java")
-    @Suppress("DEPRECATION")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == AppConstants.REQUEST_CODE_AVATAR && resultCode == Activity.RESULT_OK) {
-            selectedAvatar = data?.getStringExtra(AppConstants.KEY_SELECTED_AVATAR).toString()
-            updateAvatar(selectedAvatar)
-            listener?.onAvatarSelected(true)
+    private fun setupObservers() {
+        mSignUpViewModel.apply {
+            signUpSuccessEvent.observe(viewLifecycleOwner) {
+                navigateToHome()
+                Utils.showToast(requireContext(), "New user created successfully!")
+            }
+
+            isUsernameTaken.observe(viewLifecycleOwner) {
+                clearInputField(binding.etSignUpInputUsername)
+
+                Utils.showToast(
+                    requireContext(),
+                    "This username is already in use. Please choose another username."
+                )
+            }
+
+            isPasswordsNotMatching.observe(viewLifecycleOwner) {
+                binding.apply {
+                    clearInputField(etSignUpInputPassword, etSignUpInputConfirmation)
+                }
+
+                Utils.showToast(requireContext(), "Passwords don't match! Please try again.")
+            }
+
+            isAvatarNull.observe(viewLifecycleOwner) {
+                isAvatarSelected = false
+                updateMissingAvatarWarningUI(true)
+            }
         }
     }
 
     private fun setupListeners() {
         binding.apply {
             btnSignUpReset.setOnClickListener {
-                clearInputFields()
+                clearInputField(
+                    etSignUpInputUsername,
+                    etSignUpInputPassword,
+                    etSignUpInputConfirmation
+                )
             }
 
             flRightBoxSignUpPassword.setOnClickListener {
@@ -139,12 +153,18 @@ class SignUpFragment : BaseFragment() {
                     }
                 }
 
-            cbSignUpRememberMe.setOnClickListener {
-                checkCheckboxStatus()
+            cbSignUpRememberMe.setOnClickListener { updateRememberMeStatus() }
+
+            cvSignUpAvatarContainer.setOnClickListener { openAvatarActivity() }
+
+            btnSignUpLogin.setOnClickListener {
+                (activity as AuthActivity).openFragment(LoginFragment())
             }
 
-            cvSignUpAvatarContainer.setOnClickListener {
-                openAvatarActivity()
+            btnSignUpSave.setOnClickListener { getSignUpData() }
+
+            btnSignUpCancel.setOnClickListener {
+                Utils.startActivity(requireContext(), HomeActivity::class.java)
             }
         }
     }
@@ -167,20 +187,28 @@ class SignUpFragment : BaseFragment() {
         }
     }
 
-    fun getSignUpData() {
+    private fun navigateToHome() {
+        Intent(requireContext(), HomeActivity::class.java).apply {
+            mSignUpViewModel.getLoggedInUserId()
+                ?.let { putExtra(AppConstants.KEY_CURRENT_USER_ID, it) }
+            startActivity(this)
+        }
+    }
+
+    private fun getSignUpData() {
         binding.apply {
             val username = etSignUpInputUsername.text.toString()
             val password = etSignUpInputPassword.text.toString()
             val confirmation = etSignUpInputConfirmation.text.toString()
             val avatarName = selectedAvatar
 
-            listener?.onSignUpDataReady(username, password, confirmation, avatarName)
+            mSignUpViewModel.signUp(username, password, confirmation, avatarName)
         }
     }
 
     private fun openAvatarActivity() {
-        val i = Intent(requireContext(), AvatarActivity::class.java).apply {
-            putExtra(AppConstants.KEY_IS_NEW_USER, isNewUser)
+        val intent = Intent(requireContext(), AvatarActivity::class.java).apply {
+            putExtra(AppConstants.KEY_IS_NEW_USER, true)
             putExtra(AppConstants.KEY_NEW_USERNAME, binding.etSignUpInputUsername.text.toString())
             putExtra(AppConstants.KEY_NEW_PASSWORD, binding.etSignUpInputPassword.text.toString())
             putExtra(
@@ -188,18 +216,10 @@ class SignUpFragment : BaseFragment() {
                 binding.etSignUpInputConfirmation.text.toString()
             )
         }
-        avatarResultLauncher.launch(i)
+        avatarResultLauncher.launch(intent)
     }
 
     private fun checkButtonsState() {
-        checkResetButtonState()
-        checkShowPasswordButtonState()
-        checkShowConfirmationButtonState()
-        checkSignUpButtonState()
-        checkCheckboxStatus()
-    }
-
-    private fun checkResetButtonState() {
         binding.apply {
             val username = etSignUpInputUsername.text.toString()
             val password = etSignUpInputPassword.text.toString()
@@ -207,46 +227,23 @@ class SignUpFragment : BaseFragment() {
 
             btnSignUpReset.isEnabled =
                 username.isNotEmpty() || password.isNotEmpty() || confirmation.isNotEmpty()
-        }
-    }
-
-    private fun checkShowPasswordButtonState() {
-        binding.apply {
-            val password = etSignUpInputPassword.text.toString()
-            val buttonContainer = flRightBoxSignUpPassword
-
-            buttonContainer.setBackgroundResource(
-                if (password.isNotEmpty()) R.drawable.background_common_square_active
-                else R.drawable.background_common_square_normal
-            )
-        }
-    }
-
-    private fun checkShowConfirmationButtonState() {
-        binding.apply {
-            val confirmation = etSignUpInputConfirmation.text.toString()
-            val buttonContainer = flRightBoxSignUpConfirmation
-
-            buttonContainer.setBackgroundResource(
-                if (confirmation.isNotEmpty()) R.drawable.background_common_square_active
-                else R.drawable.background_common_square_normal
-            )
-        }
-    }
-
-    private fun checkSignUpButtonState() {
-        binding.apply {
-            val username = etSignUpInputUsername.text.toString()
-            val password = etSignUpInputPassword.text.toString()
-            val confirmation = etSignUpInputConfirmation.text.toString()
-
-            val isButtonEnabled =
+            btnSignUpSave.isEnabled =
                 username.isNotEmpty() && password.isNotEmpty() && confirmation.isNotEmpty()
-            listener?.onSignUpDataStateChanged(isButtonEnabled)
+
+            checkShowInputButtonState(etSignUpInputPassword, flRightBoxSignUpPassword)
+            checkShowInputButtonState(etSignUpInputConfirmation, flRightBoxSignUpConfirmation)
         }
+        updateRememberMeStatus()
     }
 
-    private fun checkCheckboxStatus() {
+    private fun checkShowInputButtonState(editText: EditText, container: View) {
+        container.setBackgroundResource(
+            if (editText.text.isNotEmpty()) R.drawable.background_common_square_active
+            else R.drawable.background_common_square_normal
+        )
+    }
+
+    private fun updateRememberMeStatus() {
         val checkbox = binding.cbSignUpRememberMe
         if (checkbox.isChecked) {
             mSignUpViewModel.saveRememberMeToSharedPreferences(true)
@@ -255,22 +252,8 @@ class SignUpFragment : BaseFragment() {
         }
     }
 
-    private fun clearInputFields() {
-        clearUsernameInput()
-        clearPasswordInputs()
-        updateMissingAvatarWarningUI(false)
-        listener?.onSignUpDataStateChanged(false)
-    }
-
-    fun clearUsernameInput() {
-        binding.etSignUpInputUsername.text.clear()
-    }
-
-    fun clearPasswordInputs() {
-        binding.apply {
-            etSignUpInputPassword.text.clear()
-            etSignUpInputConfirmation.text.clear()
-        }
+    private fun clearInputField(vararg editTexts: EditText) {
+        editTexts.forEach { it.text.clear() }
     }
 
     private fun toggleVisibility(editText: EditText, imageView: ImageView) {
@@ -285,14 +268,6 @@ class SignUpFragment : BaseFragment() {
         editText.setSelection(selectionStart, selectionEnd)
     }
 
-    private var inputFilter = InputFilter { source, _, _, _, _, _ ->
-        if (source.toString().matches("[a-zA-Z0-9_-]+".toRegex())) {
-            null
-        } else {
-            ""
-        }
-    }
-
     @SuppressLint("DiscouragedApi")
     fun updateAvatar(selectedAvatar: String?) {
         selectedAvatar?.let { avatarName ->
@@ -300,15 +275,17 @@ class SignUpFragment : BaseFragment() {
                 resources.getIdentifier(avatarName, "drawable", requireContext().packageName)
             if (drawableResourceId != 0) {
                 binding.ivSignUpAvatar.ivAvatar.setImageResource(drawableResourceId)
+                isAvatarSelected = true
+                updateMissingAvatarWarningUI(false)
             }
         }
-        listener?.onAvatarSelected(true)
     }
 
-    fun updateMissingAvatarWarningUI(isAvatarMissing: Boolean) {
+    private fun updateMissingAvatarWarningUI(isAvatarMissing: Boolean) {
         val header = binding.rlSignUpHeader
         val title = binding.tvSignUpTitle
         val message = binding.tvSignUpMessage
+        val warningMessage = binding.tvWarningAvatarMissing
 
         header.setBackgroundResource(if (isAvatarMissing) R.drawable.background_common_header_warning else R.drawable.background_common_header)
         title.setTextColor(
@@ -323,10 +300,11 @@ class SignUpFragment : BaseFragment() {
                 if (isAvatarMissing) R.color.header_primary_txt else R.color.header_secondary_txt
             )
         )
+
+        warningMessage.visibility = if (isAvatarSelected) View.INVISIBLE else View.VISIBLE
     }
 
-    override fun onDetach() {
-        super.onDetach()
-        listener = null
+    private val inputFilter = InputFilter { source, _, _, _, _, _ ->
+        if (source.toString().matches("[a-zA-Z0-9_-]+".toRegex())) null else ""
     }
 }

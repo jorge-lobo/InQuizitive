@@ -15,8 +15,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/main"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingBottom="@dimen/margin_small"
+        android:layout_height="match_parent"
         tools:background="@drawable/background_gradient"
         tools:context=".ui.auth.signUp.SignUpFragment">
 
@@ -318,6 +317,65 @@
             android:textColor="@color/button_text_selector"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rl_sign_up_input_confirmation" />
+
+        <TextView
+            android:id="@+id/tv_auth_question"
+            style="@style/textPrimaryLight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:gravity="start"
+            android:text="@string/auth_question_sign_up"
+            android:textSize="@dimen/txt_secondary_text"
+            app:layout_constraintBottom_toTopOf="@id/btn_sign_up_login"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/btn_sign_up_login"
+            style="@style/buttonTransparent"
+            android:layout_marginHorizontal="@dimen/margin_medium"
+            android:layout_marginBottom="@dimen/margin_large"
+            android:text="@string/button_login"
+            app:layout_constraintBottom_toTopOf="@id/btn_sign_up_save"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <TextView
+            android:id="@+id/tv_warning_avatar_missing"
+            style="@style/textPrimaryWarning"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:gravity="start"
+            android:text="@string/auth_warning_avatar_missing"
+            android:textSize="@dimen/txt_secondary_text"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@id/btn_sign_up_save"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:visibility="visible" />
+
+        <Button
+            android:id="@+id/btn_sign_up_save"
+            style="@style/buttonPrimary"
+            android:layout_marginHorizontal="@dimen/margin_medium"
+            android:layout_marginBottom="@dimen/margin_medium"
+            android:enabled="false"
+            android:text="@string/button_create_account"
+            app:layout_constraintBottom_toTopOf="@id/btn_sign_up_cancel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/btn_sign_up_cancel"
+            style="@style/buttonSecondary"
+            android:layout_marginHorizontal="@dimen/margin_medium"
+            android:layout_marginBottom="@dimen/margin_big"
+            android:text="@string/button_cancel"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

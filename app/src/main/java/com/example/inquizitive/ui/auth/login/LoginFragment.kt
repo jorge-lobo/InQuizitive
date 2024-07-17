@@ -1,6 +1,6 @@
 package com.example.inquizitive.ui.auth.login
 
-import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.text.InputFilter
 import android.text.method.PasswordTransformationMethod
@@ -14,29 +14,18 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.inquizitive.R
 import com.example.inquizitive.databinding.FragmentLoginBinding
+import com.example.inquizitive.ui.auth.AuthActivity
+import com.example.inquizitive.ui.auth.signUp.SignUpFragment
 import com.example.inquizitive.ui.common.BaseFragment
+import com.example.inquizitive.ui.home.HomeActivity
+import com.example.inquizitive.utils.AppConstants
+import com.example.inquizitive.utils.Utils
 
 class LoginFragment : BaseFragment() {
 
     private lateinit var binding: FragmentLoginBinding
     private val mLoginViewModel by lazy { ViewModelProvider(this)[LoginViewModel::class.java] }
-
-    private var listener: OnLoginDataListener? = null
     private var isPasswordVisible = false
-
-    interface OnLoginDataListener {
-        fun onLoginDataReady(username: String, password: String)
-        fun onLoginDataStateChanged(isEnabled: Boolean)
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        if (context is OnLoginDataListener) {
-            listener = context
-        } else {
-            throw RuntimeException("$context must implement OnLoginDataReadyListener")
-        }
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -58,13 +47,18 @@ class LoginFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         setupListeners()
+        setupObservers()
         setupViews()
     }
 
     private fun setupListeners() {
         binding.apply {
             btnLoginReset.setOnClickListener {
-                clearInputFields()
+                val inputUsername = binding.etLoginInputUsername
+                val inputPassword = binding.etLoginInputPassword
+
+                clearInputField(inputUsername)
+                clearInputField(inputPassword)
             }
 
             flRightBoxLoginPassword.setOnClickListener {
@@ -78,8 +72,34 @@ class LoginFragment : BaseFragment() {
                 }
             }
 
-            cbLoginRememberMe.setOnClickListener {
-                checkCheckboxStatus()
+            cbLoginRememberMe.setOnClickListener { updateRememberMeStatus() }
+
+            btnLoginNewUser.setOnClickListener {
+                (activity as AuthActivity).openFragment(SignUpFragment())
+            }
+
+            btnLoginEnter.setOnClickListener { getLoginData() }
+
+            btnLoginCancel.setOnClickListener {
+                Utils.startActivity(requireContext(), HomeActivity::class.java)
+            }
+        }
+    }
+
+    private fun setupObservers() {
+        mLoginViewModel.apply {
+            loginSuccessEvent.observe(viewLifecycleOwner) { navigateToHome() }
+
+            isUsernameNull.observe(viewLifecycleOwner) {
+                val inputUsername = binding.etLoginInputUsername
+                clearInputField(inputUsername)
+                Utils.showToast(requireContext(), "This username doesn't exist. Please try again.")
+            }
+
+            isPasswordIncorrect.observe(viewLifecycleOwner) {
+                val inputPassword = binding.etLoginInputPassword
+                clearInputField(inputPassword)
+                Utils.showToast(requireContext(), "Wrong password. Please try again.")
             }
         }
     }
@@ -101,29 +121,34 @@ class LoginFragment : BaseFragment() {
         }
     }
 
-    fun getLoginData() {
+    private fun navigateToHome() {
+        Intent(requireContext(), HomeActivity::class.java).apply {
+            mLoginViewModel.getLoggedInUserId()
+                ?.let { putExtra(AppConstants.KEY_CURRENT_USER_ID, it) }
+            startActivity(this)
+        }
+    }
+
+    private fun getLoginData() {
         binding.apply {
             val username = etLoginInputUsername.text.toString()
             val password = etLoginInputPassword.text.toString()
 
-            listener?.onLoginDataReady(username, password)
+            mLoginViewModel.login(username, password)
         }
     }
 
     private fun checkButtonsState() {
-        checkResetButtonState()
-        checkShowPasswordButtonState()
-        checkLoginButtonState()
-        checkCheckboxStatus()
-    }
-
-    private fun checkResetButtonState() {
         binding.apply {
             val username = etLoginInputUsername.text.toString()
             val password = etLoginInputPassword.text.toString()
 
             btnLoginReset.isEnabled = username.isNotEmpty() || password.isNotEmpty()
+            btnLoginEnter.isEnabled = username.isNotEmpty() && password.isNotEmpty()
         }
+
+        checkShowPasswordButtonState()
+        updateRememberMeStatus()
     }
 
     private fun checkShowPasswordButtonState() {
@@ -138,17 +163,7 @@ class LoginFragment : BaseFragment() {
         }
     }
 
-    private fun checkLoginButtonState() {
-        binding.apply {
-            val username = etLoginInputUsername.text.toString()
-            val password = etLoginInputPassword.text.toString()
-
-            val isButtonEnabled = username.isNotEmpty() && password.isNotEmpty()
-            listener?.onLoginDataStateChanged(isButtonEnabled)
-        }
-    }
-
-    private fun checkCheckboxStatus() {
+    private fun updateRememberMeStatus() {
         val checkbox = binding.cbLoginRememberMe
 
         if (checkbox.isChecked) {
@@ -158,11 +173,8 @@ class LoginFragment : BaseFragment() {
         }
     }
 
-    fun clearInputFields() {
-        binding.apply {
-            etLoginInputUsername.text.clear()
-            etLoginInputPassword.text.clear()
-        }
+    private fun clearInputField(editText: EditText) {
+        editText.text.clear()
     }
 
     private fun togglePasswordVisibility(editText: EditText, imageView: ImageView) {
@@ -180,15 +192,6 @@ class LoginFragment : BaseFragment() {
     }
 
     private val inputFilter = InputFilter { source, _, _, _, _, _ ->
-        if (source.toString().matches("[a-zA-Z0-9_-]+".toRegex())) {
-            null
-        } else {
-            ""
-        }
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        listener = null
+        if (source.toString().matches("[a-zA-Z0-9_-]+".toRegex())) null else ""
     }
 }
