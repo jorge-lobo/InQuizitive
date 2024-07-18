@@ -31,15 +31,15 @@ class LoginFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(
+        binding = DataBindingUtil.inflate<FragmentLoginBinding?>(
             inflater,
             R.layout.fragment_login,
             container,
             false
-        )
-        binding.viewModel = mLoginViewModel
-        binding.lifecycleOwner = viewLifecycleOwner
-
+        ).apply {
+            viewModel = mLoginViewModel
+            lifecycleOwner = viewLifecycleOwner
+        }
         return binding.root
     }
 

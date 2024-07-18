@@ -65,15 +65,15 @@ class SignUpFragment : BaseFragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        binding = DataBindingUtil.inflate(
+        binding = DataBindingUtil.inflate<FragmentSignUpBinding?>(
             inflater,
             R.layout.fragment_sign_up,
             container,
             false
-        )
-        binding.viewModel = mSignUpViewModel
-        binding.lifecycleOwner = viewLifecycleOwner
-
+        ).apply {
+            viewModel = mSignUpViewModel
+            lifecycleOwner = viewLifecycleOwner
+        }
         return binding.root
     }
 

@@ -5,6 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.databinding.DataBindingUtil
+import com.example.inquizitive.R
 import com.example.inquizitive.databinding.ActivityAvatarBinding
 import com.example.inquizitive.ui.home.HomeActivity
 import com.example.inquizitive.utils.AppConstants
@@ -25,8 +27,7 @@ class AvatarActivity : AppCompatActivity(), AvatarGridAdapter.OnItemClickListene
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityAvatarBinding.inflate(layoutInflater)
-        setContentView(binding.root)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_avatar)
 
         isNewUser = intent.getBooleanExtra(AppConstants.KEY_IS_NEW_USER, true)
         username = intent.getStringExtra(AppConstants.KEY_NEW_USERNAME).toString()
