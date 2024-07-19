@@ -91,25 +91,19 @@ class SignUpFragment : BaseFragment() {
     private fun setupObservers() {
         mSignUpViewModel.apply {
             signUpSuccessEvent.observe(viewLifecycleOwner) {
-                navigateToHome()
-                Utils.showToast(requireContext(), "New user created successfully!")
+                handleSignUpCompletion()
             }
 
             isUsernameTaken.observe(viewLifecycleOwner) {
                 clearInputField(binding.etSignUpInputUsername)
-
-                Utils.showToast(
-                    requireContext(),
-                    "This username is already in use. Please choose another username."
-                )
+                showErrorMessage(isUsernameTaken = true)
             }
 
             isPasswordsNotMatching.observe(viewLifecycleOwner) {
                 binding.apply {
                     clearInputField(etSignUpInputPassword, etSignUpInputConfirmation)
                 }
-
-                Utils.showToast(requireContext(), "Passwords don't match! Please try again.")
+                showErrorMessage(isUsernameTaken = false)
             }
 
             isAvatarNull.observe(viewLifecycleOwner) {
@@ -187,12 +181,44 @@ class SignUpFragment : BaseFragment() {
         }
     }
 
-    private fun navigateToHome() {
-        Intent(requireContext(), HomeActivity::class.java).apply {
-            mSignUpViewModel.getLoggedInUserId()
-                ?.let { putExtra(AppConstants.KEY_CURRENT_USER_ID, it) }
-            startActivity(this)
+    private fun showErrorMessage(isUsernameTaken: Boolean) {
+        val message =
+            if (isUsernameTaken) getString(R.string.sign_up_error_username)
+            else getString(R.string.sign_up_error_passwords)
+
+        binding.apply {
+            rlSignUpHeader.visibility = View.INVISIBLE
+            llSignUpErrorMessageContainer.visibility = View.VISIBLE
+            tvSignUpErrorMessage.text = message
         }
+
+        binding.root.postDelayed({
+            binding.apply {
+                rlSignUpHeader.visibility = View.VISIBLE
+                llSignUpErrorMessageContainer.visibility = View.GONE
+                tvSignUpErrorMessage.text = ""
+            }
+        }, 2000)
+    }
+
+    private fun handleSignUpCompletion() {
+        val isSuccess = true
+        val message = getString(R.string.dialog_success_message)
+        val dialog = SignUpMessageFragment.newInstance(message, isSuccess)
+        parentFragmentManager.beginTransaction().apply {
+            replace(R.id.fl_auth_container, dialog)
+            addToBackStack(null)
+            commit()
+        }
+
+        binding.root.postDelayed({
+            Intent(requireContext(), HomeActivity::class.java).apply {
+                mSignUpViewModel.getLoggedInUserId()
+                    ?.let { putExtra(AppConstants.KEY_CURRENT_USER_ID, it) }
+                startActivity(this)
+                requireActivity().finish()
+            }
+        }, 2000)
     }
 
     private fun getSignUpData() {
@@ -286,6 +312,7 @@ class SignUpFragment : BaseFragment() {
         val title = binding.tvSignUpTitle
         val message = binding.tvSignUpMessage
         val warningMessage = binding.tvWarningAvatarMissing
+        val btnSignUp = binding.btnSignUpSave
 
         header.setBackgroundResource(if (isAvatarMissing) R.drawable.background_common_header_warning else R.drawable.background_common_header)
         title.setTextColor(
@@ -300,7 +327,7 @@ class SignUpFragment : BaseFragment() {
                 if (isAvatarMissing) R.color.header_primary_txt else R.color.header_secondary_txt
             )
         )
-
+        btnSignUp.isEnabled = isAvatarSelected
         warningMessage.visibility = if (isAvatarSelected) View.INVISIBLE else View.VISIBLE
     }
 

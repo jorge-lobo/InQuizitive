@@ -31,43 +31,6 @@ class SignUpViewModel(application: Application) : BaseViewModel(application), Li
     val isPasswordsNotMatching: LiveData<Boolean> get() = _isPasswordsNotMatching
     val isAvatarNull: LiveData<Boolean> get() = _isAvatarNull
 
-    /*fun signUp(username: String, password: String, confirmation: String, avatarName: String) {
-        viewModelScope.launch {
-            val signUpSuccessful =
-                if (password.isNotEmpty() && confirmation.isNotEmpty() && password == confirmation
-                    && userRepository.getUserByUsername(username) == null && avatarName.isNotEmpty()
-                ) {
-                    val newUser = User(
-                        id = userRepository.getNextUserId(),
-                        username = username,
-                        password = password,
-                        avatar = avatarName,
-                        quizzesPlayed = 0,
-                        totalPoints = 0,
-                        bestResult = 0,
-                        totalCoins = 0,
-                        actualCoins = 0,
-                        spentCoins = 0,
-                        totalTime = 0,
-                        spentTime = 0,
-                        totalAnswers = 0,
-                        correctAnswers = 0
-                    )
-                    handleSignUpSuccess(newUser)
-                    true
-                } else {
-                    false
-                }
-
-            if (signUpSuccessful) {
-                _signUpSuccess.value = true
-            } else {
-                _signUpSuccess.value = false
-                handleSignUpFailure(username, password, confirmation, avatarName)
-            }
-        }
-    }*/
-
     fun signUp(username: String, password: String, confirmation: String, avatarName: String) {
         viewModelScope.launch {
             if (validateSignUpInputs(username, password, confirmation, avatarName)) {

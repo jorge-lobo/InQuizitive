@@ -25,6 +25,7 @@
             android:layout_height="@dimen/header_medium"
             android:background="@drawable/background_common_header"
             android:padding="@dimen/margin_medium"
+            android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -68,6 +69,50 @@
                 android:textSize="@dimen/txt_secondary_text" />
 
         </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_sign_up_error_message_container"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/header_medium"
+            android:background="@drawable/background_common_header_warning"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="@dimen/margin_medium"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_sign_up_icon_container"
+                android:layout_width="@dimen/dialog_icon_box"
+                android:layout_height="@dimen/dialog_icon_box"
+                android:backgroundTint="@color/dialog_failure_secondary"
+                app:cardCornerRadius="@dimen/corner_medium">
+
+                <ImageView
+                    android:id="@+id/iv_sign_up_error_icon"
+                    android:layout_width="@dimen/icon_dialog"
+                    android:layout_height="@dimen/icon_dialog"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/description_icon"
+                    android:src="@drawable/ic_svg_close_delete"
+                    app:tint="@color/icon_primary" />
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/tv_sign_up_error_message"
+                style="@style/textPrimaryLight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:gravity="center"
+                android:textSize="@dimen/txt_secondary_text"
+                tools:text="@string/dialog_failure_message" />
+
+        </LinearLayout>
 
         <TextView
             android:id="@+id/tv_label_username"

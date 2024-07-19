@@ -69,6 +69,14 @@
     <string name="auth_question_sign_up">Already have an account?</string>
     <string name="auth_warning_avatar_missing">You must define your avatar first!</string>
 
+    <!-- Login -->
+    <string name="login_error_username">This username doesn\'t exist. Please try again.</string>
+    <string name="login_error_password">Wrong password. Please try again.</string>
+
+    <!-- Sign Up -->
+    <string name="sign_up_error_username">Oops! This username is already in use.</string>
+    <string name="sign_up_error_passwords">Passwords don\'t match! Please try again.</string>
+
     <!-- User Profile -->
     <string name="profile_title">Personal Stats</string>
     <string name="profile_label_total_quizzes">Quizzes played</string>
