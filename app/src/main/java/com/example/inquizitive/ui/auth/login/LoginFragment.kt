@@ -88,18 +88,18 @@ class LoginFragment : BaseFragment() {
 
     private fun setupObservers() {
         mLoginViewModel.apply {
-            loginSuccessEvent.observe(viewLifecycleOwner) { navigateToHome() }
+            loginSuccessEvent.observe(viewLifecycleOwner) { navigateToHomeActivity() }
 
             isUsernameNull.observe(viewLifecycleOwner) {
                 val inputUsername = binding.etLoginInputUsername
                 clearInputField(inputUsername)
-                Utils.showToast(requireContext(), "This username doesn't exist. Please try again.")
+                showErrorMessage(isUsernameNull = true)
             }
 
             isPasswordIncorrect.observe(viewLifecycleOwner) {
                 val inputPassword = binding.etLoginInputPassword
                 clearInputField(inputPassword)
-                Utils.showToast(requireContext(), "Wrong password. Please try again.")
+                showErrorMessage(isUsernameNull = false)
             }
         }
     }
@@ -121,7 +121,27 @@ class LoginFragment : BaseFragment() {
         }
     }
 
-    private fun navigateToHome() {
+    private fun showErrorMessage(isUsernameNull: Boolean) {
+        val message =
+            if (isUsernameNull) getString(R.string.login_error_username)
+            else getString(R.string.login_error_password)
+
+        binding.apply {
+            llLoginHeader.visibility = View.INVISIBLE
+            llLoginErrorMessageContainer.visibility = View.VISIBLE
+            tvLoginErrorMessage.text = message
+        }
+
+        binding.root.postDelayed({
+            binding.apply {
+                llLoginHeader.visibility = View.VISIBLE
+                llLoginErrorMessageContainer.visibility = View.GONE
+                tvLoginErrorMessage.text = ""
+            }
+        }, 2000)
+    }
+
+    private fun navigateToHomeActivity() {
         Intent(requireContext(), HomeActivity::class.java).apply {
             mLoginViewModel.getLoggedInUserId()
                 ?.let { putExtra(AppConstants.KEY_CURRENT_USER_ID, it) }
