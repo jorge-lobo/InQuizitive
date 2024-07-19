@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Buttons -->
+    <style name="buttonPrimary">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/height_primary</item>
+        <item name="android:background">@drawable/shape_button</item>
+        <item name="android:backgroundTint">@color/button_primary_background_selector</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="strokeColor">@color/button_primary_stroke_selector</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:fontFamily">@font/roboto_cn_bold</item>
+        <item name="android:textSize">@dimen/txt_primary_text</item>
+        <item name="android:textColor">@color/button_primary_text_selector</item>
+    </style>
+
+    <style name="buttonSecondary">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/height_primary</item>
+        <item name="android:background">@drawable/shape_button</item>
+        <item name="android:backgroundTint">@color/button_secondary_bg</item>
+        <item name="strokeWidth">2dp</item>
+        <item name="strokeColor">@color/button_secondary_stroke</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:fontFamily">@font/roboto_cn_bold</item>
+        <item name="android:textSize">@dimen/txt_primary_text</item>
+        <item name="android:textColor">@color/button_secondary_txt</item>
+    </style>
+
+    <style name="buttonTransparent">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/height_primary</item>
+        <item name="android:background">@drawable/shape_button</item>
+        <item name="android:backgroundTint">@color/transparent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:fontFamily">@font/roboto_cn_bold</item>
+        <item name="android:textSize">@dimen/txt_primary_text</item>
+        <item name="android:textColor">@color/button_primary_txt</item>
+    </style>
+
+    <!-- Input -->
+    <style name="form_input_text" parent="Widget.AppCompat.EditText">
+        <item name="android:fontFamily">@font/agency_fb_bold</item>
+        <item name="android:textColor">@color/text_secondary</item>
+        <item name="android:textColorHint">@color/input_hint</item>
+        <item name="android:textSize">@dimen/txt_input_text</item>
+        <item name="android:gravity">center_vertical</item>
+    </style>
+
+    <!-- Text -->
+    <style name="textPrimaryLight">
+        <item name="android:fontFamily">@font/agency_fb_bold</item>
+        <item name="android:textColor">@color/text_primary</item>
+    </style>
+
+    <style name="textPrimaryDark">
+        <item name="android:fontFamily">@font/agency_fb_bold</item>
+        <item name="android:textColor">@color/text_secondary</item>
+    </style>
+
+    <style name="textPrimaryHint">
+        <item name="android:fontFamily">@font/agency_fb_bold</item>
+        <item name="android:textColor">@color/header_secondary_txt</item>
+    </style>
+
+    <style name="textPrimaryWarning">
+        <item name="android:fontFamily">@font/agency_fb_bold</item>
+        <item name="android:textColor">@color/text_warning</item>
+    </style>
+
+    <style name="textSecondaryLight">
+        <item name="android:fontFamily">@font/roboto_cn_bold</item>
+        <item name="android:textColor">@color/text_primary</item>
+    </style>
+
+    <style name="textSecondaryDark">
+        <item name="android:fontFamily">@font/roboto_cn_bold</item>
+        <item name="android:textColor">@color/text_secondary</item>
+    </style>
+
+    <style name="textSwitchButton">
+        <item name="android:fontFamily">@font/roboto_cn_bold</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:textColor">@color/switch_button_text_selector</item>
+        <item name="android:textSize">@dimen/txt_input_text</item>
+    </style>
+
+</resources>

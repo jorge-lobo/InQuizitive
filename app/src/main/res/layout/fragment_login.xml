@@ -1,0 +1,324 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.example.inquizitive.ui.auth.login.LoginViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:background="@drawable/background_gradient"
+        tools:context=".ui.auth.login.LoginFragment">
+
+        <LinearLayout
+            android:id="@+id/ll_login_header"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/header_medium"
+            android:background="@drawable/background_common_header"
+            android:orientation="vertical"
+            android:padding="@dimen/margin_medium"
+            android:visibility="visible"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tv_login_title"
+                style="@style/textPrimaryLight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/header_title_login"
+                android:textSize="@dimen/txt_title" />
+
+            <TextView
+                android:id="@+id/tv_login_message"
+                style="@style/textPrimaryLight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:text="@string/header_message_login"
+                android:textSize="@dimen/txt_primary_text" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_login_error_message_container"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/header_medium"
+            android:background="@drawable/background_common_header_warning"
+            android:gravity="center_horizontal"
+            android:orientation="vertical"
+            android:padding="@dimen/margin_medium"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_login_icon_container"
+                android:layout_width="@dimen/dialog_icon_box"
+                android:layout_height="@dimen/dialog_icon_box"
+                android:backgroundTint="@color/dialog_failure_secondary"
+                app:cardCornerRadius="@dimen/corner_medium">
+
+                <ImageView
+                    android:id="@+id/iv_login_error_icon"
+                    android:layout_width="@dimen/icon_dialog"
+                    android:layout_height="@dimen/icon_dialog"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/description_icon"
+                    android:src="@drawable/ic_svg_close_delete"
+                    app:tint="@color/icon_primary" />
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/tv_login_error_message"
+                style="@style/textPrimaryLight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="bottom"
+                android:layout_marginTop="@dimen/margin_medium"
+                android:gravity="center"
+                android:textSize="@dimen/txt_secondary_text"
+                tools:text="@string/dialog_failure_message" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_label_username"
+            style="@style/textPrimaryLight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:layout_marginTop="@dimen/margin_big"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:gravity="start"
+            android:text="@string/auth_username"
+            android:textSize="@dimen/txt_secondary_text"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ll_login_header" />
+
+        <LinearLayout
+            android:id="@+id/ll_login_input_username"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_primary"
+            android:layout_marginHorizontal="@dimen/margin_medium"
+            android:layout_marginTop="@dimen/margin_extra_small"
+            android:background="@drawable/background_common_rectangular_normal"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingHorizontal="@dimen/margin_small_box"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_label_username">
+
+            <FrameLayout
+                android:id="@+id/fl_left_box_username"
+                android:layout_width="@dimen/small_box_container"
+                android:layout_height="@dimen/small_box_container"
+                android:background="@drawable/background_common_square_normal">
+
+                <ImageView
+                    android:id="@+id/iv_login_icon_user"
+                    android:layout_width="@dimen/icon_input"
+                    android:layout_height="@dimen/icon_input"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/description_icon"
+                    android:src="@drawable/ic_svg_user"
+                    app:tint="@color/icon_primary" />
+
+            </FrameLayout>
+
+            <EditText
+                android:id="@+id/et_login_input_username"
+                style="@style/form_input_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/margin_extra_small"
+                android:autofillHints=""
+                android:background="@drawable/background_common_edit_text"
+                android:hint="@string/auth_username"
+                android:inputType="text" />
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_label_password"
+            style="@style/textPrimaryLight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:layout_marginTop="@dimen/margin_big"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:gravity="start"
+            android:text="@string/auth_password"
+            android:textSize="@dimen/txt_secondary_text"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/ll_login_input_username" />
+
+        <RelativeLayout
+            android:id="@+id/rl_login_input_password"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_primary"
+            android:layout_marginHorizontal="@dimen/margin_medium"
+            android:layout_marginTop="@dimen/margin_extra_small"
+            android:background="@drawable/background_common_rectangular_normal"
+            android:paddingHorizontal="@dimen/margin_small_box"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_label_password">
+
+            <FrameLayout
+                android:id="@+id/fl_left_box_password"
+                android:layout_width="@dimen/small_box_container"
+                android:layout_height="@dimen/small_box_container"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="2dp"
+                android:background="@drawable/background_common_square_normal">
+
+                <ImageView
+                    android:id="@+id/iv_login_icon_password"
+                    android:layout_width="@dimen/icon_input"
+                    android:layout_height="@dimen/icon_input"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/description_icon"
+                    android:src="@drawable/ic_svg_lock"
+                    app:tint="@color/icon_primary" />
+
+            </FrameLayout>
+
+            <EditText
+                android:id="@+id/et_login_input_password"
+                style="@style/form_input_text"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentBottom="true"
+                android:layout_marginHorizontal="40dp"
+                android:autofillHints=""
+                android:background="@drawable/background_common_edit_text"
+                android:hint="@string/auth_password"
+                android:inputType="textPassword" />
+
+            <FrameLayout
+                android:id="@+id/fl_right_box_login_password"
+                android:layout_width="@dimen/small_box_container"
+                android:layout_height="@dimen/small_box_container"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                android:layout_marginTop="2dp"
+                android:background="@drawable/background_common_square_normal">
+
+                <ImageView
+                    android:id="@+id/iv_login_icon_view"
+                    android:layout_width="@dimen/icon_input"
+                    android:layout_height="@dimen/icon_input"
+                    android:layout_gravity="center"
+                    android:contentDescription="@string/description_icon"
+                    android:src="@drawable/ic_svg_eye_view"
+                    app:tint="@color/icon_primary" />
+
+            </FrameLayout>
+
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_login_cb_container"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:layout_marginTop="@dimen/margin_medium"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rl_login_input_password">
+
+            <CheckBox
+                android:id="@+id/cb_login_remember_me"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/check_box"
+                android:buttonTint="@color/checkbox_color_selector"
+                android:checked="false" />
+
+            <TextView
+                android:id="@+id/tv_label_logged"
+                style="@style/textPrimaryLight"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="@dimen/margin_extra_small"
+                android:gravity="start"
+                android:text="@string/auth_logged"
+                android:textSize="@dimen/txt_secondary_text" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/btn_login_reset"
+            style="@style/buttonTransparent"
+            android:layout_width="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_medium"
+            android:layout_marginTop="@dimen/margin_small"
+            android:enabled="false"
+            android:gravity="end"
+            android:text="@string/button_reset"
+            android:textColor="@color/button_text_selector"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rl_login_input_password" />
+
+        <TextView
+            android:id="@+id/tv_login_question"
+            style="@style/textPrimaryLight"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_medium"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:gravity="start"
+            android:text="@string/auth_question_login"
+            android:textSize="@dimen/txt_secondary_text"
+            app:layout_constraintBottom_toTopOf="@id/btn_login_new_user"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/btn_login_new_user"
+            style="@style/buttonTransparent"
+            android:layout_marginHorizontal="@dimen/margin_medium"
+            android:layout_marginBottom="@dimen/margin_medium"
+            android:text="@string/button_new_account"
+            app:layout_constraintBottom_toTopOf="@id/btn_login_enter"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/btn_login_enter"
+            style="@style/buttonPrimary"
+            android:layout_marginHorizontal="@dimen/margin_medium"
+            android:layout_marginBottom="@dimen/margin_medium"
+            android:enabled="false"
+            android:text="@string/button_enter"
+            app:layout_constraintBottom_toTopOf="@id/btn_login_cancel"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/btn_login_cancel"
+            style="@style/buttonSecondary"
+            android:layout_marginHorizontal="@dimen/margin_medium"
+            android:layout_marginBottom="@dimen/margin_big"
+            android:text="@string/button_cancel"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

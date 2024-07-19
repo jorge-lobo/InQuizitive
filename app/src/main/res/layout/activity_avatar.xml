@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.example.inquizitive.ui.avatar.AvatarViewModel" />
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background_gradient"
+        tools:context=".ui.avatar.AvatarActivity">
+
+        <RelativeLayout
+            android:id="@+id/rl_avatar_header"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/header_narrow"
+            android:background="@drawable/background_common_header"
+            android:padding="@dimen/margin_medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/iv_avatar_close_button"
+                android:layout_width="@dimen/icon_button"
+                android:layout_height="@dimen/icon_button"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:contentDescription="@string/description_button_icon"
+                android:src="@drawable/ic_svg_close_delete"
+                app:tint="@color/icon_primary" />
+
+            <RelativeLayout
+                android:id="@+id/rl_btn_switch_container"
+                android:layout_width="192dp"
+                android:layout_height="@dimen/height_secondary"
+                android:layout_alignParentEnd="true"
+                android:background="@drawable/background_common_display">
+
+                <ToggleButton
+                    android:id="@+id/tb_switch_female"
+                    style="@style/textSwitchButton"
+                    android:layout_width="@dimen/switch_button_width"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentStart="true"
+                    android:background="@drawable/background_common_switch_button"
+                    android:checked="true"
+                    android:gravity="center"
+                    android:textOff="@string/button_female"
+                    android:textOn="@string/button_female" />
+
+                <ToggleButton
+                    android:id="@+id/tb_switch_male"
+                    style="@style/textSwitchButton"
+                    android:layout_width="@dimen/switch_button_width"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentEnd="true"
+                    android:background="@drawable/background_common_switch_button"
+                    android:checked="false"
+                    android:gravity="center"
+                    android:textOff="@string/button_male"
+                    android:textOn="@string/button_male" />
+
+            </RelativeLayout>
+
+        </RelativeLayout>
+
+        <GridView
+            android:id="@+id/gv_avatars"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_medium"
+            android:gravity="center"
+            android:horizontalSpacing="@dimen/margin_medium"
+            android:numColumns="4"
+            android:verticalSpacing="@dimen/margin_large"
+            app:layout_constraintBottom_toTopOf="@id/btn_avatar_update"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rl_avatar_header" />
+
+        <Button
+            android:id="@+id/btn_avatar_update"
+            style="@style/buttonPrimary"
+            android:layout_marginHorizontal="@dimen/margin_medium"
+            android:layout_marginBottom="@dimen/margin_big"
+            android:enabled="false"
+            android:text="@string/button_update_avatar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

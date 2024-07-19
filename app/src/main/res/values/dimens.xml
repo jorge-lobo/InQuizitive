@@ -4,14 +4,16 @@
     <!-- Common -->
     <dimen name="height_primary">48dp</dimen>
     <dimen name="height_secondary">32dp</dimen>
-    <dimen name="small_box_container">40dp</dimen>
+    <dimen name="small_box_container">36dp</dimen>
     <dimen name="progress_bar_height">8dp</dimen>
 
     <!-- Margins -->
+    <dimen name="margin_huge">48dp</dimen>
     <dimen name="margin_big">32dp</dimen>
     <dimen name="margin_large">24dp</dimen>
     <dimen name="margin_medium">16dp</dimen>
     <dimen name="margin_small">8dp</dimen>
+    <dimen name="margin_small_box">6dp</dimen>
     <dimen name="margin_extra_small">4dp</dimen>
 
     <!-- Corners -->
@@ -56,6 +58,7 @@
     <dimen name="icon_option">24dp</dimen>
 
     <!-- Avatar -->
+    <dimen name="avatar_grid">72dp</dimen>
     <dimen name="avatar_large">64dp</dimen>
     <dimen name="avatar_small">32dp</dimen>
 
@@ -67,10 +70,12 @@
 
     <!-- Text -->
     <dimen name="txt_title">48sp</dimen>
+    <dimen name="txt_char">40sp</dimen>
     <dimen name="txt_category">32sp</dimen>
     <dimen name="txt_new_record">32sp</dimen>
     <dimen name="txt_primary_text">24sp</dimen>
     <dimen name="txt_small_button">20sp</dimen>
+    <dimen name="txt_input_text">20sp</dimen>
     <dimen name="txt_secondary_text">16sp</dimen>
     <dimen name="txt_progress">12sp</dimen>
     <dimen name="txt_coins">12sp</dimen>

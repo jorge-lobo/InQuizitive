@@ -1,0 +1,36 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "user1",
+      "password": "123",
+      "avatar": "avatar_m15",
+      "quizzesPlayed": 23,
+      "totalPoints": 20134,
+      "bestResult": 963,
+      "totalCoins": 4630,
+      "actualCoins": 1200,
+      "spentCoins": 3430,
+      "totalTime": 45000,
+      "spentTime": 39631,
+      "totalAnswers": 230,
+      "correctAnswers": 153
+    },
+    {
+      "id": 2,
+      "username": "user2",
+      "password": "123",
+      "avatar": "avatar_f6",
+      "quizzesPlayed": 15,
+      "totalPoints": 13224,
+      "bestResult": 844,
+      "totalCoins": 3200,
+      "actualCoins": 1000,
+      "spentCoins": 2200,
+      "totalTime": 32100,
+      "spentTime": 25300,
+      "totalAnswers": 150,
+      "correctAnswers": 103
+    }
+  ]
+}

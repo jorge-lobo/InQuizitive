@@ -66,6 +66,7 @@
     <color name="button_error_stroke">@color/coralRed</color>
     <color name="button_text_bg">@color/transparent</color>
     <color name="button_text_txt">@color/white</color>
+    <color name="button_text_inactive_txt">@color/stormCloud</color>
     <color name="button_text_stroke">@color/transparent</color>
     <color name="button_back_bg">@color/dolphin</color>
 
@@ -105,6 +106,7 @@
 
     <!-- Auth Input -->
     <color name="input_bg">@color/white</color>
+    <color name="input_stroke">@color/ice</color>
     <color name="input_hint">@color/dolphin</color>
     <color name="input_txt">@color/onyx</color>
     <color name="input_icon_box">@color/ice</color>
@@ -119,9 +121,7 @@
 
     <!-- Avatar -->
     <color name="avatar_default_bg">@color/white</color>
-    <color name="avatar_default_stroke">@color/silver</color>
-    <color name="avatar_selected_bg">@color/transparent</color>
-    <color name="avatar_selected_stroke">@color/azure</color>
+    <color name="avatar_selected_bg">@color/dodgerBlue</color>
 
     <!-- Help Cards -->
     <color name="help_card_bg">@color/stormCloud</color>
