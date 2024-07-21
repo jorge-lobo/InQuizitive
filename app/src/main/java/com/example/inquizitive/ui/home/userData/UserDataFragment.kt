@@ -10,6 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.inquizitive.R
 import com.example.inquizitive.databinding.FragmentUserDataBinding
 import com.example.inquizitive.ui.common.BaseFragment
+import com.example.inquizitive.ui.userProfile.UserProfileActivity
 import com.example.inquizitive.utils.Utils
 
 class UserDataFragment : BaseFragment() {
@@ -55,7 +56,7 @@ class UserDataFragment : BaseFragment() {
     private fun setupListeners() {
         binding.apply {
             btnIconUser.setOnClickListener {
-                Utils.showToast(requireContext(), "User Profile")
+                Utils.startActivity(requireContext(), UserProfileActivity::class.java)
             }
         }
     }

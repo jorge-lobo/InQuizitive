@@ -79,13 +79,13 @@
 
     <!-- User Profile -->
     <string name="profile_title">Personal Stats</string>
-    <string name="profile_label_total_quizzes">Quizzes played</string>
-    <string name="profile_label_correct_answers">Correct answers</string>
-    <string name="profile_label_best_result">Best result</string>
-    <string name="profile_label_total_points">Points earned</string>
-    <string name="profile_label_total_coins">Coins earned</string>
-    <string name="profile_label_spent_coins">Coins spent</string>
-    <string name="profile_label_spent_time">time spent</string>
+    <string name="profile_label_total_quizzes">Quizzes played:</string>
+    <string name="profile_label_correct_answers">Correct answers:</string>
+    <string name="profile_label_best_result">Best result:</string>
+    <string name="profile_label_total_points">Points earned:</string>
+    <string name="profile_label_total_coins">Coins earned:</string>
+    <string name="profile_label_spent_coins">Coins spent:</string>
+    <string name="profile_label_spent_time">Time spent:</string>
 
     <!-- Help Cards -->
     <string name="help_card_dismiss_one">- 1 option</string>
