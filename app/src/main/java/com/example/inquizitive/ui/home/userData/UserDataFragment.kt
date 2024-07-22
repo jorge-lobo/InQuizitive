@@ -1,6 +1,7 @@
 package com.example.inquizitive.ui.home.userData
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,6 +12,7 @@ import com.example.inquizitive.R
 import com.example.inquizitive.databinding.FragmentUserDataBinding
 import com.example.inquizitive.ui.common.BaseFragment
 import com.example.inquizitive.ui.userProfile.UserProfileActivity
+import com.example.inquizitive.utils.AppConstants
 import com.example.inquizitive.utils.Utils
 
 class UserDataFragment : BaseFragment() {
@@ -56,8 +58,16 @@ class UserDataFragment : BaseFragment() {
     private fun setupListeners() {
         binding.apply {
             btnIconUser.setOnClickListener {
-                Utils.startActivity(requireContext(), UserProfileActivity::class.java)
+                navigateToUserProfileActivity()
             }
+        }
+    }
+
+    private fun navigateToUserProfileActivity() {
+        Intent(requireContext(), UserProfileActivity::class.java).apply {
+            mUserDataViewModel.getLoggedInUserId()
+                ?.let { putExtra(AppConstants.KEY_CURRENT_USER_ID, it) }
+            startActivity(this)
         }
     }
 
