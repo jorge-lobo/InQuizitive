@@ -3,6 +3,7 @@ package com.example.inquizitive.ui.userProfile
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -11,18 +12,21 @@ import com.example.inquizitive.databinding.ActivityUserProfileBinding
 import com.example.inquizitive.ui.avatar.AvatarActivity
 import com.example.inquizitive.ui.home.HomeActivity
 import com.example.inquizitive.utils.AppConstants
-import com.example.inquizitive.utils.Utils
 
 class UserProfileActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityUserProfileBinding
     private val mUserProfileViewModel by lazy { ViewModelProvider(this)[UserProfileViewModel::class.java] }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_user_profile)
-
-        binding.viewModel = mUserProfileViewModel
-        binding.lifecycleOwner = this
+        binding = DataBindingUtil.setContentView<ActivityUserProfileBinding?>(
+            this,
+            R.layout.activity_user_profile
+        ).apply {
+            viewModel = mUserProfileViewModel
+            lifecycleOwner = this@UserProfileActivity
+        }
 
         mUserProfileViewModel.initialize()
         setupObservers()
@@ -48,7 +52,8 @@ class UserProfileActivity : AppCompatActivity() {
     private fun setupListeners() {
         binding.apply {
             btnProfileLogout.setOnClickListener {
-                Utils.showToast(this@UserProfileActivity, "Logout")
+                updateUI(true)
+                openLogoutConfirmationFragment()
             }
 
             btnProfileHome.setOnClickListener {
@@ -59,6 +64,21 @@ class UserProfileActivity : AppCompatActivity() {
                 openAvatarActivity()
             }
         }
+    }
+
+    fun updateUI(logout: Boolean) {
+        binding.apply {
+            body.visibility = if (logout) View.INVISIBLE else View.VISIBLE
+            logoutFragmentContainer.visibility = if (logout) View.VISIBLE else View.INVISIBLE
+        }
+    }
+
+    private fun openLogoutConfirmationFragment() {
+        val fragment = LogoutConfirmationFragment()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.logout_fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun openAvatarActivity() {

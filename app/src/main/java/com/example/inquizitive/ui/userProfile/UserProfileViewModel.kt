@@ -37,7 +37,6 @@ class UserProfileViewModel(application: Application) : BaseViewModel(application
     private val _userTimeRateFormatted = MutableLiveData<String>()
     private val _userAvatar = MutableLiveData<String>()
 
-    val loggedInUser: LiveData<User?> get() = _loggedInUser
     val username: LiveData<String> get() = _username
     val userTotalQuizzes: LiveData<String> get() = _userTotalQuizzes
     val userCorrectAnswers: LiveData<String> get() = _userCorrectAnswers
@@ -81,60 +80,41 @@ class UserProfileViewModel(application: Application) : BaseViewModel(application
     }
 
     private fun updateUserLiveData(user: User) {
-        val totalQuizzes = user.quizzesPlayed ?: 0
-        val totalAnswers = user.quizzesPlayed?.times(10)
-        val correctAnswers = user.correctAnswers ?: 0
-        val totalPoints = user.totalPoints ?: 0
-        val bestResult = user.bestResult ?: 0
-        val currentCoins = user.actualCoins ?: 0
-        val spentCoins = user.spentCoins ?: 0
-        val spentTime = user.spentTime ?: 0
-
         _username.value = user.username ?: ""
-        _userTotalQuizzes.value = formatNumberWithThousandSeparator(totalQuizzes)
-        _userCorrectAnswers.value = "${formatNumberWithThousandSeparator(correctAnswers)} / ${
-            totalAnswers?.let {
-                formatNumberWithThousandSeparator(
-                    it
-                )
-            }
-        }"
-        _userBestResult.value = "${formatNumberWithThousandSeparator(bestResult)} points"
-        _userTotalPoints.value = "${formatNumberWithThousandSeparator(totalPoints)} points"
-        _userCurrentCoins.value = "${formatNumberWithThousandSeparator(currentCoins)} coins"
-        _userSpentCoins.value = "${formatNumberWithThousandSeparator(spentCoins)} coins"
-        _userTime.value = "${formatNumberWithThousandSeparator(spentTime)} seconds"
+        _userTotalQuizzes.value = formatNumberWithThousandSeparator(user.quizzesPlayed ?: 0)
+        _userCorrectAnswers.value =
+            "${formatNumberWithThousandSeparator(user.correctAnswers ?: 0)} / ${
+                formatNumberWithThousandSeparator(user.quizzesPlayed?.times(10) ?: 0)
+            }"
+        _userBestResult.value = "${formatNumberWithThousandSeparator(user.bestResult ?: 0)} points"
+        _userTotalPoints.value =
+            "${formatNumberWithThousandSeparator(user.totalPoints ?: 0)} points"
+        _userCurrentCoins.value =
+            "${formatNumberWithThousandSeparator(user.actualCoins ?: 0)} coins"
+        _userSpentCoins.value = "${formatNumberWithThousandSeparator(user.spentCoins ?: 0)} coins"
+        _userTime.value = "${formatNumberWithThousandSeparator(user.spentTime ?: 0)} seconds"
         _userAvatar.value = user.avatar ?: ""
 
         val correctAnswersRate =
-            calculateCorrectAnswersRate(
-                totalAnswers ?: 0,
-                user.correctAnswers ?: 0
-            )
+            calculateRate(user.quizzesPlayed?.times(10) ?: 0, user.correctAnswers ?: 0)
         _userCorrectAnswersRate.value = correctAnswersRate
         _userCorrectAnswersRateFormatted.value = String.format("%.1f %%", correctAnswersRate)
 
-        val timeRate = calculateTimeRate(user.totalTime ?: 0, user.spentTime ?: 0)
+        val timeRate = calculateRate(user.totalTime ?: 0, user.spentTime ?: 0)
         _userTimeRate.value = timeRate
         _userTimeRateFormatted.value = String.format("%.1f %%", timeRate)
     }
 
-    private fun calculateCorrectAnswersRate(totalAnswers: Int, correctAnswers: Int): Double {
-        if (totalAnswers == 0) return 0.0
-        return (correctAnswers.toDouble() / totalAnswers) * 100
-    }
-
-    private fun calculateTimeRate(totalTime: Int, spentTime: Int): Double {
-        if (totalTime == 0) return 0.0
-        return (spentTime.toDouble() / totalTime) * 100
+    private fun calculateRate(total: Int, value: Int): Double {
+        if (total == 0) return 0.0
+        return (value.toDouble() / total) * 100
     }
 
     private fun formatNumberWithThousandSeparator(number: Int): String {
         val symbols = DecimalFormatSymbols(Locale.getDefault()).apply {
             groupingSeparator = ' '
         }
-        val formatter = DecimalFormat("#,###", symbols)
-        return formatter.format(number)
+        return DecimalFormat("#,###", symbols).format(number)
     }
 
     override fun onError(message: String?, validationErrors: Map<String, ArrayList<String>>?) {
