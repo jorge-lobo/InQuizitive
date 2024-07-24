@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.example.inquizitive.ui.userProfile.LogoutConfirmationViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/transparent"
+        android:gravity="center"
+        android:padding="@dimen/margin_medium">
+
+        <FrameLayout
+            android:id="@+id/fl_dialog_body"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dialog_height"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
+            android:background="@drawable/background_dialog_default">
+
+            <LinearLayout
+                android:id="@+id/ll_text_container"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top"
+                android:orientation="vertical"
+                android:paddingHorizontal="@dimen/margin_medium"
+                android:paddingTop="@dimen/margin_large">
+
+                <TextView
+                    android:id="@+id/tv_logout_title"
+                    style="@style/textPrimaryLight"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/dialog_logout_title"
+                    android:textAllCaps="true"
+                    android:textSize="@dimen/txt_primary_text" />
+
+                <TextView
+                    android:id="@+id/tv_logout_message"
+                    style="@style/textPrimaryLight"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/margin_large"
+                    android:gravity="center"
+                    android:text="@string/dialog_logout_message"
+                    android:textSize="@dimen/txt_primary_text" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_logout_buttons_container"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/height_primary"
+                android:layout_gravity="bottom"
+                android:layout_margin="@dimen/margin_medium"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_logout_cancel"
+                    style="@style/buttonSecondary"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/button_cancel" />
+
+                <View
+                    android:layout_width="@dimen/margin_medium"
+                    android:layout_height="match_parent" />
+
+                <Button
+                    android:id="@+id/btn_logout_yes"
+                    style="@style/buttonPrimary"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:text="@string/button_yes" />
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+    </RelativeLayout>
+
+</layout>

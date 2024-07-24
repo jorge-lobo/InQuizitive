@@ -1,14 +1,12 @@
 package com.example.inquizitive.ui.avatar
 
 import android.content.Context
-import android.graphics.drawable.GradientDrawable
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import android.widget.FrameLayout
 import android.widget.ImageView
-import androidx.core.content.ContextCompat
 import com.example.inquizitive.R
 
 class AvatarGridAdapter(
@@ -61,6 +59,11 @@ class AvatarGridAdapter(
 
     fun clearSelection() {
         selectedPosition = -1
+        notifyDataSetChanged()
+    }
+
+    fun selectAvatar(position: Int) {
+        selectedPosition = position
         notifyDataSetChanged()
     }
 

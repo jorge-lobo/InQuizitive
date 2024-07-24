@@ -39,7 +39,7 @@ class UserDataViewModel(application: Application) : BaseViewModel(application), 
         loadLoggedInUser()
     }
 
-    private fun getLoggedInUserId(): Int? {
+    fun getLoggedInUserId(): Int? {
         return prefs.getInt(AppConstants.KEY_CURRENT_USER_ID, -1).takeIf { it != -1 }
     }
 
