@@ -59,6 +59,10 @@ class UserProfileViewModel(application: Application) : BaseViewModel(application
         return prefs.getInt(AppConstants.KEY_CURRENT_USER_ID, -1).takeIf { it != -1 }
     }
 
+    fun getLoggedInUserAvatar(): String? {
+        return _userAvatar.value
+    }
+
     private fun loadLoggedInUser() {
         viewModelScope.launch {
             isLoading.value = true

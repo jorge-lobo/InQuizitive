@@ -8,7 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import com.example.inquizitive.R
 import com.example.inquizitive.databinding.ActivityAvatarBinding
-import com.example.inquizitive.ui.home.HomeActivity
+import com.example.inquizitive.ui.userProfile.UserProfileActivity
 import com.example.inquizitive.utils.AppConstants
 import com.example.inquizitive.utils.Utils
 
@@ -20,23 +20,23 @@ class AvatarActivity : AppCompatActivity(), AvatarGridAdapter.OnItemClickListene
 
     private var isNewUser = false
     private var selectedAvatarPosition: Int = -1
+    private var userId: Int = -1
     private var username = ""
     private var password = ""
     private var confirmation = ""
-    private var isFemale = true
+    private var avatarName = ""
+    private var isFemale = false
+    private var isInitialLoad = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_avatar)
 
-        isNewUser = intent.getBooleanExtra(AppConstants.KEY_IS_NEW_USER, true)
-        username = intent.getStringExtra(AppConstants.KEY_NEW_USERNAME).toString()
-        password = intent.getStringExtra(AppConstants.KEY_NEW_PASSWORD).toString()
-        confirmation = intent.getStringExtra(AppConstants.KEY_NEW_CONFIRMATION).toString()
-
+        retrieveIntentData()
         setupAdapter()
         setupObservers()
         setupListeners()
+        initializeAvatarSelection()
     }
 
     override fun onItemClick(position: Int) {
@@ -44,15 +44,39 @@ class AvatarActivity : AppCompatActivity(), AvatarGridAdapter.OnItemClickListene
         changeBtnUpdateAvatarVisibility(true)
     }
 
+    private fun initializeAvatarSelection() {
+        if (!isNewUser) {
+            checkAvatarGender()
+        } else {
+            selectInitialFemaleAvatars()
+        }
+    }
+
+    private fun retrieveIntentData() {
+        intent.apply {
+            isNewUser = getBooleanExtra(AppConstants.KEY_IS_NEW_USER, true)
+            userId = getIntExtra(AppConstants.KEY_CURRENT_USER_ID, -1)
+            username = getStringExtra(AppConstants.KEY_NEW_USERNAME).orEmpty()
+            password = getStringExtra(AppConstants.KEY_NEW_PASSWORD).orEmpty()
+            confirmation = getStringExtra(AppConstants.KEY_NEW_CONFIRMATION).orEmpty()
+            avatarName = getStringExtra(AppConstants.KEY_SELECTED_AVATAR).orEmpty()
+        }
+    }
+
+    private fun setupAdapter() {
+        adapter = AvatarGridAdapter(this, mAvatarViewModel.getAvatars(), this)
+        binding.gvAvatars.adapter = adapter
+    }
+
     private fun setupObservers() {
         mAvatarViewModel.apply {
             avatars.observe(this@AvatarActivity) { avatars ->
                 adapter.updateAvatars(avatars)
-            }
-
-            isFemale.observe(this@AvatarActivity) { isFemale ->
-                this@AvatarActivity.isFemale = isFemale
-                toggleMode(isFemale)
+                if (isInitialLoad && selectedAvatarPosition != -1) {
+                    adapter.selectAvatar(selectedAvatarPosition)
+                    changeBtnUpdateAvatarVisibility(true)
+                    isInitialLoad = false
+                }
             }
         }
     }
@@ -61,15 +85,13 @@ class AvatarActivity : AppCompatActivity(), AvatarGridAdapter.OnItemClickListene
         binding.apply {
             tbSwitchFemale.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
-                    mAvatarViewModel.selectFemaleAvatars()
-                    clearSelection()
+                    switchGender(true)
                 }
             }
 
             tbSwitchMale.setOnCheckedChangeListener { _, isChecked ->
                 if (isChecked) {
-                    mAvatarViewModel.selectMaleAvatars()
-                    clearSelection()
+                    switchGender(false)
                 }
             }
 
@@ -83,16 +105,40 @@ class AvatarActivity : AppCompatActivity(), AvatarGridAdapter.OnItemClickListene
         }
     }
 
-    private fun setupAdapter() {
-        adapter = AvatarGridAdapter(this, mAvatarViewModel.getAvatars(), this)
-        binding.gvAvatars.adapter = adapter
+    private fun switchGender(female: Boolean) {
+        isFemale = female
+        mAvatarViewModel.setGender(female)
+        clearSelection()
+        showAvatars(isFemale)
     }
 
-    private fun toggleMode(isFemale: Boolean) {
+    private fun checkAvatarGender() {
+        isFemale = avatarName.startsWith("avatar_f")
+        showAvatars(isFemale)
+        toggleGenderSwitches(isFemale)
+        selectedAvatarPosition = avatarName.filter { it.isDigit() }.toInt() - 1
+    }
+
+    private fun showAvatars(isFemale: Boolean) {
+        if (isFemale) {
+            mAvatarViewModel.selectFemaleAvatars()
+            binding.tbSwitchMale.isChecked = false
+        } else {
+            mAvatarViewModel.selectMaleAvatars()
+            binding.tbSwitchFemale.isChecked = false
+        }
+    }
+
+    private fun toggleGenderSwitches(isFemale: Boolean) {
         binding.apply {
             tbSwitchFemale.isChecked = isFemale
             tbSwitchMale.isChecked = !isFemale
         }
+    }
+
+    private fun selectInitialFemaleAvatars() {
+        mAvatarViewModel.selectFemaleAvatars()
+        isFemale = true
     }
 
     private fun clearSelection() {
@@ -103,7 +149,6 @@ class AvatarActivity : AppCompatActivity(), AvatarGridAdapter.OnItemClickListene
 
     private fun handleAvatarSelection(position: Int) {
         selectedAvatarPosition = position
-
     }
 
     private fun updateAvatar() {
@@ -113,8 +158,8 @@ class AvatarActivity : AppCompatActivity(), AvatarGridAdapter.OnItemClickListene
         if (isNewUser) {
             navigateToSignUp(avatarString)
         } else {
-            Utils.startActivity(this, HomeActivity::class.java)
-            finish()
+            mAvatarViewModel.updateUserAvatar(userId, avatarString)
+            navigateToUserProfileActivity()
         }
     }
 
@@ -130,6 +175,11 @@ class AvatarActivity : AppCompatActivity(), AvatarGridAdapter.OnItemClickListene
             putExtra(AppConstants.KEY_SELECTED_AVATAR, avatarString)
         }
         setResult(Activity.RESULT_OK, intent)
+        finish()
+    }
+
+    private fun navigateToUserProfileActivity() {
+        Utils.startActivity(this, UserProfileActivity::class.java)
         finish()
     }
 }

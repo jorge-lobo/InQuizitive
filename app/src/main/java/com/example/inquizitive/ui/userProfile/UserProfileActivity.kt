@@ -82,10 +82,13 @@ class UserProfileActivity : AppCompatActivity() {
     }
 
     private fun openAvatarActivity() {
+        val userId = mUserProfileViewModel.getLoggedInUserId() ?: -1
+        val currentAvatar = mUserProfileViewModel.getLoggedInUserAvatar() ?: ""
+
         val intent = Intent(this, AvatarActivity::class.java).apply {
             putExtra(AppConstants.KEY_IS_NEW_USER, false)
-            putExtra(AppConstants.KEY_CURRENT_USER_ID, -1)
-            putExtra(AppConstants.KEY_SELECTED_AVATAR, "")
+            putExtra(AppConstants.KEY_CURRENT_USER_ID, userId)
+            putExtra(AppConstants.KEY_SELECTED_AVATAR, currentAvatar)
         }
         startActivity(intent)
     }
