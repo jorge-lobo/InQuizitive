@@ -10,6 +10,7 @@
     <string name="button_reset">Reset</string>
     <string name="button_leaderboards">Leaderboards</string>
     <string name="button_play">Play Quiz</string>
+    <string name="button_connect">Enable Wi-Fi</string>
     <string name="button_play_again">Play Again</string>
     <string name="button_next">Next</string>
     <string name="button_finish">Finish</string>

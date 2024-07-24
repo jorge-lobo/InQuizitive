@@ -1,10 +1,14 @@
 package com.example.inquizitive.ui.home
 
+import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.Network
 import android.net.NetworkCapabilities
 import android.net.NetworkRequest
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.provider.Settings
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -24,6 +28,16 @@ class HomeActivity : AppCompatActivity() {
     private val mHomeViewModel: HomeViewModel by viewModels()
     private var isInitialConnectionChecked = false
 
+    private val handler = Handler(Looper.getMainLooper())
+    private val internetCheckRunnable = object : Runnable {
+        override fun run() {
+            checkInternetConnectivity()
+            if (!mHomeViewModel.internetConnection.value!!) {
+                handler.postDelayed(this, 5000)
+            }
+        }
+    }
+
     private val networkCallback = object : ConnectivityManager.NetworkCallback() {
         override fun onAvailable(network: Network) {
             mHomeViewModel.setInternetConnection(true)
@@ -42,7 +56,7 @@ class HomeActivity : AppCompatActivity() {
         setupViews()
         setupListeners()
         openFragment()
-        mHomeViewModel.checkInternetConnectivity()
+        checkInternetConnectivity()
     }
 
     private fun setupObservers() {
@@ -54,11 +68,9 @@ class HomeActivity : AppCompatActivity() {
             internetConnection.observe(this@HomeActivity) { isConnected ->
                 if (!isInitialConnectionChecked) {
                     isInitialConnectionChecked = true
-                    if (isConnected) {
-                        updateUI(true)
-                    } else {
-                        updateUI(false)
-                    }
+                    updateUI(isConnected)
+                } else {
+                    updateUI(isConnected)
                 }
             }
         }
@@ -81,7 +93,16 @@ class HomeActivity : AppCompatActivity() {
             btnLeaderboards.setOnClickListener {
                 Utils.showToast(this@HomeActivity, "Leaderboards")
             }
+
+            btnConnect.setOnClickListener {
+                openWiFiSettings()
+                handler.postDelayed(internetCheckRunnable, 5000)
+            }
         }
+    }
+
+    private fun checkInternetConnectivity() {
+        mHomeViewModel.checkInternetConnectivity()
     }
 
     private fun setupConnectivity() {
@@ -113,6 +134,11 @@ class HomeActivity : AppCompatActivity() {
         unregisterNetworkCallback()
     }
 
+    private fun openWiFiSettings() {
+        val wifiIntent = Intent(Settings.ACTION_WIFI_SETTINGS)
+        startActivity(wifiIntent)
+    }
+
     private fun openFragment() {
         mHomeViewModel.checkLoginStatus().let { isLoggedIn ->
             val fragmentToOpen = if (isLoggedIn) UserDataFragment() else AuthFragment()
@@ -128,11 +154,19 @@ class HomeActivity : AppCompatActivity() {
             if (isConnected) {
                 gameDescriptionContainer.visibility = View.VISIBLE
                 internetConnectionWarningContainer.visibility = View.GONE
-                btnPlay.isEnabled = true
+                btnPlay.apply {
+                    mHomeViewModel.checkLoginStatus().let { isLoggedIn ->
+                        visibility = if (isLoggedIn) View.VISIBLE else View.INVISIBLE
+                    }
+                    isEnabled = true
+                }
             } else {
                 gameDescriptionContainer.visibility = View.GONE
                 internetConnectionWarningContainer.visibility = View.VISIBLE
-                btnPlay.isEnabled = false
+                btnPlay.apply {
+                    visibility = View.INVISIBLE
+                    isEnabled = false
+                }
             }
         }
     }
