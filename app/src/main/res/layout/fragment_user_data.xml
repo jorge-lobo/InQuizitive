@@ -112,7 +112,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_marginTop="@dimen/margin_medium"
                     android:gravity="center"
-                    android:text="@{viewModel.userQuizzes.toString()}"
+                    android:text="@{viewModel.userQuizzes}"
                     android:textSize="@dimen/txt_secondary_text"
                     tools:text="13" />
 
@@ -151,7 +151,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_marginTop="@dimen/margin_medium"
                     android:gravity="center"
-                    android:text="@{viewModel.userPoints.toString()}"
+                    android:text="@{viewModel.userPoints}"
                     android:textSize="@dimen/txt_secondary_text"
                     tools:text="12010" />
 
@@ -190,7 +190,7 @@
                     android:layout_alignParentEnd="true"
                     android:layout_marginTop="@dimen/margin_medium"
                     android:gravity="center"
-                    android:text="@{viewModel.userBest.toString()}"
+                    android:text="@{viewModel.userBest}"
                     android:textSize="@dimen/txt_secondary_text"
                     tools:text="930" />
 
