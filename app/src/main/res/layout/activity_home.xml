@@ -25,7 +25,7 @@
             android:layout_marginBottom="@dimen/margin_big"
             android:orientation="vertical"
             android:paddingHorizontal="@dimen/margin_medium"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/btn_play"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -36,6 +36,7 @@
                 android:layout_width="@dimen/pic_home_default"
                 android:layout_height="@dimen/pic_home_default"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginStart="20dp"
                 android:layout_marginBottom="@dimen/margin_huge"
                 android:contentDescription="@string/description_image_home"
                 android:src="@drawable/ic_pic_sand_clock" />
@@ -55,11 +56,11 @@
             android:id="@+id/internet_connection_warning_container"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_big"
+            android:layout_marginBottom="@dimen/margin_medium"
             android:orientation="vertical"
             android:paddingHorizontal="@dimen/margin_medium"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@id/btn_play"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@id/btn_leaderboards"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             tools:ignore="UseCompoundDrawables">
@@ -78,12 +79,18 @@
                 style="@style/textPrimaryLight"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_big"
                 android:gravity="center_horizontal"
                 android:text="@string/internet_connection"
                 android:textSize="@dimen/txt_secondary_text" />
 
-        </LinearLayout>
+            <Button
+                android:id="@+id/btn_connect"
+                style="@style/buttonPrimary"
+                android:enabled="true"
+                android:text="@string/button_connect" />
 
+        </LinearLayout>
 
         <Button
             android:id="@+id/btn_play"

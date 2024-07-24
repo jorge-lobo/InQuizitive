@@ -50,7 +50,7 @@ class UserDataFragment : BaseFragment() {
             }
 
             userCoins.observe(viewLifecycleOwner) { actualCoins ->
-                binding.userCoinsDisplay.tvUserCoins.text = actualCoins.toString()
+                binding.userCoinsDisplay.tvUserCoins.text = actualCoins
             }
         }
     }

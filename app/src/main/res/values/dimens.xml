@@ -49,7 +49,7 @@
     <dimen name="check_box">16dp</dimen>
 
     <!-- Icons -->
-    <dimen name="icon_button">24dp</dimen>
+    <dimen name="icon_button">32dp</dimen>
     <dimen name="icon_dialog">32dp</dimen>
     <dimen name="icon_button_back">32dp</dimen>
     <dimen name="icon_display">16dp</dimen>
