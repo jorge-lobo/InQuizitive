@@ -36,6 +36,7 @@
                 android:layout_width="@dimen/pic_home_default"
                 android:layout_height="@dimen/pic_home_default"
                 android:layout_gravity="center_horizontal"
+                android:layout_marginStart="20dp"
                 android:layout_marginBottom="@dimen/margin_huge"
                 android:contentDescription="@string/description_image_home"
                 android:src="@drawable/ic_pic_sand_clock" />
