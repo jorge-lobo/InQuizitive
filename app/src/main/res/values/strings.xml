@@ -48,6 +48,8 @@
     <string name="header_title_sign_up">New user</string>
     <string name="header_message_login">Please enter your account details</string>
     <string name="header_message_avatar">Click on the image to define your avatar</string>
+    <string name="header_leaderboard_title">Leaderboard</string>
+    <string name="header_leaderboard_number_1">1</string>
 
     <!-- Dialogs -->
     <string name="dialog_success_message">New user created successfully!</string>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cl_item_container"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_primary"
+        tools:background="@drawable/background_gradient">
+
+        <FrameLayout
+            android:id="@+id/fl_item_position_container"
+            android:layout_width="@dimen/small_box_container"
+            android:layout_height="@dimen/small_box_container"
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="@dimen/margin_extra_small"
+            android:background="@drawable/background_common_square_white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tv_item_position"
+                style="@style/textPrimaryDark"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:layout_marginBottom="@dimen/margin_tiny"
+                android:gravity="center"
+                android:textSize="@dimen/txt_char"
+                tools:text="9" />
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/tv_item_username"
+            style="@style/textPrimaryLight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_small"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:gravity="start"
+            android:textSize="@dimen/txt_primary_text"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@id/fl_item_position_container"
+            tools:text="username" />
+
+        <TextView
+            android:id="@+id/tv_item_score"
+            style="@style/textPrimaryLight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="256dp"
+            android:layout_marginBottom="@dimen/margin_small"
+            android:gravity="start"
+            android:textSize="@dimen/txt_primary_text"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:text="Score: 1 236" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
