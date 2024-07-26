@@ -7,22 +7,23 @@
         android:id="@+id/cl_item_container"
         android:layout_width="match_parent"
         android:layout_height="@dimen/height_primary"
-        tools:background="@drawable/background_gradient">
+        android:layout_marginBottom="@dimen/margin_medium"
+        android:background="@drawable/background_common_rectangular_white">
 
         <FrameLayout
             android:id="@+id/fl_item_position_container"
             android:layout_width="@dimen/small_box_container"
             android:layout_height="@dimen/small_box_container"
             android:layout_alignParentBottom="true"
-            android:layout_marginStart="@dimen/margin_extra_small"
-            android:background="@drawable/background_common_square_white"
+            android:layout_marginStart="@dimen/margin_tiny"
+            android:background="@drawable/background_common_square_normal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <TextView
                 android:id="@+id/tv_item_position"
-                style="@style/textPrimaryDark"
+                style="@style/textPrimaryLight"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -35,11 +36,11 @@
 
         <TextView
             android:id="@+id/tv_item_username"
-            style="@style/textPrimaryLight"
+            style="@style/textPrimaryDark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/margin_small"
-            android:layout_marginBottom="@dimen/margin_small"
+            android:layout_marginBottom="@dimen/margin_extra_small"
             android:gravity="start"
             android:textSize="@dimen/txt_primary_text"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -48,11 +49,11 @@
 
         <TextView
             android:id="@+id/tv_item_score"
-            style="@style/textPrimaryLight"
+            style="@style/textPrimaryDark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="256dp"
-            android:layout_marginBottom="@dimen/margin_small"
+            android:layout_marginStart="224dp"
+            android:layout_marginBottom="@dimen/margin_extra_small"
             android:gravity="start"
             android:textSize="@dimen/txt_primary_text"
             app:layout_constraintBottom_toBottomOf="parent"

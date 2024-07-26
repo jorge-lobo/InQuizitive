@@ -18,6 +18,7 @@ import com.example.inquizitive.R
 import com.example.inquizitive.databinding.ActivityHomeBinding
 import com.example.inquizitive.ui.home.auth.AuthFragment
 import com.example.inquizitive.ui.home.userData.UserDataFragment
+import com.example.inquizitive.ui.leaderboard.LeaderboardActivity
 import com.example.inquizitive.utils.Utils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -91,7 +92,7 @@ class HomeActivity : AppCompatActivity() {
             }
 
             btnLeaderboards.setOnClickListener {
-                Utils.showToast(this@HomeActivity, "Leaderboards")
+                Utils.startActivity(this@HomeActivity, LeaderboardActivity::class.java)
             }
 
             btnConnect.setOnClickListener {
