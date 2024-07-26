@@ -49,6 +49,11 @@
     <string name="header_message_login">Please enter your account details</string>
     <string name="header_message_avatar">Click on the image to define your avatar</string>
 
+    <!-- Leaderboard -->
+    <string name="leaderboard_title">Leaderboard</string>
+    <string name="leaderboard_top_position">1</string>
+    <string name="leaderboard_score_format">Score %s</string>
+
     <!-- Dialogs -->
     <string name="dialog_success_message">New user created successfully!</string>
     <string name="dialog_failure_message">Oops! Something wrong happened.</string>

@@ -19,8 +19,7 @@ class SplashScreenViewModel(application: Application) : BaseViewModel(applicatio
     fun uploadJsonToInternalStorage() {
         viewModelScope.launch {
             uploadFile("users.json")
-            // to do: create a json file to save all results
-            /*uploadFile("results.json")*/
+            uploadFile("results.json")
         }
     }
 

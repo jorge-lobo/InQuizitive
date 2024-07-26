@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <import type="android.view.View" />
+
+        <variable
+            name="viewModel"
+            type="com.example.inquizitive.ui.leaderboard.LeaderboardViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/main"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/background_gradient"
+        tools:context=".ui.leaderboard.LeaderboardActivity">
+
+        <RelativeLayout
+            android:id="@+id/rl_leaderboard_header"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/header_medium"
+            android:background="@drawable/background_common_header"
+            android:padding="@dimen/margin_medium"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/tv_leaderboard_title"
+                style="@style/textPrimaryLight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:text="@string/leaderboard_title"
+                android:textSize="@dimen/txt_title"
+                tools:ignore="RelativeOverlap" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_leaderboard_avatar_container"
+                android:layout_width="@dimen/avatar_large"
+                android:layout_height="@dimen/avatar_large"
+                android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
+                app:cardCornerRadius="@dimen/corner_medium">
+
+                <include
+                    android:id="@+id/iv_leaderboard_avatar"
+                    layout="@layout/common_avatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent" />
+
+            </androidx.cardview.widget.CardView>
+
+            <FrameLayout
+                android:id="@+id/fl_header_position_container"
+                android:layout_width="@dimen/small_box_container"
+                android:layout_height="@dimen/small_box_container"
+                android:layout_marginStart="@dimen/margin_extra_small"
+                android:layout_alignParentBottom="true"
+                android:background="@drawable/background_common_square_white">
+
+                <TextView
+                    android:id="@+id/tv_leaderboard_header_position"
+                    style="@style/textPrimaryDark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="@dimen/margin_tiny"
+                    android:gravity="center"
+                    android:text="@string/leaderboard_top_position"
+                    android:textSize="@dimen/txt_char" />
+
+            </FrameLayout>
+
+            <TextView
+                android:id="@+id/tv_leaderboard_header_username"
+                style="@style/textPrimaryLight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="@dimen/margin_small"
+                android:layout_marginBottom="@dimen/margin_extra_small"
+                android:layout_toEndOf="@id/fl_header_position_container"
+                android:gravity="start"
+                android:textSize="@dimen/txt_primary_text"
+                tools:text="username" />
+
+            <TextView
+                android:id="@+id/tv_leaderboard_header_score"
+                style="@style/textPrimaryLight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentBottom="true"
+                android:layout_marginStart="228dp"
+                android:layout_marginBottom="@dimen/margin_extra_small"
+                android:gravity="start"
+                android:textSize="@dimen/txt_primary_text"
+                tools:text="Score: 1 236" />
+
+        </RelativeLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rv_leaderboard"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/margin_medium"
+            android:layout_marginVertical="@dimen/margin_big"
+            android:foregroundGravity="top|center_horizontal"
+            app:layout_constraintBottom_toTopOf="@id/btn_leaderboard_home"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rl_leaderboard_header" />
+
+        <Button
+            android:id="@+id/btn_leaderboard_home"
+            style="@style/buttonPrimary"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/height_primary"
+            android:layout_marginHorizontal="@dimen/margin_medium"
+            android:layout_marginBottom="@dimen/margin_large"
+            android:text="@string/button_home"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>

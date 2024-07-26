@@ -10,10 +10,8 @@ import com.example.inquizitive.data.user.User
 import com.example.inquizitive.data.user.UserRepository
 import com.example.inquizitive.ui.common.BaseViewModel
 import com.example.inquizitive.utils.AppConstants
+import com.example.inquizitive.utils.Utils
 import kotlinx.coroutines.launch
-import java.text.DecimalFormat
-import java.text.DecimalFormatSymbols
-import java.util.Locale
 
 class UserProfileViewModel(application: Application) : BaseViewModel(application),
     LifecycleObserver {
@@ -85,18 +83,18 @@ class UserProfileViewModel(application: Application) : BaseViewModel(application
 
     private fun updateUserLiveData(user: User) {
         _username.value = user.username ?: ""
-        _userTotalQuizzes.value = formatNumberWithThousandSeparator(user.quizzesPlayed ?: 0)
+        _userTotalQuizzes.value = Utils.formatNumberWithThousandSeparator(user.quizzesPlayed ?: 0)
         _userCorrectAnswers.value =
-            "${formatNumberWithThousandSeparator(user.correctAnswers ?: 0)} / ${
-                formatNumberWithThousandSeparator(user.quizzesPlayed?.times(10) ?: 0)
+            "${Utils.formatNumberWithThousandSeparator(user.correctAnswers ?: 0)} / ${
+                Utils.formatNumberWithThousandSeparator(user.quizzesPlayed?.times(10) ?: 0)
             }"
-        _userBestResult.value = "${formatNumberWithThousandSeparator(user.bestResult ?: 0)} points"
+        _userBestResult.value = "${Utils.formatNumberWithThousandSeparator(user.bestResult ?: 0)} points"
         _userTotalPoints.value =
-            "${formatNumberWithThousandSeparator(user.totalPoints ?: 0)} points"
+            "${Utils.formatNumberWithThousandSeparator(user.totalPoints ?: 0)} points"
         _userCurrentCoins.value =
-            "${formatNumberWithThousandSeparator(user.actualCoins ?: 0)} coins"
-        _userSpentCoins.value = "${formatNumberWithThousandSeparator(user.spentCoins ?: 0)} coins"
-        _userTime.value = "${formatNumberWithThousandSeparator(user.spentTime ?: 0)} seconds"
+            "${Utils.formatNumberWithThousandSeparator(user.actualCoins ?: 0)} coins"
+        _userSpentCoins.value = "${Utils.formatNumberWithThousandSeparator(user.spentCoins ?: 0)} coins"
+        _userTime.value = "${Utils.formatNumberWithThousandSeparator(user.spentTime ?: 0)} seconds"
         _userAvatar.value = user.avatar ?: ""
 
         val correctAnswersRate =
@@ -112,13 +110,6 @@ class UserProfileViewModel(application: Application) : BaseViewModel(application
     private fun calculateRate(total: Int, value: Int): Double {
         if (total == 0) return 0.0
         return (value.toDouble() / total) * 100
-    }
-
-    private fun formatNumberWithThousandSeparator(number: Int): String {
-        val symbols = DecimalFormatSymbols(Locale.getDefault()).apply {
-            groupingSeparator = ' '
-        }
-        return DecimalFormat("#,###", symbols).format(number)
     }
 
     override fun onError(message: String?, validationErrors: Map<String, ArrayList<String>>?) {
