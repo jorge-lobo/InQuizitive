@@ -10,10 +10,8 @@ import com.example.inquizitive.data.user.User
 import com.example.inquizitive.data.user.UserRepository
 import com.example.inquizitive.ui.common.BaseViewModel
 import com.example.inquizitive.utils.AppConstants
+import com.example.inquizitive.utils.Utils
 import kotlinx.coroutines.launch
-import java.text.DecimalFormat
-import java.text.DecimalFormatSymbols
-import java.util.Locale
 
 class UserDataViewModel(application: Application) : BaseViewModel(application), LifecycleObserver {
 
@@ -68,19 +66,12 @@ class UserDataViewModel(application: Application) : BaseViewModel(application), 
 
     private fun updateUserLiveData(user: User) {
         _username.value = user.username ?: ""
-        _userCoins.value = formatNumberWithThousandSeparator(user.actualCoins ?: 0)
-        _userQuizzes.value = formatNumberWithThousandSeparator(user.quizzesPlayed ?: 0)
-        _userPoints.value = formatNumberWithThousandSeparator(user.totalPoints ?: 0)
-        _userBest.value = formatNumberWithThousandSeparator(user.bestResult ?: 0)
+        _userCoins.value = Utils.formatNumberWithThousandSeparator(user.actualCoins ?: 0)
+        _userQuizzes.value = Utils.formatNumberWithThousandSeparator(user.quizzesPlayed ?: 0)
+        _userPoints.value = Utils.formatNumberWithThousandSeparator(user.totalPoints ?: 0)
+        _userBest.value = Utils.formatNumberWithThousandSeparator(user.bestResult ?: 0)
         _userAvatar.value = user.avatar ?: ""
         _welcomeMessage.value = "Hello ${user.username ?: "User"} !"
-    }
-
-    private fun formatNumberWithThousandSeparator(number: Int): String {
-        val symbols = DecimalFormatSymbols(Locale.getDefault()).apply {
-            groupingSeparator = ' '
-        }
-        return DecimalFormat("#,###", symbols).format(number)
     }
 
     override fun onError(message: String?, validationErrors: Map<String, ArrayList<String>>?) {
