@@ -19,6 +19,8 @@ import com.example.inquizitive.databinding.ActivityHomeBinding
 import com.example.inquizitive.ui.home.auth.AuthFragment
 import com.example.inquizitive.ui.home.userData.UserDataFragment
 import com.example.inquizitive.ui.leaderboard.LeaderboardActivity
+import com.example.inquizitive.ui.quiz.QuizActivity
+import com.example.inquizitive.utils.AppConstants
 import com.example.inquizitive.utils.Utils
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -88,7 +90,7 @@ class HomeActivity : AppCompatActivity() {
     private fun setupListeners() {
         binding.apply {
             btnPlay.setOnClickListener {
-                Utils.showToast(this@HomeActivity, "Play Quiz")
+                startQuiz()
             }
 
             btnLeaderboards.setOnClickListener {
@@ -169,6 +171,14 @@ class HomeActivity : AppCompatActivity() {
                     isEnabled = false
                 }
             }
+        }
+    }
+
+    private fun startQuiz() {
+        Intent(this, QuizActivity::class.java).apply {
+            mHomeViewModel.getLoggedInUserId()
+                ?.let { putExtra(AppConstants.KEY_CURRENT_USER_ID, it) }
+            startActivity(this)
         }
     }
 }

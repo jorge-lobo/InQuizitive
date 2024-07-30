@@ -18,6 +18,9 @@
         android:theme="@style/Theme.InQuizitive"
         tools:targetApi="31">
         <activity
+            android:name=".ui.quiz.QuizActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.leaderboard.LeaderboardActivity"
             android:exported="false" />
         <activity
