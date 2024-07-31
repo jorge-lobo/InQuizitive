@@ -29,7 +29,7 @@
             app:layout_constraintTop_toTopOf="parent" />
 
         <RelativeLayout
-            android:id="@+id/quiz_header_container"
+            android:id="@+id/rl_quiz_header_container"
             android:layout_width="match_parent"
             android:layout_height="@dimen/header_small"
             android:paddingHorizontal="@dimen/margin_medium"
@@ -66,7 +66,7 @@
                     app:cardCornerRadius="@dimen/corner_medium">
 
                     <include
-                        android:id="@+id/iv_home_avatar"
+                        android:id="@+id/iv_quiz_avatar"
                         layout="@layout/common_avatar"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent" />
@@ -86,7 +86,7 @@
                 tools:visibility="visible">
 
                 <TextView
-                    android:id="@+id/tv_help"
+                    android:id="@+id/tv_btn_help"
                     style="@style/textSecondaryLight"
                     android:layout_width="@dimen/display_width"
                     android:layout_height="wrap_content"
@@ -140,7 +140,7 @@
             android:paddingHorizontal="@dimen/margin_medium"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/quiz_header_container">
+            app:layout_constraintTop_toBottomOf="@id/rl_quiz_header_container">
 
             <ImageView
                 android:id="@+id/iv_category_icon"
@@ -163,7 +163,6 @@
                 android:layout_toStartOf="@id/rl_timer_background"
                 android:layout_toEndOf="@id/iv_category_icon"
                 android:gravity="center"
-                android:text="@string/society_and_culture"
                 android:textSize="@dimen/txt_category"
                 tools:text="@string/society_and_culture" />
 
