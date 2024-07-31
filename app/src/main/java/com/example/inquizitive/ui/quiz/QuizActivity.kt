@@ -2,6 +2,7 @@ package com.example.inquizitive.ui.quiz
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -37,6 +38,11 @@ class QuizActivity : AppCompatActivity() {
             userCoins.observe(this@QuizActivity) { actualCoins ->
                 binding.quizCoinsDisplay.tvUserCoins.text = actualCoins
             }
+
+            isHelpAvailable.observe(this@QuizActivity) { isAvailable ->
+                binding.flBtnHelpContainer.visibility =
+                    if (isAvailable) View.VISIBLE else View.INVISIBLE
+            }
         }
     }
 
@@ -51,7 +57,7 @@ class QuizActivity : AppCompatActivity() {
 
     @SuppressLint("DiscouragedApi")
     private fun updateAvatar(avatar: String) {
-        val drawableResourceId = resources.getIdentifier(avatar, "drawable", this.packageName)
+        val drawableResourceId = resources.getIdentifier(avatar, "drawable", packageName)
         if (drawableResourceId != 0) {
             binding.ivQuizAvatar.ivAvatar.setImageResource(drawableResourceId)
         }

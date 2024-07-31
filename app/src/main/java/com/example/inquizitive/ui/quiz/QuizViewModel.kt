@@ -16,16 +16,19 @@ import kotlinx.coroutines.launch
 class QuizViewModel(application: Application) : BaseViewModel(application), LifecycleObserver {
 
     private val userRepository = UserRepository(application)
-    private val prefs = application.getSharedPreferences(AppConstants.PREFS_KEY, Context.MODE_PRIVATE)
+    private val prefs =
+        application.getSharedPreferences(AppConstants.PREFS_KEY, Context.MODE_PRIVATE)
 
     private val _loggedInUser = MutableLiveData<User?>()
     private val _username = MutableLiveData<String>()
     private val _userCoins = MutableLiveData<String>()
     private val _userAvatar = MutableLiveData<String>()
+    private val _isHelpAvailable = MutableLiveData<Boolean>()
 
     val username: LiveData<String> get() = _username
     val userCoins: LiveData<String> get() = _userCoins
     val userAvatar: LiveData<String> get() = _userAvatar
+    val isHelpAvailable: LiveData<Boolean> get() = _isHelpAvailable
 
     fun initialize() {
         loadLoggedInUser()
@@ -43,7 +46,7 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
                 if (userId != null) {
                     val user = userRepository.getUserById(userId)
                     _loggedInUser.value = user
-                    user?.let { updateUserLiveData(it) } ?: onError("User not found")
+                    user?.let { handleUserSuccess(it) } ?: onError("User not found")
                 } else {
                     _loggedInUser.value = null
                 }
@@ -55,10 +58,19 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
         }
     }
 
+    private fun handleUserSuccess(user: User) {
+        updateUserLiveData(user)
+        checkHelpAvailability(user)
+    }
+
     private fun updateUserLiveData(user: User) {
-        _username.value = user.username ?: ""
+        _username.value = user.username.orEmpty()
         _userCoins.value = Utils.formatNumberWithThousandSeparator(user.actualCoins ?: 0)
-        _userAvatar.value = user.avatar ?: ""
+        _userAvatar.value = user.avatar.orEmpty()
+    }
+
+    private fun checkHelpAvailability(user: User) {
+        _isHelpAvailable.value = (user.actualCoins ?: 0) > 79
     }
 
     override fun onError(message: String?, validationErrors: Map<String, ArrayList<String>>?) {
