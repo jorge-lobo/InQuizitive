@@ -40,6 +40,7 @@
     <string name="level_easy">Easy</string>
     <string name="level_medium">Medium</string>
     <string name="level_hard">Hard</string>
+    <string name="level_unknown">Unknown</string>
 
     <!-- Options -->
     <string name="option_a">A</string>

@@ -2,18 +2,17 @@ package com.example.inquizitive.data.question
 
 import com.example.inquizitive.data.common.ResultWrapper
 import com.example.inquizitive.data.question.objects.Question
-import com.example.inquizitive.data.question.objects.QuestionListResponse
 import com.example.inquizitive.data.question.remote.QuestionRemoteDataSource
 
 object QuestionRepository : IQuestionDataSource.Main {
 
     private var cachedQuestionResponse = mutableListOf<Question>()
 
-    override suspend fun getQuestions(): ResultWrapper<QuestionListResponse> {
+    override suspend fun getQuestions(): ResultWrapper<List<Question>> {
         val result = QuestionRemoteDataSource.getQuestions()
 
         result.result?.let {
-            cachedQuestionResponse.addAll(it.results)
+            cachedQuestionResponse.addAll(it)
         }
         return result
     }

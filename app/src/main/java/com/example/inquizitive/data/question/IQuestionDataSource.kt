@@ -2,7 +2,6 @@ package com.example.inquizitive.data.question
 
 import com.example.inquizitive.data.common.ResultWrapper
 import com.example.inquizitive.data.question.objects.Question
-import com.example.inquizitive.data.question.objects.QuestionListResponse
 
 class IQuestionDataSource {
     //Interfaces required for all objects in this data source
@@ -12,7 +11,7 @@ class IQuestionDataSource {
 
     //Interfaces specific to remote data source
     interface Remote : Common {
-        suspend fun getQuestions() : ResultWrapper<QuestionListResponse>
+        suspend fun getQuestions() : ResultWrapper<List<Question>>
     }
 
     //Interfaces specific to local data source

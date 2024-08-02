@@ -1,10 +1,9 @@
 package com.example.inquizitive.data.question.remote
 
-import com.example.inquizitive.data.question.objects.QuestionListResponse
+import com.example.inquizitive.data.question.objects.Question
 import retrofit2.http.GET
-import retrofit2.http.Query
 
 interface QuestionAPI {
     @GET("questions")
-    suspend fun getQuestions(): QuestionListResponse
+    suspend fun getQuestions(): List<Question>
 }
