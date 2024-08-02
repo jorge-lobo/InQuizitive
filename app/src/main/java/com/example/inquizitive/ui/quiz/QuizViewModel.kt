@@ -40,6 +40,7 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
     private val _correctAnswer = MutableLiveData<String?>()
     private val _incorrectAnswers = MutableLiveData<ArrayList<String>>()
     private val _options = MutableLiveData<List<String>>()
+    private val _countdown = MutableLiveData<Int>()
 
     val username: LiveData<String> get() = _username
     val userCoins: LiveData<String> get() = _userCoins
@@ -48,15 +49,14 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
     val questionText: LiveData<String?> get() = _questionText
     val category: LiveData<String?> get() = _category
     val difficulty: LiveData<String?> get() = _difficulty
-    val isLoadComplete: LiveData<Boolean> get() = _isLoadComplete
     val timeLeft: LiveData<String> get() = _timeLeft
-    val correctAnswer: LiveData<String?> get() = _correctAnswer
-    val incorrectAnswers: LiveData<ArrayList<String>> get() = _incorrectAnswers
     val options: LiveData<List<String>> get() = _options
+    val countdown: LiveData<Int> get() = _countdown
 
     private var job: Job? = null
 
     fun initialize() {
+        startIntro()
         loadLoggedInUser()
     }
 
@@ -153,6 +153,15 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
 
     private fun checkHelpAvailability(user: User) {
         _isHelpAvailable.value = (user.actualCoins ?: 0) > 79
+    }
+
+    private fun startIntro() {
+        job = CoroutineScope(Dispatchers.Main).launch {
+            for (i in 3 downTo 0) {
+                _countdown.value = i
+                delay(1000L)
+            }
+        }
     }
 
     private fun startTimer(time: Int) {

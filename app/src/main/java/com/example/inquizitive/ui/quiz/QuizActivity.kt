@@ -47,12 +47,6 @@ class QuizActivity : AppCompatActivity() {
                     if (isAvailable) View.VISIBLE else View.INVISIBLE
             }
 
-            isLoadComplete.observe(this@QuizActivity) { isLoadComplete ->
-                if (isLoadComplete) {
-                    mQuizViewModel.startTimerForCurrentDifficulty()
-                }
-            }
-
             questionText.observe(this@QuizActivity) { question ->
                 binding.tvQuizQuestion.text = question
             }
@@ -82,6 +76,15 @@ class QuizActivity : AppCompatActivity() {
                         tvTextOptionC.text = options[2]
                         tvTextOptionD.text = options[3]
                     }
+                }
+            }
+
+            countdown.observe(this@QuizActivity) { countdown ->
+                binding.tvCountdown.text = countdown.toString()
+                if (countdown == 0) {
+                    binding.flQuizIntroScreen.visibility = View.GONE
+                    binding.clQuizMain.visibility = View.VISIBLE
+                    mQuizViewModel.startTimerForCurrentDifficulty()
                 }
             }
         }
