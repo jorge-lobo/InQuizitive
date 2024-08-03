@@ -3,7 +3,12 @@ package com.example.inquizitive.ui.quiz
 import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
+import android.widget.FrameLayout
+import android.widget.ImageView
+import android.widget.RelativeLayout
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.inquizitive.R
@@ -68,8 +73,8 @@ class QuizActivity : AppCompatActivity() {
                 binding.tvQuizTimer.text = timeLeft
             }
 
-            options.observe(this@QuizActivity) { options->
-                if (options.size == 4){
+            options.observe(this@QuizActivity) { options ->
+                if (options.size == 4) {
                     binding.apply {
                         tvTextOptionA.text = options[0]
                         tvTextOptionB.text = options[1]
@@ -102,7 +107,190 @@ class QuizActivity : AppCompatActivity() {
                     proceedToNextQuestion()
                     startTimerForCurrentDifficulty()
                 }
+                resetOptions()
             }
+
+            rlOptionA.setOnClickListener { onOptionSelected(it as RelativeLayout) }
+            rlOptionB.setOnClickListener { onOptionSelected(it as RelativeLayout) }
+            rlOptionC.setOnClickListener { onOptionSelected(it as RelativeLayout) }
+            rlOptionD.setOnClickListener { onOptionSelected(it as RelativeLayout) }
+        }
+    }
+
+    private fun onOptionSelected(selectedOption: RelativeLayout) {
+        val options = listOf(
+            binding.rlOptionA,
+            binding.rlOptionB,
+            binding.rlOptionC,
+            binding.rlOptionD
+        )
+
+        options.forEach { option ->
+            if (option == selectedOption) {
+                setupSelectedOptionUI(option)
+            } else {
+                setupDefaultOptionUI(option)
+            }
+        }
+    }
+
+    private fun resetOptions() {
+        val options = listOf(
+            binding.rlOptionA,
+            binding.rlOptionB,
+            binding.rlOptionC,
+            binding.rlOptionD
+        )
+
+        options.forEach { option ->
+            setupDefaultOptionUI(option)
+        }
+    }
+
+    private fun setupDefaultOptionUI(option: RelativeLayout) {
+        applyStyleToOption(
+            option,
+            R.drawable.background_common_rectangular_normal,
+            ContextCompat.getColor(this, R.color.option_default_txt),
+            R.drawable.background_common_square_normal,
+            ContextCompat.getColor(this, R.color.option_default_letter),
+            R.drawable.background_common_square_normal
+        )
+
+        listOf(
+            R.id.fl_right_box_option_a,
+            R.id.fl_right_box_option_b,
+            R.id.fl_right_box_option_c,
+            R.id.fl_right_box_option_d
+        ).forEach { id ->
+            option.findViewById<FrameLayout>(id)?.visibility = View.INVISIBLE
+        }
+    }
+
+    private fun setupSelectedOptionUI(option: RelativeLayout) {
+        applyStyleToOption(
+            option,
+            R.drawable.background_common_rectangular_selected,
+            ContextCompat.getColor(this, R.color.option_selected_txt),
+            R.drawable.background_common_square_selected,
+            ContextCompat.getColor(this, R.color.option_selected_letter),
+            R.drawable.background_common_square_selected
+        )
+    }
+
+    private fun setupInactiveOptionUI(option: RelativeLayout) {
+        applyStyleToOption(
+            option,
+            R.drawable.background_common_rectangular_inactive,
+            ContextCompat.getColor(this, R.color.option_inactive_txt),
+            R.drawable.background_common_square_inactive,
+            ContextCompat.getColor(this, R.color.option_inactive_letter),
+            R.drawable.background_common_square_inactive
+        )
+    }
+
+    private fun setupCorrectOptionUI(option: RelativeLayout) {
+        applyStyleToOption(
+            option,
+            R.drawable.background_common_rectangular_correct,
+            ContextCompat.getColor(this, R.color.option_correct_txt),
+            R.drawable.background_common_square_correct,
+            ContextCompat.getColor(this, R.color.option_correct_letter),
+            R.drawable.background_common_square_correct
+        )
+
+        listOf(
+            R.id.fl_right_box_option_a,
+            R.id.fl_right_box_option_b,
+            R.id.fl_right_box_option_c,
+            R.id.fl_right_box_option_d
+        ).forEach { id ->
+            option.findViewById<FrameLayout>(id)?.visibility = View.VISIBLE
+        }
+
+        listOf(
+            R.id.iv_icon_option_a,
+            R.id.iv_icon_option_b,
+            R.id.iv_icon_option_c,
+            R.id.iv_icon_option_d
+        ).forEach { id ->
+            option.findViewById<ImageView>(id)?.setImageResource(R.drawable.ic_svg_check_mark)
+        }
+    }
+
+    private fun setupIncorrectOptionUI(option: RelativeLayout) {
+        applyStyleToOption(
+            option,
+            R.drawable.background_common_rectangular_wrong,
+            ContextCompat.getColor(this, R.color.option_wrong_txt),
+            R.drawable.background_common_square_wrong,
+            ContextCompat.getColor(this, R.color.option_wrong_letter),
+            R.drawable.background_common_square_wrong
+        )
+
+        listOf(
+            R.id.fl_right_box_option_a,
+            R.id.fl_right_box_option_b,
+            R.id.fl_right_box_option_c,
+            R.id.fl_right_box_option_d
+        ).forEach { id ->
+            option.findViewById<FrameLayout>(id)?.visibility = View.VISIBLE
+        }
+
+        listOf(
+            R.id.iv_icon_option_a,
+            R.id.iv_icon_option_b,
+            R.id.iv_icon_option_c,
+            R.id.iv_icon_option_d
+        ).forEach { id ->
+            option.findViewById<ImageView>(id)?.setImageResource(R.drawable.ic_svg_close_delete)
+        }
+    }
+
+    private fun applyStyleToOption(
+        option: RelativeLayout,
+        backgroundResource: Int,
+        textColor: Int,
+        leftFrameLayoutResource: Int,
+        charColor: Int,
+        rightFrameLayoutResource: Int
+    ) {
+        option.setBackgroundResource(backgroundResource)
+
+        listOf(
+            R.id.tv_text_option_a,
+            R.id.tv_text_option_b,
+            R.id.tv_text_option_c,
+            R.id.tv_text_option_d
+        ).forEach { id ->
+            option.findViewById<TextView>(id)?.setTextColor(textColor)
+        }
+
+        listOf(
+            R.id.fl_left_box_option_a,
+            R.id.fl_left_box_option_b,
+            R.id.fl_left_box_option_c,
+            R.id.fl_left_box_option_d
+        ).forEach { id ->
+            option.findViewById<FrameLayout>(id)?.setBackgroundResource(leftFrameLayoutResource)
+        }
+
+        listOf(
+            R.id.tv_a,
+            R.id.tv_b,
+            R.id.tv_c,
+            R.id.tv_d
+        ).forEach { id ->
+            option.findViewById<TextView>(id)?.setTextColor(charColor)
+        }
+
+        listOf(
+            R.id.fl_right_box_option_a,
+            R.id.fl_right_box_option_b,
+            R.id.fl_right_box_option_c,
+            R.id.fl_right_box_option_d
+        ).forEach { id ->
+            option.findViewById<FrameLayout>(id)?.setBackgroundResource(rightFrameLayoutResource)
         }
     }
 

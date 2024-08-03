@@ -83,7 +83,7 @@
     <color name="option_default_letter">@color/white</color>
     <color name="option_inactive_bg">@color/silver</color>
     <color name="option_inactive_stroke">@color/ice</color>
-    <color name="option_inactive_txt">@color/stormCloud</color>
+    <color name="option_inactive_txt">@color/dolphin</color>
     <color name="option_inactive_box">@color/ice</color>
     <color name="option_inactive_letter">@color/silver</color>
     <color name="option_selected_bg">@color/dodgerBlue</color>
