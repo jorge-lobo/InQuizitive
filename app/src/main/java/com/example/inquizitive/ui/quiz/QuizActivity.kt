@@ -13,11 +13,17 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.inquizitive.R
 import com.example.inquizitive.databinding.ActivityQuizBinding
+import com.example.inquizitive.utils.Utils
 
 class QuizActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityQuizBinding
     private val mQuizViewModel by lazy { ViewModelProvider(this)[QuizViewModel::class.java] }
+
+    private var isOptionSelected: Boolean = false
+    private var isAnswerSubmitted: Boolean = false
+    private var isQuizFinished: Boolean = false
+    private var selectedAnswer: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,69 +35,39 @@ class QuizActivity : AppCompatActivity() {
             lifecycleOwner = this@QuizActivity
         }
 
-        mQuizViewModel.apply {
-            initialize()
-            onStart()
-        }
+        initializeViewModel()
         setupObservers()
         setupListeners()
     }
 
+    private fun initializeViewModel() {
+        mQuizViewModel.apply {
+            initialize()
+            onStart()
+        }
+    }
+
     private fun setupObservers() {
         mQuizViewModel.apply {
-            userAvatar.observe(this@QuizActivity) { avatarName ->
-                avatarName?.let { updateAvatar(it) }
+            userAvatar.observe(this@QuizActivity) { it?.let { updateAvatar(it) } }
+
+            userCoins.observe(this@QuizActivity) { binding.quizCoinsDisplay.tvUserCoins.text = it }
+
+            isHelpAvailable.observe(this@QuizActivity) {
+                binding.flBtnHelpContainer.visibility = if (it) View.VISIBLE else View.INVISIBLE
             }
 
-            userCoins.observe(this@QuizActivity) { actualCoins ->
-                binding.quizCoinsDisplay.tvUserCoins.text = actualCoins
-            }
+            questionText.observe(this@QuizActivity) { binding.tvQuizQuestion.text = it }
 
-            isHelpAvailable.observe(this@QuizActivity) { isAvailable ->
-                binding.flBtnHelpContainer.visibility =
-                    if (isAvailable) View.VISIBLE else View.INVISIBLE
-            }
+            category.observe(this@QuizActivity) { it?.let { updateCategory(it) } }
 
-            questionText.observe(this@QuizActivity) { question ->
-                binding.tvQuizQuestion.text = question
-            }
+            difficulty.observe(this@QuizActivity) { it?.let { updateDifficulty(it) } }
 
-            category.observe(this@QuizActivity) { category ->
-                if (category != null) {
-                    updateCategoryName(category)
-                    updateCategoryIcon(category)
-                }
-            }
+            timeLeft.observe(this@QuizActivity) { binding.tvQuizTimer.text = it }
 
-            difficulty.observe(this@QuizActivity) { difficulty ->
-                if (difficulty != null) {
-                    updateDifficulty(difficulty)
-                }
-            }
+            options.observe(this@QuizActivity) { updateOptions(it) }
 
-            timeLeft.observe(this@QuizActivity) { timeLeft ->
-                binding.tvQuizTimer.text = timeLeft
-            }
-
-            options.observe(this@QuizActivity) { options ->
-                if (options.size == 4) {
-                    binding.apply {
-                        tvTextOptionA.text = options[0]
-                        tvTextOptionB.text = options[1]
-                        tvTextOptionC.text = options[2]
-                        tvTextOptionD.text = options[3]
-                    }
-                }
-            }
-
-            countdown.observe(this@QuizActivity) { countdown ->
-                binding.tvCountdown.text = countdown.toString()
-                if (countdown == 0) {
-                    binding.flQuizIntroScreen.visibility = View.GONE
-                    binding.clQuizMain.visibility = View.VISIBLE
-                    mQuizViewModel.startTimerForCurrentDifficulty()
-                }
-            }
+            countdown.observe(this@QuizActivity) { handleCountdown(it) }
         }
     }
 
@@ -102,18 +78,12 @@ class QuizActivity : AppCompatActivity() {
             }
 
             btnSubmit.setOnClickListener {
-                mQuizViewModel.apply {
-                    stopTimer()
-                    proceedToNextQuestion()
-                    startTimerForCurrentDifficulty()
-                }
-                resetOptions()
+                handleBtnSubmitClick()
             }
 
-            rlOptionA.setOnClickListener { onOptionSelected(it as RelativeLayout) }
-            rlOptionB.setOnClickListener { onOptionSelected(it as RelativeLayout) }
-            rlOptionC.setOnClickListener { onOptionSelected(it as RelativeLayout) }
-            rlOptionD.setOnClickListener { onOptionSelected(it as RelativeLayout) }
+            listOf(rlOptionA, rlOptionB, rlOptionC, rlOptionD).forEach { option ->
+                option.setOnClickListener { onOptionSelected(it as RelativeLayout) }
+            }
         }
     }
 
@@ -128,10 +98,97 @@ class QuizActivity : AppCompatActivity() {
         options.forEach { option ->
             if (option == selectedOption) {
                 setupSelectedOptionUI(option)
+                isOptionSelected = true
+                updateBtnSubmit()
+
+                selectedAnswer = when (option) {
+                    binding.rlOptionA -> binding.tvTextOptionA.text.toString()
+                    binding.rlOptionB -> binding.tvTextOptionB.text.toString()
+                    binding.rlOptionC -> binding.tvTextOptionC.text.toString()
+                    binding.rlOptionD -> binding.tvTextOptionD.text.toString()
+                    else -> null
+                }
             } else {
                 setupDefaultOptionUI(option)
             }
         }
+    }
+
+    private fun updateOptionUI() {
+        val correctOption = mQuizViewModel.correctAnswer.value
+        val options = listOf(
+            binding.rlOptionA to binding.tvTextOptionA.text.toString(),
+            binding.rlOptionB to binding.tvTextOptionB.text.toString(),
+            binding.rlOptionC to binding.tvTextOptionC.text.toString(),
+            binding.rlOptionD to binding.tvTextOptionD.text.toString()
+        )
+
+        options.forEach { (optionLayout, optionText) ->
+            when (optionText) {
+                correctOption -> setupCorrectOptionUI(optionLayout)
+                selectedAnswer -> setupIncorrectOptionUI(optionLayout)
+                else -> setupDefaultOptionUI(optionLayout)
+            }
+        }
+    }
+
+    private fun handleBtnSubmitClick() {
+        val btnSubmit = binding.btnSubmit
+        val currentQuestionIndex = mQuizViewModel.currentQuestionIndex.value ?: 0
+        val totalQuestions = mQuizViewModel.totalQuestions.value ?: 0
+        if (currentQuestionIndex == totalQuestions - 1) {
+            isQuizFinished = true
+        }
+
+        if (isOptionSelected && !isAnswerSubmitted) {
+            isAnswerSubmitted = true
+
+            btnSubmit.text = if (isQuizFinished) {
+                getString(R.string.button_finish)
+            } else {
+                getString(R.string.button_next)
+            }
+
+            mQuizViewModel.apply {
+                stopTimer()
+                val isCorrect = checkAnswer(selectedAnswer)
+                if (isCorrect) {
+                    handleCorrectAnswer()
+                } else {
+                    handleIncorrectAnswer()
+                }
+            }
+        } else if (isAnswerSubmitted) {
+            isAnswerSubmitted = false
+            isOptionSelected = false
+            btnSubmit.apply {
+                isEnabled = false
+                text = getString(R.string.button_submit_answer)
+            }
+
+            if (isQuizFinished) {
+                // showResult()
+                Utils.showToast(this@QuizActivity, "Show results")
+            } else {
+                mQuizViewModel.apply {
+                    proceedToNextQuestion()
+                    startTimerForCurrentDifficulty()
+                }
+            }
+            resetOptions()
+        }
+    }
+
+    private fun updateBtnSubmit() {
+        binding.btnSubmit.isEnabled = isOptionSelected
+    }
+
+    private fun handleCorrectAnswer() {
+        updateOptionUI()
+    }
+
+    private fun handleIncorrectAnswer() {
+        updateOptionUI()
     }
 
     private fun resetOptions() {
@@ -141,160 +198,117 @@ class QuizActivity : AppCompatActivity() {
             binding.rlOptionC,
             binding.rlOptionD
         )
-
-        options.forEach { option ->
-            setupDefaultOptionUI(option)
-        }
+        options.forEach { setupDefaultOptionUI(it) }
     }
 
-    private fun setupDefaultOptionUI(option: RelativeLayout) {
-        applyStyleToOption(
-            option,
-            R.drawable.background_common_rectangular_normal,
-            ContextCompat.getColor(this, R.color.option_default_txt),
-            R.drawable.background_common_square_normal,
-            ContextCompat.getColor(this, R.color.option_default_letter),
-            R.drawable.background_common_square_normal
-        )
+    private fun setupDefaultOptionUI(option: RelativeLayout) = applyStyleToOption(
+        option,
+        R.drawable.background_common_rectangular_normal,
+        R.color.option_default_txt,
+        R.drawable.background_common_square_normal,
+        R.color.option_default_letter,
+        R.drawable.background_common_square_normal
+    )
 
-        listOf(
-            R.id.fl_right_box_option_a,
-            R.id.fl_right_box_option_b,
-            R.id.fl_right_box_option_c,
-            R.id.fl_right_box_option_d
-        ).forEach { id ->
-            option.findViewById<FrameLayout>(id)?.visibility = View.INVISIBLE
-        }
-    }
+    private fun setupSelectedOptionUI(option: RelativeLayout) = applyStyleToOption(
+        option,
+        R.drawable.background_common_rectangular_selected,
+        R.color.option_selected_txt,
+        R.drawable.background_common_square_selected,
+        R.color.option_selected_letter,
+        R.drawable.background_common_square_selected
+    )
 
-    private fun setupSelectedOptionUI(option: RelativeLayout) {
-        applyStyleToOption(
-            option,
-            R.drawable.background_common_rectangular_selected,
-            ContextCompat.getColor(this, R.color.option_selected_txt),
-            R.drawable.background_common_square_selected,
-            ContextCompat.getColor(this, R.color.option_selected_letter),
-            R.drawable.background_common_square_selected
-        )
-    }
+    private fun setupInactiveOptionUI(option: RelativeLayout) = applyStyleToOption(
+        option,
+        R.drawable.background_common_rectangular_inactive,
+        R.color.option_inactive_txt,
+        R.drawable.background_common_square_inactive,
+        R.color.option_inactive_letter,
+        R.drawable.background_common_square_inactive
+    )
 
-    private fun setupInactiveOptionUI(option: RelativeLayout) {
-        applyStyleToOption(
-            option,
-            R.drawable.background_common_rectangular_inactive,
-            ContextCompat.getColor(this, R.color.option_inactive_txt),
-            R.drawable.background_common_square_inactive,
-            ContextCompat.getColor(this, R.color.option_inactive_letter),
-            R.drawable.background_common_square_inactive
-        )
-    }
+    private fun setupCorrectOptionUI(option: RelativeLayout) = applyStyleToOption(
+        option,
+        R.drawable.background_common_rectangular_correct,
+        R.color.option_correct_txt,
+        R.drawable.background_common_square_correct,
+        R.color.option_correct_letter,
+        R.drawable.background_common_square_correct,
+        true,
+        R.drawable.ic_svg_check_mark
+    )
 
-    private fun setupCorrectOptionUI(option: RelativeLayout) {
-        applyStyleToOption(
-            option,
-            R.drawable.background_common_rectangular_correct,
-            ContextCompat.getColor(this, R.color.option_correct_txt),
-            R.drawable.background_common_square_correct,
-            ContextCompat.getColor(this, R.color.option_correct_letter),
-            R.drawable.background_common_square_correct
-        )
-
-        listOf(
-            R.id.fl_right_box_option_a,
-            R.id.fl_right_box_option_b,
-            R.id.fl_right_box_option_c,
-            R.id.fl_right_box_option_d
-        ).forEach { id ->
-            option.findViewById<FrameLayout>(id)?.visibility = View.VISIBLE
-        }
-
-        listOf(
-            R.id.iv_icon_option_a,
-            R.id.iv_icon_option_b,
-            R.id.iv_icon_option_c,
-            R.id.iv_icon_option_d
-        ).forEach { id ->
-            option.findViewById<ImageView>(id)?.setImageResource(R.drawable.ic_svg_check_mark)
-        }
-    }
-
-    private fun setupIncorrectOptionUI(option: RelativeLayout) {
-        applyStyleToOption(
-            option,
-            R.drawable.background_common_rectangular_wrong,
-            ContextCompat.getColor(this, R.color.option_wrong_txt),
-            R.drawable.background_common_square_wrong,
-            ContextCompat.getColor(this, R.color.option_wrong_letter),
-            R.drawable.background_common_square_wrong
-        )
-
-        listOf(
-            R.id.fl_right_box_option_a,
-            R.id.fl_right_box_option_b,
-            R.id.fl_right_box_option_c,
-            R.id.fl_right_box_option_d
-        ).forEach { id ->
-            option.findViewById<FrameLayout>(id)?.visibility = View.VISIBLE
-        }
-
-        listOf(
-            R.id.iv_icon_option_a,
-            R.id.iv_icon_option_b,
-            R.id.iv_icon_option_c,
-            R.id.iv_icon_option_d
-        ).forEach { id ->
-            option.findViewById<ImageView>(id)?.setImageResource(R.drawable.ic_svg_close_delete)
-        }
-    }
+    private fun setupIncorrectOptionUI(option: RelativeLayout) = applyStyleToOption(
+        option,
+        R.drawable.background_common_rectangular_wrong,
+        R.color.option_wrong_txt,
+        R.drawable.background_common_square_wrong,
+        R.color.option_wrong_letter,
+        R.drawable.background_common_square_wrong,
+        true,
+        R.drawable.ic_svg_close_delete
+    )
 
     private fun applyStyleToOption(
         option: RelativeLayout,
         backgroundResource: Int,
-        textColor: Int,
+        textColorRes: Int,
         leftFrameLayoutResource: Int,
-        charColor: Int,
-        rightFrameLayoutResource: Int
+        charColorRes: Int,
+        rightFrameLayoutResource: Int,
+        showRightBox: Boolean = false,
+        rightBoxIcon: Int? = null
     ) {
-        option.setBackgroundResource(backgroundResource)
+        option.apply {
+            setBackgroundResource(backgroundResource)
 
-        listOf(
-            R.id.tv_text_option_a,
-            R.id.tv_text_option_b,
-            R.id.tv_text_option_c,
-            R.id.tv_text_option_d
-        ).forEach { id ->
-            option.findViewById<TextView>(id)?.setTextColor(textColor)
-        }
+            updateChildren<TextView>(
+                R.id.tv_text_option_a,
+                R.id.tv_text_option_b,
+                R.id.tv_text_option_c,
+                R.id.tv_text_option_d
+            ) {
+                setTextColor(ContextCompat.getColor(context, textColorRes))
+            }
 
-        listOf(
-            R.id.fl_left_box_option_a,
-            R.id.fl_left_box_option_b,
-            R.id.fl_left_box_option_c,
-            R.id.fl_left_box_option_d
-        ).forEach { id ->
-            option.findViewById<FrameLayout>(id)?.setBackgroundResource(leftFrameLayoutResource)
-        }
+            updateChildren<FrameLayout>(
+                R.id.fl_left_box_option_a,
+                R.id.fl_left_box_option_b,
+                R.id.fl_left_box_option_c,
+                R.id.fl_left_box_option_d
+            ) {
+                setBackgroundResource(leftFrameLayoutResource)
+            }
 
-        listOf(
-            R.id.tv_a,
-            R.id.tv_b,
-            R.id.tv_c,
-            R.id.tv_d
-        ).forEach { id ->
-            option.findViewById<TextView>(id)?.setTextColor(charColor)
-        }
+            updateChildren<TextView>(R.id.tv_a, R.id.tv_b, R.id.tv_c, R.id.tv_d) {
+                setTextColor(ContextCompat.getColor(context, charColorRes))
+            }
 
-        listOf(
-            R.id.fl_right_box_option_a,
-            R.id.fl_right_box_option_b,
-            R.id.fl_right_box_option_c,
-            R.id.fl_right_box_option_d
-        ).forEach { id ->
-            option.findViewById<FrameLayout>(id)?.setBackgroundResource(rightFrameLayoutResource)
+            updateChildren<FrameLayout>(
+                R.id.fl_right_box_option_a,
+                R.id.fl_right_box_option_b,
+                R.id.fl_right_box_option_c,
+                R.id.fl_right_box_option_d
+            ) {
+                setBackgroundResource(rightFrameLayoutResource)
+                visibility = if (showRightBox) View.VISIBLE else View.INVISIBLE
+            }
+
+            rightBoxIcon?.let { icon ->
+                updateChildren<ImageView>(
+                    R.id.iv_icon_option_a,
+                    R.id.iv_icon_option_b,
+                    R.id.iv_icon_option_c,
+                    R.id.iv_icon_option_d
+                ) {
+                    setImageResource(icon)
+                }
+            }
         }
     }
 
-    private fun updateCategoryName(category: String) {
+    private fun updateCategory(category: String) {
         val textResId = when (category) {
             "film_and_tv" -> R.string.film_and_tv
             "geography" -> R.string.geography
@@ -309,10 +323,8 @@ class QuizActivity : AppCompatActivity() {
             else -> R.string.general_knowledge
         }
         binding.tvCategoryName.text = getText(textResId)
-    }
 
-    private fun updateCategoryIcon(category: String) {
-        val drawableResource = when (category) {
+        val drawableResId = when (category) {
             "film_and_tv" -> R.drawable.ic_cat_film_tv
             "geography" -> R.drawable.ic_cat_geography
             "society_and_culture" -> R.drawable.ic_cat_society_culture
@@ -325,7 +337,7 @@ class QuizActivity : AppCompatActivity() {
             "music" -> R.drawable.ic_cat_music
             else -> R.drawable.ic_cat_general_knowlegde
         }
-        binding.ivCategoryIcon.setImageResource(drawableResource)
+        binding.ivCategoryIcon.setImageResource(drawableResId)
     }
 
     private fun updateDifficulty(difficulty: String) {
@@ -343,6 +355,35 @@ class QuizActivity : AppCompatActivity() {
         val drawableResourceId = resources.getIdentifier(avatar, "drawable", packageName)
         if (drawableResourceId != 0) {
             binding.ivQuizAvatar.ivAvatar.setImageResource(drawableResourceId)
+        }
+    }
+
+    private fun updateOptions(options: List<String>) {
+        if (options.size == 4) {
+            binding.apply {
+                tvTextOptionA.text = options[0]
+                tvTextOptionB.text = options[1]
+                tvTextOptionC.text = options[2]
+                tvTextOptionD.text = options[3]
+            }
+        }
+    }
+
+    private fun handleCountdown(countdown: Int) {
+        binding.tvCountdown.text = countdown.toString()
+        if (countdown == 0) {
+            binding.flQuizIntroScreen.visibility = View.GONE
+            binding.clQuizMain.visibility = View.VISIBLE
+            mQuizViewModel.startTimerForCurrentDifficulty()
+        }
+    }
+
+    private inline fun <reified T : View> RelativeLayout.updateChildren(
+        vararg ids: Int,
+        update: T.() -> Unit
+    ) {
+        ids.forEach { id ->
+            findViewById<T>(id)?.update()
         }
     }
 }

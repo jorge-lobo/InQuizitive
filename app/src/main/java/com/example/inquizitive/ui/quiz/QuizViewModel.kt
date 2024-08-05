@@ -31,7 +31,8 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
     private val _userAvatar = MutableLiveData<String>()
     private val _isHelpAvailable = MutableLiveData<Boolean>()
     private val _questions = MutableLiveData<List<Question>>()
-    private val _currentQuestionIndex = MutableLiveData<Int>().apply { value = 0 }
+    private val _totalQuestions = MutableLiveData<Int>()
+    private val _currentQuestionIndex = MutableLiveData<Int>()
     private val _questionText = MutableLiveData<String?>()
     private val _category = MutableLiveData<String?>()
     private val _difficulty = MutableLiveData<String?>()
@@ -46,14 +47,22 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
     val userCoins: LiveData<String> get() = _userCoins
     val userAvatar: LiveData<String> get() = _userAvatar
     val isHelpAvailable: LiveData<Boolean> get() = _isHelpAvailable
+    val totalQuestions: LiveData<Int>get() = _totalQuestions
+    val currentQuestionIndex: LiveData<Int> get() = _currentQuestionIndex
     val questionText: LiveData<String?> get() = _questionText
     val category: LiveData<String?> get() = _category
     val difficulty: LiveData<String?> get() = _difficulty
     val timeLeft: LiveData<String> get() = _timeLeft
+    val correctAnswer: LiveData<String?> get() = _correctAnswer
     val options: LiveData<List<String>> get() = _options
     val countdown: LiveData<Int> get() = _countdown
 
     private var job: Job? = null
+
+    init {
+        _totalQuestions.value = 10
+        _currentQuestionIndex.value = 0
+    }
 
     fun initialize() {
         startIntro()
@@ -100,29 +109,39 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
     }
 
     private fun getQuestionsFromAPI() {
-        isLoading.value = true
-        noDataAvailable.value = false
-
         viewModelScope.launch {
+            isLoading.value = true
+            noDataAvailable.value = false
             val questionsResponse = QuestionRepository.getQuestions()
-
-            questionsResponse.result?.let {
-                _questions.value = it
-                if (it.isNotEmpty()) {
-                    _questionText.value = it[0].questionText?.text
-                    _category.value = it[0].category
-                    _difficulty.value = it[0].difficulty
-                    _correctAnswer.value = it[0].correctAnswer
-                    _incorrectAnswers.value = it[0].incorrectAnswers
-                    shuffleAndSetOptions(it[0].correctAnswer, it[0].incorrectAnswers)
-                }
-                _isLoadComplete.value = true
-            } ?: run {
+            if (questionsResponse.result != null) {
+                handleQuestionsResponse(questionsResponse.result!!)
+            } else {
                 onError(questionsResponse.error?.message ?: "Failed to load questions")
-                _isLoadComplete.value = false
             }
             isLoading.value = false
         }
+    }
+
+    private fun handleQuestionsResponse(questions: List<Question>) {
+        _questions.value = questions
+        if (questions.isNotEmpty()) {
+            updateQuestion(questions[0])
+        }
+        _isLoadComplete.value = true
+    }
+
+    private fun updateQuestion(question: Question) {
+        _questionText.value = question.questionText?.text
+        _category.value = question.category
+        _difficulty.value = question.difficulty
+        _correctAnswer.value = question.correctAnswer
+        _incorrectAnswers.value = question.incorrectAnswers
+        shuffleAndSetOptions(question.correctAnswer, question.incorrectAnswers)
+    }
+
+    fun checkAnswer(selectedAnswer: String?): Boolean {
+        val correctAnswer = _correctAnswer.value
+        return selectedAnswer == correctAnswer
     }
 
     fun proceedToNextQuestion() {
