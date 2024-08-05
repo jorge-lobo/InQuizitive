@@ -68,6 +68,8 @@ class QuizActivity : AppCompatActivity() {
             options.observe(this@QuizActivity) { updateOptions(it) }
 
             countdown.observe(this@QuizActivity) { handleCountdown(it) }
+
+            currentQuestionIndex.observe(this@QuizActivity) {updateQuizProgress(it)}
         }
     }
 
@@ -348,6 +350,15 @@ class QuizActivity : AppCompatActivity() {
             else -> R.string.level_unknown
         }
         binding.tvDifficulty.text = getText(textResId)
+    }
+
+    private fun updateQuizProgress(currentQuestionIndex: Int) {
+        val currentQuestion = currentQuestionIndex + 1
+
+        binding.apply {
+            pbQuizProgress.progress = currentQuestion * 10
+            tvQuizProgress.text = getString(R.string.quiz_progress, currentQuestion)
+        }
     }
 
     @SuppressLint("DiscouragedApi")
