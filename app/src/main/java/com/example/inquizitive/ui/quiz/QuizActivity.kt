@@ -24,6 +24,7 @@ class QuizActivity : AppCompatActivity() {
     private var isAnswerSubmitted: Boolean = false
     private var isQuizFinished: Boolean = false
     private var selectedAnswer: String? = null
+    private var isClickable: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -144,6 +145,7 @@ class QuizActivity : AppCompatActivity() {
 
         if (isOptionSelected && !isAnswerSubmitted) {
             isAnswerSubmitted = true
+            updateOptionsAvailability(isClickable = false)
 
             btnSubmit.text = if (isQuizFinished) {
                 getString(R.string.button_finish)
@@ -176,6 +178,7 @@ class QuizActivity : AppCompatActivity() {
                     proceedToNextQuestion()
                     startTimerForCurrentDifficulty()
                 }
+                updateOptionsAvailability(isClickable = true)
             }
             resetOptions()
         }
@@ -191,6 +194,15 @@ class QuizActivity : AppCompatActivity() {
 
     private fun handleIncorrectAnswer() {
         updateOptionUI()
+    }
+
+    private fun updateOptionsAvailability(isClickable: Boolean) {
+        binding.apply {
+            rlOptionA.isClickable = isClickable
+            rlOptionB.isClickable = isClickable
+            rlOptionC.isClickable = isClickable
+            rlOptionD.isClickable = isClickable
+        }
     }
 
     private fun resetOptions() {
