@@ -22,9 +22,9 @@ class QuizActivity : AppCompatActivity() {
 
     private var isOptionSelected: Boolean = false
     private var isAnswerSubmitted: Boolean = false
+    private var isTimeOver: Boolean = false
     private var isQuizFinished: Boolean = false
     private var selectedAnswer: String? = null
-    private var isClickable: Boolean = true
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -70,7 +70,11 @@ class QuizActivity : AppCompatActivity() {
 
             countdown.observe(this@QuizActivity) { handleCountdown(it) }
 
-            currentQuestionIndex.observe(this@QuizActivity) {updateQuizProgress(it)}
+            currentQuestionIndex.observe(this@QuizActivity) { updateQuizProgress(it) }
+
+            isTimeRunningOut.observe(this@QuizActivity) { updateTimerUI(it) }
+
+            isTimeOver.observe(this@QuizActivity) { lockOptions(it) }
         }
     }
 
@@ -135,6 +139,37 @@ class QuizActivity : AppCompatActivity() {
         }
     }
 
+    private fun updateTimerUI(isTimerRunningOut: Boolean) {
+        val backgroundRes =
+            if (isTimerRunningOut) R.drawable.background_timer_warning else R.drawable.background_timer_normal
+
+        val iconColor = if (isTimerRunningOut) R.color.icon_primary else R.color.icon_secondary
+
+        val textColor = if (isTimerRunningOut) R.color.timer_warning_txt else R.color.timer_default_txt
+
+        binding.apply {
+            rlTimerBackground.setBackgroundResource(backgroundRes)
+            ivIconClock.setColorFilter(ContextCompat.getColor(this@QuizActivity, iconColor))
+            tvQuizTimer.setTextColor(ContextCompat.getColor(this@QuizActivity, textColor))
+        }
+    }
+
+    private fun lockOptions(isTimeOver: Boolean) {
+        if (isTimeOver) {
+            updateOptionsAvailability(isClickable = false)
+            binding.btnSubmit.apply {
+                isEnabled = true
+                text = if (isQuizFinished) {
+                    getString(R.string.button_finish)
+                } else {
+                    getString(R.string.button_next)
+                }
+            }
+            handleIncorrectAnswer()
+            isAnswerSubmitted = true
+        }
+    }
+
     private fun handleBtnSubmitClick() {
         val btnSubmit = binding.btnSubmit
         val currentQuestionIndex = mQuizViewModel.currentQuestionIndex.value ?: 0
@@ -164,6 +199,7 @@ class QuizActivity : AppCompatActivity() {
             }
         } else if (isAnswerSubmitted) {
             isAnswerSubmitted = false
+            isTimeOver = false
             isOptionSelected = false
             btnSubmit.apply {
                 isEnabled = false

@@ -42,6 +42,8 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
     private val _incorrectAnswers = MutableLiveData<ArrayList<String>>()
     private val _options = MutableLiveData<List<String>>()
     private val _countdown = MutableLiveData<Int>()
+    private val _isTimeRunningOut = MutableLiveData<Boolean>()
+    private val _isTimeOver = MutableLiveData<Boolean>()
 
     val username: LiveData<String> get() = _username
     val userCoins: LiveData<String> get() = _userCoins
@@ -56,6 +58,8 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
     val correctAnswer: LiveData<String?> get() = _correctAnswer
     val options: LiveData<List<String>> get() = _options
     val countdown: LiveData<Int> get() = _countdown
+    val isTimeRunningOut: LiveData<Boolean> get() = _isTimeRunningOut
+    val isTimeOver: LiveData<Boolean> get() = _isTimeOver
 
     private var job: Job? = null
 
@@ -190,9 +194,15 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
                 val seconds = i % 60
                 val formattedTime = String.format("%02d:%02d", minutes, seconds)
                 _timeLeft.value = formattedTime
+                checkTimer(seconds)
                 delay(1000L)
             }
         }
+    }
+
+    private fun checkTimer(seconds: Int) {
+        _isTimeRunningOut.value = seconds < 11
+        _isTimeOver.value = seconds == 0
     }
 
     fun stopTimer() {
