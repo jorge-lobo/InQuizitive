@@ -31,25 +31,31 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
     private val _userAvatar = MutableLiveData<String>()
     private val _isHelpAvailable = MutableLiveData<Boolean>()
     private val _questions = MutableLiveData<List<Question>>()
-    private val _totalQuestions = MutableLiveData<Int>()
-    private val _currentQuestionIndex = MutableLiveData<Int>()
+    private val _totalQuestions = MutableLiveData<Int>().apply { value = 10 }
+    private val _currentQuestionIndex = MutableLiveData<Int>().apply { value = 0 }
     private val _questionText = MutableLiveData<String?>()
     private val _category = MutableLiveData<String?>()
     private val _difficulty = MutableLiveData<String?>()
     private val _isLoadComplete = MutableLiveData<Boolean>().apply { value = false }
     private val _timeLeft = MutableLiveData<String>()
+    private val _secondsLeft = MutableLiveData<Int>()
     private val _correctAnswer = MutableLiveData<String?>()
     private val _incorrectAnswers = MutableLiveData<ArrayList<String>>()
     private val _options = MutableLiveData<List<String>>()
     private val _countdown = MutableLiveData<Int>()
     private val _isTimeRunningOut = MutableLiveData<Boolean>()
     private val _isTimeOver = MutableLiveData<Boolean>()
+    private val _totalPoints = MutableLiveData<Int>().apply { value = 0 }
+    private val _totalCoins = MutableLiveData<Int>().apply { value = 0 }
+    private val _totalCorrectAnswers = MutableLiveData<Int>().apply { value = 0 }
+    private val _totalTime = MutableLiveData<Int>().apply { value = 0 }
+    private val _totalTimeSpent = MutableLiveData<Int>().apply { value = 0 }
 
     val username: LiveData<String> get() = _username
     val userCoins: LiveData<String> get() = _userCoins
     val userAvatar: LiveData<String> get() = _userAvatar
     val isHelpAvailable: LiveData<Boolean> get() = _isHelpAvailable
-    val totalQuestions: LiveData<Int>get() = _totalQuestions
+    val totalQuestions: LiveData<Int> get() = _totalQuestions
     val currentQuestionIndex: LiveData<Int> get() = _currentQuestionIndex
     val questionText: LiveData<String?> get() = _questionText
     val category: LiveData<String?> get() = _category
@@ -60,13 +66,13 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
     val countdown: LiveData<Int> get() = _countdown
     val isTimeRunningOut: LiveData<Boolean> get() = _isTimeRunningOut
     val isTimeOver: LiveData<Boolean> get() = _isTimeOver
+    val totalPoints: LiveData<Int> get() = _totalPoints
+    val totalCoins: LiveData<Int> get() = _totalCoins
+    val totalCorrectAnswers: LiveData<Int> get() = _totalCorrectAnswers
+    val totalTime: LiveData<Int> get() = _totalTime
+    val totalTimeSpent: LiveData<Int> get() = _totalTimeSpent
 
     private var job: Job? = null
-
-    init {
-        _totalQuestions.value = 10
-        _currentQuestionIndex.value = 0
-    }
 
     fun initialize() {
         startIntro()
@@ -116,11 +122,10 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
         viewModelScope.launch {
             isLoading.value = true
             noDataAvailable.value = false
-            val questionsResponse = QuestionRepository.getQuestions()
-            if (questionsResponse.result != null) {
-                handleQuestionsResponse(questionsResponse.result!!)
-            } else {
-                onError(questionsResponse.error?.message ?: "Failed to load questions")
+            QuestionRepository.getQuestions().let { questionsResponse ->
+                questionsResponse.result?.let { questions ->
+                    handleQuestionsResponse(questions)
+                } ?: onError(questionsResponse.error?.message ?: "Failed to load questions")
             }
             isLoading.value = false
         }
@@ -135,12 +140,14 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
     }
 
     private fun updateQuestion(question: Question) {
-        _questionText.value = question.questionText?.text
-        _category.value = question.category
-        _difficulty.value = question.difficulty
-        _correctAnswer.value = question.correctAnswer
-        _incorrectAnswers.value = question.incorrectAnswers
-        shuffleAndSetOptions(question.correctAnswer, question.incorrectAnswers)
+        with(question) {
+            _questionText.value = questionText?.text
+            _category.value = category
+            _difficulty.value = difficulty
+            _correctAnswer.value = correctAnswer
+            _incorrectAnswers.value = incorrectAnswers
+            shuffleAndSetOptions(correctAnswer, incorrectAnswers)
+        }
     }
 
     fun checkAnswer(selectedAnswer: String?): Boolean {
@@ -149,28 +156,22 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
     }
 
     fun proceedToNextQuestion() {
-        val currentIndex = _currentQuestionIndex.value ?: return
-        val questionList = _questions.value ?: return
-
-        if (currentIndex + 1 < questionList.size) {
-            _currentQuestionIndex.value = currentIndex + 1
-            _questionText.value = questionList[currentIndex + 1].questionText?.text
-            _category.value = questionList[currentIndex + 1].category
-            _difficulty.value = questionList[currentIndex + 1].difficulty
-            _correctAnswer.value = questionList[currentIndex + 1].correctAnswer
-            _incorrectAnswers.value = questionList[currentIndex + 1].incorrectAnswers
-            shuffleAndSetOptions(
-                questionList[currentIndex + 1].correctAnswer,
-                questionList[currentIndex + 1].incorrectAnswers
-            )
+        _questions.value?.let { questionList ->
+            _currentQuestionIndex.value?.let { currentIndex ->
+                if (currentIndex + 1 < questionList.size) {
+                    updateQuestion(questionList[currentIndex + 1])
+                    _currentQuestionIndex.value = currentIndex + 1
+                }
+            }
         }
     }
 
     private fun shuffleAndSetOptions(correctAnswer: String?, incorrectAnswers: ArrayList<String>) {
-        val allOptions = mutableListOf<String>()
-        correctAnswer?.let { allOptions.add(it) }
-        allOptions.addAll(incorrectAnswers)
-        allOptions.shuffle()
+        val allOptions = mutableListOf<String>().apply {
+            correctAnswer?.let { add(it) }
+            addAll(incorrectAnswers)
+            shuffle()
+        }
         _options.value = allOptions
     }
 
@@ -201,8 +202,72 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
     }
 
     private fun checkTimer(seconds: Int) {
+        _secondsLeft.value = seconds
         _isTimeRunningOut.value = seconds < 11
         _isTimeOver.value = seconds == 0
+    }
+
+    fun handleCorrectAnswer() {
+        updatePoints()
+        updateCoins()
+        incrementCorrectAnswers()
+    }
+
+    private fun updatePoints() {
+        _difficulty.value?.let { difficulty ->
+            _secondsLeft.value?.let { timeLeft ->
+                _totalPoints.value?.let { totalPoints ->
+                    val value = when (difficulty) {
+                        "easy" -> 1
+                        "medium" -> 3
+                        "hard" -> 9
+                        else -> 0
+                    }
+                    val points = value * timeLeft
+                    _totalPoints.value = totalPoints + points
+                }
+            }
+        }
+    }
+
+    private fun updateCoins() {
+        _difficulty.value?.let { difficulty ->
+            _totalCoins.value?.let { totalCoins ->
+                val coins = when (difficulty) {
+                    "easy" -> 10
+                    "medium" -> 30
+                    "hard" -> 90
+                    else -> 0
+                }
+                _totalCoins.value = totalCoins + coins
+            }
+        }
+    }
+
+    private fun incrementCorrectAnswers() {
+        _totalCorrectAnswers.value?.let { totalCorrectAnswers ->
+            _totalCorrectAnswers.value = totalCorrectAnswers + 1
+        }
+    }
+
+    fun getTimeSpent() {
+        _difficulty.value?.let { difficulty ->
+            _secondsLeft.value?.let { endTime ->
+                _totalTime.value?.let { totalTime ->
+                    _totalTimeSpent.value?.let { totalTimeSpent ->
+                        val startTime = when (difficulty) {
+                            "easy" -> 20
+                            "medium" -> 30
+                            "hard" -> 40
+                            else -> 30
+                        }
+                        val usedTime = startTime - endTime
+                        _totalTimeSpent.value = totalTimeSpent + usedTime
+                        _totalTime.value = totalTime + startTime
+                    }
+                }
+            }
+        }
     }
 
     fun stopTimer() {
@@ -211,14 +276,15 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
     }
 
     fun startTimerForCurrentDifficulty() {
-        val difficulty = _difficulty.value ?: return
-        val time = when (difficulty) {
-            "easy" -> 20
-            "medium" -> 30
-            "hard" -> 40
-            else -> 30
+        _difficulty.value?.let { difficulty ->
+            val time = when (difficulty) {
+                "easy" -> 20
+                "medium" -> 30
+                "hard" -> 40
+                else -> 30
+            }
+            startTimer(time)
         }
-        startTimer(time)
     }
 
     override fun onCleared() {

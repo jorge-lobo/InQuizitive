@@ -95,14 +95,12 @@ class QuizActivity : AppCompatActivity() {
     }
 
     private fun onOptionSelected(selectedOption: RelativeLayout) {
-        val options = listOf(
+        listOf(
             binding.rlOptionA,
             binding.rlOptionB,
             binding.rlOptionC,
             binding.rlOptionD
-        )
-
-        options.forEach { option ->
+        ).forEach { option ->
             if (option == selectedOption) {
                 setupSelectedOptionUI(option)
                 isOptionSelected = true
@@ -123,14 +121,12 @@ class QuizActivity : AppCompatActivity() {
 
     private fun updateOptionUI() {
         val correctOption = mQuizViewModel.correctAnswer.value
-        val options = listOf(
+        listOf(
             binding.rlOptionA to binding.tvTextOptionA.text.toString(),
             binding.rlOptionB to binding.tvTextOptionB.text.toString(),
             binding.rlOptionC to binding.tvTextOptionC.text.toString(),
             binding.rlOptionD to binding.tvTextOptionD.text.toString()
-        )
-
-        options.forEach { (optionLayout, optionText) ->
+        ).forEach { (optionLayout, optionText) ->
             when (optionText) {
                 correctOption -> setupCorrectOptionUI(optionLayout)
                 selectedAnswer -> setupIncorrectOptionUI(optionLayout)
@@ -145,7 +141,8 @@ class QuizActivity : AppCompatActivity() {
 
         val iconColor = if (isTimerRunningOut) R.color.icon_primary else R.color.icon_secondary
 
-        val textColor = if (isTimerRunningOut) R.color.timer_warning_txt else R.color.timer_default_txt
+        val textColor =
+            if (isTimerRunningOut) R.color.timer_warning_txt else R.color.timer_default_txt
 
         binding.apply {
             rlTimerBackground.setBackgroundResource(backgroundRes)
@@ -156,7 +153,7 @@ class QuizActivity : AppCompatActivity() {
 
     private fun lockOptions(isTimeOver: Boolean) {
         if (isTimeOver) {
-            updateOptionsAvailability(isClickable = false)
+            updateOptionsAvailability(false)
             binding.btnSubmit.apply {
                 isEnabled = true
                 text = if (isQuizFinished) {
@@ -174,13 +171,11 @@ class QuizActivity : AppCompatActivity() {
         val btnSubmit = binding.btnSubmit
         val currentQuestionIndex = mQuizViewModel.currentQuestionIndex.value ?: 0
         val totalQuestions = mQuizViewModel.totalQuestions.value ?: 0
-        if (currentQuestionIndex == totalQuestions - 1) {
-            isQuizFinished = true
-        }
+        isQuizFinished = currentQuestionIndex == totalQuestions - 1
 
         if (isOptionSelected && !isAnswerSubmitted) {
             isAnswerSubmitted = true
-            updateOptionsAvailability(isClickable = false)
+            updateOptionsAvailability(false)
 
             btnSubmit.text = if (isQuizFinished) {
                 getString(R.string.button_finish)
@@ -190,34 +185,61 @@ class QuizActivity : AppCompatActivity() {
 
             mQuizViewModel.apply {
                 stopTimer()
+                getTimeSpent()
                 val isCorrect = checkAnswer(selectedAnswer)
                 if (isCorrect) {
-                    handleCorrectAnswer()
+                    this@QuizActivity.handleCorrectAnswer()
                 } else {
                     handleIncorrectAnswer()
                 }
             }
         } else if (isAnswerSubmitted) {
-            isAnswerSubmitted = false
-            isTimeOver = false
-            isOptionSelected = false
-            btnSubmit.apply {
-                isEnabled = false
-                text = getString(R.string.button_submit_answer)
-            }
+            resetQuizState()
 
             if (isQuizFinished) {
-                // showResult()
-                Utils.showToast(this@QuizActivity, "Show results")
+                showQuizResult()
             } else {
-                mQuizViewModel.apply {
-                    proceedToNextQuestion()
-                    startTimerForCurrentDifficulty()
-                }
-                updateOptionsAvailability(isClickable = true)
+                proceedToNextQuestion()
             }
-            resetOptions()
         }
+    }
+
+    private fun resetQuizState() {
+        isAnswerSubmitted = false
+        isTimeOver = false
+        isOptionSelected = false
+        binding.btnSubmit.apply {
+            isEnabled = false
+            text = getString(R.string.button_submit_answer)
+        }
+        updateOptionsAvailability(true)
+        resetOptions()
+    }
+
+    private fun showQuizResult() {
+        mQuizViewModel.apply {
+            val resultMap = mapOf(
+                "Total Coins" to totalCoins,
+                "Total Points" to totalPoints,
+                "Total Correct Answers" to totalCorrectAnswers,
+                "Total Time Spent" to totalTimeSpent,
+                "Total Time" to totalTime
+            )
+
+            resultMap.forEach { (name, liveData) ->
+                liveData.observe(this@QuizActivity) {
+                    Utils.showToast(this@QuizActivity, "$name: $it")
+                }
+            }
+        }
+    }
+
+    private fun proceedToNextQuestion() {
+        mQuizViewModel.apply {
+            proceedToNextQuestion()
+            startTimerForCurrentDifficulty()
+        }
+        updateOptionsAvailability(true)
     }
 
     private fun updateBtnSubmit() {
@@ -226,6 +248,7 @@ class QuizActivity : AppCompatActivity() {
 
     private fun handleCorrectAnswer() {
         updateOptionUI()
+        mQuizViewModel.handleCorrectAnswer()
     }
 
     private fun handleIncorrectAnswer() {
@@ -233,22 +256,15 @@ class QuizActivity : AppCompatActivity() {
     }
 
     private fun updateOptionsAvailability(isClickable: Boolean) {
-        binding.apply {
-            rlOptionA.isClickable = isClickable
-            rlOptionB.isClickable = isClickable
-            rlOptionC.isClickable = isClickable
-            rlOptionD.isClickable = isClickable
+        listOf(binding.rlOptionA, binding.rlOptionB, binding.rlOptionC, binding.rlOptionD).forEach {
+            it.isClickable = isClickable
         }
     }
 
     private fun resetOptions() {
-        val options = listOf(
-            binding.rlOptionA,
-            binding.rlOptionB,
-            binding.rlOptionC,
-            binding.rlOptionD
-        )
-        options.forEach { setupDefaultOptionUI(it) }
+        listOf(binding.rlOptionA, binding.rlOptionB, binding.rlOptionC, binding.rlOptionD).forEach {
+            setupDefaultOptionUI(it)
+        }
     }
 
     private fun setupDefaultOptionUI(option: RelativeLayout) = applyStyleToOption(
