@@ -1,14 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
-
-    <data>
-
-        <import type="android.view.View" />
-
-        <variable
-            name="viewModel"
-            type="com.example.inquizitive.ui.userProfile.logout.LogoutConfirmationViewModel" />
-    </data>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".ui.quiz.exitConfirmation.ExitConfirmationFragment">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -20,7 +13,7 @@
         <FrameLayout
             android:id="@+id/fl_dialog_body"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dialog_height"
+            android:layout_height="@dimen/dialog_height_large"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
@@ -36,12 +29,12 @@
                 android:paddingTop="@dimen/margin_large">
 
                 <TextView
-                    android:id="@+id/tv_logout_title"
+                    android:id="@+id/tv_exit_title"
                     style="@style/textPrimaryLight"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="@string/dialog_logout_title"
+                    android:text="@string/dialog_exit_title"
                     android:textAllCaps="true"
                     android:textSize="@dimen/txt_primary_text" />
 
@@ -52,13 +45,13 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/margin_large"
                     android:gravity="center"
-                    android:text="@string/dialog_logout_message"
+                    android:text="@string/dialog_exit_message"
                     android:textSize="@dimen/txt_primary_text" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/ll_logout_buttons_container"
+                android:id="@+id/ll_exit_buttons_container"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/height_primary"
                 android:layout_gravity="bottom"
@@ -66,7 +59,7 @@
                 android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/btn_logout_cancel"
+                    android:id="@+id/btn_exit_cancel"
                     style="@style/buttonSecondary"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
@@ -78,7 +71,7 @@
                     android:layout_height="match_parent" />
 
                 <Button
-                    android:id="@+id/btn_logout_yes"
+                    android:id="@+id/btn_exit_yes"
                     style="@style/buttonPrimary"
                     android:layout_width="0dp"
                     android:layout_height="match_parent"

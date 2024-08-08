@@ -31,6 +31,7 @@
 
     <!-- Dialog -->
     <dimen name="dialog_height">208dp</dimen>
+    <dimen name="dialog_height_large">256dp</dimen>
     <dimen name="dialog_icon_box">64dp</dimen>
 
     <!-- Display -->

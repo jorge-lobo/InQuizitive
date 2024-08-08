@@ -11,6 +11,7 @@ import com.example.inquizitive.R
 import com.example.inquizitive.databinding.ActivityUserProfileBinding
 import com.example.inquizitive.ui.avatar.AvatarActivity
 import com.example.inquizitive.ui.home.HomeActivity
+import com.example.inquizitive.ui.userProfile.logout.LogoutConfirmationFragment
 import com.example.inquizitive.utils.AppConstants
 
 class UserProfileActivity : AppCompatActivity() {

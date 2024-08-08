@@ -14,6 +14,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
 import com.example.inquizitive.R
 import com.example.inquizitive.databinding.ActivityQuizBinding
+import com.example.inquizitive.ui.quiz.exitConfirmation.ExitConfirmationFragment
 import com.example.inquizitive.utils.Utils
 
 class QuizActivity : AppCompatActivity() {
@@ -86,7 +87,8 @@ class QuizActivity : AppCompatActivity() {
     private fun setupListeners() {
         binding.apply {
             btnBack.setOnClickListener {
-                finish()
+                updateUI(true)
+                openExitConfirmationFragment()
             }
 
             btnSubmit.setOnClickListener {
@@ -97,6 +99,21 @@ class QuizActivity : AppCompatActivity() {
                 option.setOnClickListener { onOptionSelected(it as RelativeLayout) }
             }
         }
+    }
+
+    fun updateUI(exit: Boolean) {
+        binding.apply {
+            body.visibility = if (exit) View.INVISIBLE else View.VISIBLE
+            exitFragmentContainer.visibility = if (exit) View.VISIBLE else View.INVISIBLE
+        }
+    }
+
+    private fun openExitConfirmationFragment() {
+        val fragment = ExitConfirmationFragment()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.exit_fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     private fun onOptionSelected(selectedOption: RelativeLayout) {

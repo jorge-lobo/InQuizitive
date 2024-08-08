@@ -1,4 +1,4 @@
-package com.example.inquizitive.ui.userProfile
+package com.example.inquizitive.ui.userProfile.logout
 
 import android.app.Application
 import android.content.Context
