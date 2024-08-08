@@ -74,7 +74,7 @@ class QuizActivity : AppCompatActivity() {
 
             isTimeRunningOut.observe(this@QuizActivity) { updateTimerUI(it) }
 
-            isTimeOver.observe(this@QuizActivity) { lockOptions(it) }
+            isTimeOver.observe(this@QuizActivity) { handleTimeOver(it) }
         }
     }
 
@@ -151,20 +151,29 @@ class QuizActivity : AppCompatActivity() {
         }
     }
 
-    private fun lockOptions(isTimeOver: Boolean) {
+    private fun updateTimerVisibility(isTimerVisible: Boolean) {
+        binding.rlTimerBackground.visibility = if (isTimerVisible) View.VISIBLE else View.INVISIBLE
+    }
+
+    private fun handleTimeOver(isTimeOver: Boolean) {
         if (isTimeOver) {
-            updateOptionsAvailability(false)
-            binding.btnSubmit.apply {
-                isEnabled = true
-                text = if (isQuizFinished) {
-                    getString(R.string.button_finish)
-                } else {
-                    getString(R.string.button_next)
-                }
-            }
-            handleIncorrectAnswer()
-            isAnswerSubmitted = true
+            lockOptions()
+            updateTimerVisibility(false)
         }
+    }
+
+    private fun lockOptions() {
+        updateOptionsAvailability(false)
+        binding.btnSubmit.apply {
+            isEnabled = true
+            text = if (isQuizFinished) {
+                getString(R.string.button_finish)
+            } else {
+                getString(R.string.button_next)
+            }
+        }
+        handleIncorrectAnswer()
+        isAnswerSubmitted = true
     }
 
     private fun handleBtnSubmitClick() {
@@ -176,6 +185,7 @@ class QuizActivity : AppCompatActivity() {
         if (isOptionSelected && !isAnswerSubmitted) {
             isAnswerSubmitted = true
             updateOptionsAvailability(false)
+            updateTimerVisibility(false)
 
             btnSubmit.text = if (isQuizFinished) {
                 getString(R.string.button_finish)
@@ -240,6 +250,7 @@ class QuizActivity : AppCompatActivity() {
             startTimerForCurrentDifficulty()
         }
         updateOptionsAvailability(true)
+        updateTimerVisibility(true)
     }
 
     private fun updateBtnSubmit() {
