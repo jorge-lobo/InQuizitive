@@ -1,6 +1,7 @@
 package com.example.inquizitive.ui.quiz
 
 import android.annotation.SuppressLint
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.View
 import android.widget.FrameLayout
@@ -25,6 +26,10 @@ class QuizActivity : AppCompatActivity() {
     private var isTimeOver: Boolean = false
     private var isQuizFinished: Boolean = false
     private var selectedAnswer: String? = null
+    private var mediaPlayerIntro: MediaPlayer? = null
+    private var mediaPlayerCorrectAnswer: MediaPlayer? = null
+    private var mediaPlayerWrongAnswer: MediaPlayer? = null
+    private var mediaPlayerTimer: MediaPlayer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -149,6 +154,13 @@ class QuizActivity : AppCompatActivity() {
             ivIconClock.setColorFilter(ContextCompat.getColor(this@QuizActivity, iconColor))
             tvQuizTimer.setTextColor(ContextCompat.getColor(this@QuizActivity, textColor))
         }
+
+        if (isTimerRunningOut && mediaPlayerTimer == null) {
+            mediaPlayerTimer = MediaPlayer.create(applicationContext, R.raw.timer_beat).apply {
+                isLooping = true
+                start()
+            }
+        }
     }
 
     private fun updateTimerVisibility(isTimerVisible: Boolean) {
@@ -159,7 +171,13 @@ class QuizActivity : AppCompatActivity() {
         if (isTimeOver) {
             lockOptions()
             updateTimerVisibility(false)
+            stopMediaPlayerTimer()
         }
+    }
+
+    private fun stopMediaPlayerTimer() {
+        stopMediaPlayer(mediaPlayerTimer)
+        mediaPlayerTimer = null
     }
 
     private fun lockOptions() {
@@ -186,6 +204,7 @@ class QuizActivity : AppCompatActivity() {
             isAnswerSubmitted = true
             updateOptionsAvailability(false)
             updateTimerVisibility(false)
+            stopMediaPlayerTimer()
 
             btnSubmit.text = if (isQuizFinished) {
                 getString(R.string.button_finish)
@@ -260,10 +279,12 @@ class QuizActivity : AppCompatActivity() {
     private fun handleCorrectAnswer() {
         updateOptionUI()
         mQuizViewModel.handleCorrectAnswer()
+        mediaPlayerCorrectAnswer = playSoundEffect(mediaPlayerCorrectAnswer, R.raw.correct_answer)
     }
 
     private fun handleIncorrectAnswer() {
         updateOptionUI()
+        mediaPlayerWrongAnswer = playSoundEffect(mediaPlayerWrongAnswer, R.raw.wrong_answer)
     }
 
     private fun updateOptionsAvailability(isClickable: Boolean) {
@@ -457,10 +478,32 @@ class QuizActivity : AppCompatActivity() {
 
     private fun handleCountdown(countdown: Int) {
         binding.tvCountdown.text = countdown.toString()
+
         if (countdown == 0) {
             binding.flQuizIntroScreen.visibility = View.GONE
             binding.clQuizMain.visibility = View.VISIBLE
             mQuizViewModel.startTimerForCurrentDifficulty()
+
+            mediaPlayerIntro?.release()
+            mediaPlayerIntro = null
+        } else if (mediaPlayerIntro == null) {
+            mediaPlayerIntro = MediaPlayer.create(applicationContext, R.raw.countdown).apply {
+                start()
+            }
+        }
+    }
+
+    private fun playSoundEffect(mediaPlayer: MediaPlayer?, soundResId: Int): MediaPlayer {
+        mediaPlayer?.release()
+        return MediaPlayer.create(applicationContext, soundResId).apply {
+            start()
+        }
+    }
+
+    private fun stopMediaPlayer(mediaPlayer: MediaPlayer?) {
+        mediaPlayer?.apply {
+            stop()
+            release()
         }
     }
 
