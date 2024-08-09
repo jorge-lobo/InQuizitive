@@ -46,7 +46,7 @@
                     android:background="@drawable/background_common_header"
                     android:paddingHorizontal="@dimen/margin_medium"
                     android:paddingTop="@dimen/margin_medium"
-                    android:visibility="visible"
+                    android:visibility="invisible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -65,10 +65,10 @@
                         android:layout_width="@dimen/help_card_width"
                         android:layout_height="@dimen/help_card_height"
                         android:layout_alignParentTop="true"
-                        android:visibility="gone"
-                        tools:visibility="visible"
                         android:layout_marginStart="@dimen/margin_medium"
-                        android:layout_toEndOf="@id/help_card_one_option" />
+                        android:layout_toEndOf="@id/help_card_one_option"
+                        android:visibility="gone"
+                        tools:visibility="visible" />
 
                     <FrameLayout
                         android:id="@+id/fl_btn_close_help_container"
@@ -76,9 +76,7 @@
                         android:layout_height="@dimen/button_close_help_height"
                         android:layout_alignParentTop="true"
                         android:layout_alignParentEnd="true"
-                        android:background="@drawable/background_btn_help"
-                        android:visibility="invisible"
-                        tools:visibility="visible">
+                        android:background="@drawable/background_btn_help">
 
                         <ImageView
                             android:layout_width="@dimen/icon_button"
@@ -98,7 +96,7 @@
                     android:layout_height="@dimen/header_small"
                     android:paddingHorizontal="@dimen/margin_medium"
                     android:paddingTop="@dimen/margin_medium"
-                    android:visibility="invisible"
+                    android:visibility="visible"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
@@ -160,14 +158,6 @@
                             android:textSize="@dimen/txt_small_button" />
 
                     </FrameLayout>
-
-                    <!--<include
-                        android:id="@+id/quiz_coins_display"
-                        layout="@layout/common_coins_display"
-                        android:layout_width="@dimen/display_width"
-                        android:layout_height="@dimen/display_height"
-                        android:layout_alignParentTop="true"
-                        android:layout_alignParentEnd="true" />-->
 
                     <ProgressBar
                         android:id="@+id/pb_quiz_progress"

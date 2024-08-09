@@ -45,6 +45,7 @@ class QuizActivity : AppCompatActivity() {
         initializeViewModel()
         setupObservers()
         setupListeners()
+        setupHelpCardsUI()
     }
 
     private fun initializeViewModel() {
@@ -62,6 +63,11 @@ class QuizActivity : AppCompatActivity() {
 
             isHelpAvailable.observe(this@QuizActivity) {
                 binding.flBtnHelpContainer.visibility = if (it) View.VISIBLE else View.INVISIBLE
+            }
+
+            isHelpCardTwoOptionsAvailable.observe(this@QuizActivity) { isVisible ->
+                val helpCardTwoOptions = findViewById<View>(R.id.help_card_two_options)
+                helpCardTwoOptions.visibility = if (isVisible) View.VISIBLE else View.GONE
             }
 
             questionText.observe(this@QuizActivity) { binding.tvQuizQuestion.text = it }
@@ -91,12 +97,35 @@ class QuizActivity : AppCompatActivity() {
                 openExitConfirmationFragment()
             }
 
+            tvBtnHelp.setOnClickListener {
+                handleHelpContainerVisibility(true)
+            }
+
+            flBtnCloseHelpContainer.setOnClickListener {
+                handleHelpContainerVisibility(false)
+            }
+
             btnSubmit.setOnClickListener {
                 handleBtnSubmitClick()
             }
 
             listOf(rlOptionA, rlOptionB, rlOptionC, rlOptionD).forEach { option ->
                 option.setOnClickListener { onOptionSelected(it as RelativeLayout) }
+            }
+        }
+    }
+
+    private fun setupHelpCardsUI() {
+        binding.apply {
+            helpCardOneOption.apply {
+                tvNameHelpCard.setText(R.string.help_card_dismiss_one)
+                tvCoinsHelpCard.setText(R.string.help_card_80)
+                ivIconHelpCard.setImageResource(R.drawable.ic_svg_quarter_circle)
+            }
+            helpCardTwoOptions.apply {
+                tvNameHelpCard.setText(R.string.help_card_dismiss_two)
+                tvCoinsHelpCard.setText(R.string.help_card_200)
+                ivIconHelpCard.setImageResource(R.drawable.ic_svg_half_circle)
             }
         }
     }
@@ -114,6 +143,13 @@ class QuizActivity : AppCompatActivity() {
             .replace(R.id.exit_fragment_container, fragment)
             .addToBackStack(null)
             .commit()
+    }
+
+    private fun handleHelpContainerVisibility(isHelpOpen: Boolean) {
+        binding.apply {
+            rlQuizHeaderContainer.visibility = if (isHelpOpen) View.INVISIBLE else View.VISIBLE
+            rlQuizHelpContainer.visibility = if (isHelpOpen) View.VISIBLE else View.INVISIBLE
+        }
     }
 
     private fun onOptionSelected(selectedOption: RelativeLayout) {
@@ -221,6 +257,7 @@ class QuizActivity : AppCompatActivity() {
             isAnswerSubmitted = true
             updateOptionsAvailability(false)
             updateTimerVisibility(false)
+            updateHelpBtnVisibility(false)
             stopMediaPlayerTimer()
 
             btnSubmit.text = if (isQuizFinished) {
@@ -287,6 +324,7 @@ class QuizActivity : AppCompatActivity() {
         }
         updateOptionsAvailability(true)
         updateTimerVisibility(true)
+        updateHelpBtnVisibility(true)
     }
 
     private fun updateBtnSubmit() {
@@ -308,6 +346,10 @@ class QuizActivity : AppCompatActivity() {
         listOf(binding.rlOptionA, binding.rlOptionB, binding.rlOptionC, binding.rlOptionD).forEach {
             it.isClickable = isClickable
         }
+    }
+
+    private fun updateHelpBtnVisibility(isVisible: Boolean) {
+        binding.flBtnHelpContainer.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
     }
 
     private fun resetOptions() {

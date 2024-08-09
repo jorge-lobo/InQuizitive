@@ -30,6 +30,7 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
     private val _userCoins = MutableLiveData<String>()
     private val _userAvatar = MutableLiveData<String>()
     private val _isHelpAvailable = MutableLiveData<Boolean>()
+    private val _isHelpCardTwoOptionsAvailable = MutableLiveData<Boolean>()
     private val _questions = MutableLiveData<List<Question>>()
     private val _totalQuestions = MutableLiveData<Int>().apply { value = 10 }
     private val _currentQuestionIndex = MutableLiveData<Int>().apply { value = 0 }
@@ -55,6 +56,7 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
     val userCoins: LiveData<String> get() = _userCoins
     val userAvatar: LiveData<String> get() = _userAvatar
     val isHelpAvailable: LiveData<Boolean> get() = _isHelpAvailable
+    val isHelpCardTwoOptionsAvailable: LiveData<Boolean> get() = _isHelpCardTwoOptionsAvailable
     val totalQuestions: LiveData<Int> get() = _totalQuestions
     val currentQuestionIndex: LiveData<Int> get() = _currentQuestionIndex
     val questionText: LiveData<String?> get() = _questionText
@@ -177,6 +179,7 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
 
     private fun checkHelpAvailability(user: User) {
         _isHelpAvailable.value = (user.actualCoins ?: 0) > 79
+        _isHelpCardTwoOptionsAvailable.value = (user.actualCoins ?: 0) > 199
     }
 
     private fun startIntro() {
