@@ -47,6 +47,7 @@
 
     <!-- Buttons -->
     <dimen name="button_back_width">64dp</dimen>
+    <dimen name="button_close_help_height">64dp</dimen>
     <dimen name="button_help_width">160dp</dimen>
     <dimen name="switch_button_width">96dp</dimen>
     <dimen name="check_box">16dp</dimen>

@@ -3,8 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="@dimen/display_width"
-    android:layout_height="@dimen/display_height"
-    tools:background="@drawable/background_common_header">
+    android:layout_height="@dimen/display_height">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cv_display_coins"
