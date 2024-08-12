@@ -27,7 +27,8 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
 
     private val _loggedInUser = MutableLiveData<User?>()
     private val _username = MutableLiveData<String>()
-    private val _userCoins = MutableLiveData<String>()
+    private val _userCoins = MutableLiveData<Int?>()
+    private val _userCoinsFormatted = MutableLiveData<String>()
     private val _userAvatar = MutableLiveData<String>()
     private val _isHelpAvailable = MutableLiveData<Boolean>()
     private val _isHelpCardTwoOptionsAvailable = MutableLiveData<Boolean>()
@@ -51,9 +52,11 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
     private val _totalCorrectAnswers = MutableLiveData<Int>().apply { value = 0 }
     private val _totalTime = MutableLiveData<Int>().apply { value = 0 }
     private val _totalTimeSpent = MutableLiveData<Int>().apply { value = 0 }
+    private val _isHelpOneOptionUsed = MutableLiveData<Boolean>().apply { value = false }
+    private val _isHelpTwoOptionsUsed = MutableLiveData<Boolean>().apply { value = false }
 
     val username: LiveData<String> get() = _username
-    val userCoins: LiveData<String> get() = _userCoins
+    val userCoinsFormatted: LiveData<String> get() = _userCoinsFormatted
     val userAvatar: LiveData<String> get() = _userAvatar
     val isHelpAvailable: LiveData<Boolean> get() = _isHelpAvailable
     val isHelpCardTwoOptionsAvailable: LiveData<Boolean> get() = _isHelpCardTwoOptionsAvailable
@@ -116,7 +119,8 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
 
     private fun updateUserLiveData(user: User) {
         _username.value = user.username.orEmpty()
-        _userCoins.value = Utils.formatNumberWithThousandSeparator(user.actualCoins ?: 0)
+        _userCoins.value = user.actualCoins ?: 0
+        _userCoinsFormatted.value = Utils.formatNumberWithThousandSeparator(user.actualCoins ?: 0)
         _userAvatar.value = user.avatar.orEmpty()
     }
 
@@ -152,6 +156,15 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
         }
     }
 
+    private fun shuffleAndSetOptions(correctAnswer: String?, incorrectAnswers: ArrayList<String>) {
+        val allOptions = mutableListOf<String>().apply {
+            correctAnswer?.let { add(it) }
+            addAll(incorrectAnswers)
+            shuffle()
+        }
+        _options.value = allOptions
+    }
+
     fun checkAnswer(selectedAnswer: String?): Boolean {
         val correctAnswer = _correctAnswer.value
         return selectedAnswer == correctAnswer
@@ -163,18 +176,14 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
                 if (currentIndex + 1 < questionList.size) {
                     updateQuestion(questionList[currentIndex + 1])
                     _currentQuestionIndex.value = currentIndex + 1
+                    _isHelpOneOptionUsed.value = false
+                    _isHelpTwoOptionsUsed.value = false
+                    _loggedInUser.value?.let { user ->
+                        checkHelpAvailability(user)
+                    }
                 }
             }
         }
-    }
-
-    private fun shuffleAndSetOptions(correctAnswer: String?, incorrectAnswers: ArrayList<String>) {
-        val allOptions = mutableListOf<String>().apply {
-            correctAnswer?.let { add(it) }
-            addAll(incorrectAnswers)
-            shuffle()
-        }
-        _options.value = allOptions
     }
 
     private fun checkHelpAvailability(user: User) {
@@ -210,6 +219,23 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
         _isTimeOver.value = seconds == 0
     }
 
+    fun startTimerForCurrentDifficulty() {
+        _difficulty.value?.let { difficulty ->
+            val time = when (difficulty) {
+                "easy" -> 20
+                "medium" -> 30
+                "hard" -> 40
+                else -> 30
+            }
+            startTimer(time)
+        }
+    }
+
+    fun stopTimer() {
+        job?.cancel()
+        job = null
+    }
+
     fun handleCorrectAnswer() {
         updatePoints()
         updateCoins()
@@ -227,7 +253,14 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
                         else -> 0
                     }
                     val points = value * timeLeft
-                    _totalPoints.value = totalPoints + points
+                    val result = totalPoints + points
+                    if (_isHelpOneOptionUsed.value == true) {
+                        _totalPoints.value = (result * 0.75).toInt()
+                    } else if (_isHelpTwoOptionsUsed.value == true) {
+                        _totalPoints.value = (result * 0.75).toInt()
+                    } else {
+                        _totalPoints.value = result
+                    }
                 }
             }
         }
@@ -242,9 +275,33 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
                     "hard" -> 90
                     else -> 0
                 }
-                _totalCoins.value = totalCoins + coins
+                val result = totalCoins + coins
+                if (_isHelpOneOptionUsed.value == true) {
+                    _totalCoins.value = (result * 0.50).toInt()
+                } else if (_isHelpTwoOptionsUsed.value == true) {
+                    _totalCoins.value = (result * 0.20).toInt()
+                } else {
+                    _totalCoins.value = result
+                }
             }
         }
+    }
+
+    fun updateUserCoins(amount: Int) {
+        _userCoins.value?.let { currentCoins ->
+            val updatedCoins = currentCoins - amount
+            _userCoins.value = updatedCoins
+            _userCoinsFormatted.value = Utils.formatNumberWithThousandSeparator(updatedCoins)
+        }
+        if (amount == 80) {
+            _isHelpOneOptionUsed.value = true
+        } else if (amount == 200) {
+            _isHelpTwoOptionsUsed.value = true
+        }
+    }
+
+    fun updateBtnHelpVisibility(isVisible: Boolean) {
+        _isHelpAvailable.value = isVisible
     }
 
     private fun incrementCorrectAnswers() {
@@ -270,23 +327,6 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
                     }
                 }
             }
-        }
-    }
-
-    fun stopTimer() {
-        job?.cancel()
-        job = null
-    }
-
-    fun startTimerForCurrentDifficulty() {
-        _difficulty.value?.let { difficulty ->
-            val time = when (difficulty) {
-                "easy" -> 20
-                "medium" -> 30
-                "hard" -> 40
-                else -> 30
-            }
-            startTimer(time)
         }
     }
 

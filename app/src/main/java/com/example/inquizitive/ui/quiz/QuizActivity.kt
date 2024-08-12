@@ -27,6 +27,7 @@ class QuizActivity : AppCompatActivity() {
     private var isTimeOver: Boolean = false
     private var isQuizFinished: Boolean = false
     private var selectedAnswer: String? = null
+    private var disabledOptions = mutableListOf<RelativeLayout>()
     private var mediaPlayerIntro: MediaPlayer? = null
     private var mediaPlayerCorrectAnswer: MediaPlayer? = null
     private var mediaPlayerWrongAnswer: MediaPlayer? = null
@@ -59,7 +60,9 @@ class QuizActivity : AppCompatActivity() {
         mQuizViewModel.apply {
             userAvatar.observe(this@QuizActivity) { it?.let { updateAvatar(it) } }
 
-            userCoins.observe(this@QuizActivity) { binding.quizCoinsDisplay.tvUserCoins.text = it }
+            userCoinsFormatted.observe(this@QuizActivity) {
+                binding.quizCoinsDisplay.tvUserCoins.text = it
+            }
 
             isHelpAvailable.observe(this@QuizActivity) {
                 binding.flBtnHelpContainer.visibility = if (it) View.VISIBLE else View.INVISIBLE
@@ -91,6 +94,17 @@ class QuizActivity : AppCompatActivity() {
     }
 
     private fun setupListeners() {
+        val btnHelpCardOneOption = findViewById<View>(R.id.help_card_one_option)
+        val btnHelpCardTwoOptions = findViewById<View>(R.id.help_card_two_options)
+
+        btnHelpCardOneOption.setOnClickListener {
+            handleOneOptionHelp()
+        }
+
+        btnHelpCardTwoOptions.setOnClickListener {
+            handleTwoOptionsHelp()
+        }
+
         binding.apply {
             btnBack.setOnClickListener {
                 updateUI(true)
@@ -137,46 +151,6 @@ class QuizActivity : AppCompatActivity() {
         }
     }
 
-    private fun openExitConfirmationFragment() {
-        val fragment = ExitConfirmationFragment()
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.exit_fragment_container, fragment)
-            .addToBackStack(null)
-            .commit()
-    }
-
-    private fun handleHelpContainerVisibility(isHelpOpen: Boolean) {
-        binding.apply {
-            rlQuizHeaderContainer.visibility = if (isHelpOpen) View.INVISIBLE else View.VISIBLE
-            rlQuizHelpContainer.visibility = if (isHelpOpen) View.VISIBLE else View.INVISIBLE
-        }
-    }
-
-    private fun onOptionSelected(selectedOption: RelativeLayout) {
-        listOf(
-            binding.rlOptionA,
-            binding.rlOptionB,
-            binding.rlOptionC,
-            binding.rlOptionD
-        ).forEach { option ->
-            if (option == selectedOption) {
-                setupSelectedOptionUI(option)
-                isOptionSelected = true
-                updateBtnSubmit()
-
-                selectedAnswer = when (option) {
-                    binding.rlOptionA -> binding.tvTextOptionA.text.toString()
-                    binding.rlOptionB -> binding.tvTextOptionB.text.toString()
-                    binding.rlOptionC -> binding.tvTextOptionC.text.toString()
-                    binding.rlOptionD -> binding.tvTextOptionD.text.toString()
-                    else -> null
-                }
-            } else {
-                setupDefaultOptionUI(option)
-            }
-        }
-    }
-
     private fun updateOptionUI() {
         val correctOption = mQuizViewModel.correctAnswer.value
         listOf(
@@ -220,31 +194,136 @@ class QuizActivity : AppCompatActivity() {
         binding.rlTimerBackground.visibility = if (isTimerVisible) View.VISIBLE else View.INVISIBLE
     }
 
+    private fun updateCategory(category: String) {
+        val textResId = when (category) {
+            "film_and_tv" -> R.string.film_and_tv
+            "geography" -> R.string.geography
+            "society_and_culture" -> R.string.society_and_culture
+            "food_and_drink" -> R.string.food_and_drink
+            "arts_and_literature" -> R.string.arts_and_literature
+            "general_knowledge" -> R.string.general_knowledge
+            "history" -> R.string.history
+            "science" -> R.string.science
+            "sport_and_leisure" -> R.string.sport_and_leisure
+            "music" -> R.string.music
+            else -> R.string.general_knowledge
+        }
+        binding.tvCategoryName.text = getText(textResId)
+
+        val drawableResId = when (category) {
+            "film_and_tv" -> R.drawable.ic_cat_film_tv
+            "geography" -> R.drawable.ic_cat_geography
+            "society_and_culture" -> R.drawable.ic_cat_society_culture
+            "food_and_drink" -> R.drawable.ic_cat_food_drink
+            "arts_and_literature" -> R.drawable.ic_cat_art_literature
+            "general_knowledge" -> R.drawable.ic_cat_general_knowlegde
+            "history" -> R.drawable.ic_cat_history
+            "science" -> R.drawable.ic_cat_science
+            "sport_and_leisure" -> R.drawable.ic_cat_sport_leisure
+            "music" -> R.drawable.ic_cat_music
+            else -> R.drawable.ic_cat_general_knowlegde
+        }
+        binding.ivCategoryIcon.setImageResource(drawableResId)
+    }
+
+    private fun updateDifficulty(difficulty: String) {
+        val textResId = when (difficulty) {
+            "easy" -> R.string.level_easy
+            "medium" -> R.string.level_medium
+            "hard" -> R.string.level_hard
+            else -> R.string.level_unknown
+        }
+        binding.tvDifficulty.text = getText(textResId)
+    }
+
+    private fun updateQuizProgress(currentQuestionIndex: Int) {
+        val currentQuestion = currentQuestionIndex + 1
+
+        binding.apply {
+            pbQuizProgress.progress = currentQuestion * 10
+            tvQuizProgress.text = getString(R.string.quiz_progress, currentQuestion)
+        }
+    }
+
+    @SuppressLint("DiscouragedApi")
+    private fun updateAvatar(avatar: String) {
+        val drawableResourceId = resources.getIdentifier(avatar, "drawable", packageName)
+        if (drawableResourceId != 0) {
+            binding.ivQuizAvatar.ivAvatar.setImageResource(drawableResourceId)
+        }
+    }
+
+    private fun updateOptions(options: List<String>) {
+        if (options.size == 4) {
+            binding.apply {
+                tvTextOptionA.text = options[0]
+                tvTextOptionB.text = options[1]
+                tvTextOptionC.text = options[2]
+                tvTextOptionD.text = options[3]
+            }
+        }
+    }
+
+    private fun updateBtnSubmit() {
+        binding.btnSubmit.isEnabled = isOptionSelected
+    }
+
+    private fun updateOptionsAvailability(isClickable: Boolean) {
+        listOf(binding.rlOptionA, binding.rlOptionB, binding.rlOptionC, binding.rlOptionD).forEach {
+            it.isClickable = isClickable
+        }
+    }
+
+    private fun updateHelpBtnVisibility(isVisible: Boolean) {
+        binding.flBtnHelpContainer.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
+    }
+
+    private fun resetOptions() {
+        listOf(binding.rlOptionA, binding.rlOptionB, binding.rlOptionC, binding.rlOptionD).forEach {
+            setupDefaultOptionUI(it)
+        }
+    }
+
+    private fun handleHelpContainerVisibility(isHelpOpen: Boolean) {
+        binding.apply {
+            rlQuizHeaderContainer.visibility = if (isHelpOpen) View.INVISIBLE else View.VISIBLE
+            rlQuizHelpContainer.visibility = if (isHelpOpen) View.VISIBLE else View.INVISIBLE
+        }
+    }
+
+    private fun onOptionSelected(selectedOption: RelativeLayout) {
+        listOf(
+            binding.rlOptionA,
+            binding.rlOptionB,
+            binding.rlOptionC,
+            binding.rlOptionD
+        ).forEach { option ->
+            if (option == selectedOption) {
+                setupSelectedOptionUI(option)
+                isOptionSelected = true
+                updateBtnSubmit()
+
+                selectedAnswer = when (option) {
+                    binding.rlOptionA -> binding.tvTextOptionA.text.toString()
+                    binding.rlOptionB -> binding.tvTextOptionB.text.toString()
+                    binding.rlOptionC -> binding.tvTextOptionC.text.toString()
+                    binding.rlOptionD -> binding.tvTextOptionD.text.toString()
+                    else -> null
+                }
+            } else {
+                if (option !in disabledOptions) {
+                    setupDefaultOptionUI(option)
+                }
+            }
+        }
+    }
+
     private fun handleTimeOver(isTimeOver: Boolean) {
         if (isTimeOver) {
             lockOptions()
             updateTimerVisibility(false)
             stopMediaPlayerTimer()
         }
-    }
-
-    private fun stopMediaPlayerTimer() {
-        stopMediaPlayer(mediaPlayerTimer)
-        mediaPlayerTimer = null
-    }
-
-    private fun lockOptions() {
-        updateOptionsAvailability(false)
-        binding.btnSubmit.apply {
-            isEnabled = true
-            text = if (isQuizFinished) {
-                getString(R.string.button_finish)
-            } else {
-                getString(R.string.button_next)
-            }
-        }
-        handleIncorrectAnswer()
-        isAnswerSubmitted = true
     }
 
     private fun handleBtnSubmitClick() {
@@ -287,6 +366,96 @@ class QuizActivity : AppCompatActivity() {
         }
     }
 
+    private fun handleCorrectAnswer() {
+        updateOptionUI()
+        mQuizViewModel.handleCorrectAnswer()
+        mediaPlayerCorrectAnswer = playSoundEffect(mediaPlayerCorrectAnswer, R.raw.correct_answer)
+    }
+
+    private fun handleIncorrectAnswer() {
+        updateOptionUI()
+        mediaPlayerWrongAnswer = playSoundEffect(mediaPlayerWrongAnswer, R.raw.wrong_answer)
+    }
+
+    private fun handleOneOptionHelp() {
+        val correctAnswer = mQuizViewModel.correctAnswer.value
+        val options = listOf(
+            binding.rlOptionA to binding.tvTextOptionA.text.toString(),
+            binding.rlOptionB to binding.tvTextOptionB.text.toString(),
+            binding.rlOptionC to binding.tvTextOptionC.text.toString(),
+            binding.rlOptionD to binding.tvTextOptionD.text.toString()
+        )
+
+        val incorrectOptions = options.filter { it.second != correctAnswer }
+        if (incorrectOptions.isNotEmpty()) {
+            val optionToDisable = incorrectOptions.random()
+            setupInactiveOptionUI(optionToDisable.first)
+            optionToDisable.first.isClickable = false
+            disabledOptions.add(optionToDisable.first)
+        }
+        mQuizViewModel.apply {
+            updateBtnHelpVisibility(false)
+            updateUserCoins(80)
+        }
+        handleHelpContainerVisibility(false)
+    }
+
+    private fun handleTwoOptionsHelp() {
+        val correctAnswer = mQuizViewModel.correctAnswer.value
+        val options = listOf(
+            binding.rlOptionA to binding.tvTextOptionA.text.toString(),
+            binding.rlOptionB to binding.tvTextOptionB.text.toString(),
+            binding.rlOptionC to binding.tvTextOptionC.text.toString(),
+            binding.rlOptionD to binding.tvTextOptionD.text.toString()
+        )
+
+        val incorrectOptions = options.filter { it.second != correctAnswer }
+        if (incorrectOptions.size >= 2) {
+            val optionsToDisable = incorrectOptions.shuffled().take(2)
+            optionsToDisable.forEach { optionToDisable ->
+                setupInactiveOptionUI(optionToDisable.first)
+                optionToDisable.first.isClickable = false
+                disabledOptions.add(optionToDisable.first)
+            }
+        }
+        mQuizViewModel.apply {
+            updateBtnHelpVisibility(false)
+            updateUserCoins(200)
+        }
+        handleHelpContainerVisibility(false)
+    }
+
+    private fun handleCountdown(countdown: Int) {
+        binding.tvCountdown.text = countdown.toString()
+
+        if (countdown == 0) {
+            binding.flQuizIntroScreen.visibility = View.GONE
+            binding.clQuizMain.visibility = View.VISIBLE
+            mQuizViewModel.startTimerForCurrentDifficulty()
+
+            mediaPlayerIntro?.release()
+            mediaPlayerIntro = null
+        } else if (mediaPlayerIntro == null) {
+            mediaPlayerIntro = MediaPlayer.create(applicationContext, R.raw.countdown).apply {
+                start()
+            }
+        }
+    }
+
+    private fun lockOptions() {
+        updateOptionsAvailability(false)
+        binding.btnSubmit.apply {
+            isEnabled = true
+            text = if (isQuizFinished) {
+                getString(R.string.button_finish)
+            } else {
+                getString(R.string.button_next)
+            }
+        }
+        handleIncorrectAnswer()
+        isAnswerSubmitted = true
+    }
+
     private fun resetQuizState() {
         isAnswerSubmitted = false
         isTimeOver = false
@@ -321,41 +490,39 @@ class QuizActivity : AppCompatActivity() {
         mQuizViewModel.apply {
             proceedToNextQuestion()
             startTimerForCurrentDifficulty()
+            updateBtnHelpVisibility(true)
         }
         updateOptionsAvailability(true)
         updateTimerVisibility(true)
         updateHelpBtnVisibility(true)
+        disabledOptions.clear()
     }
 
-    private fun updateBtnSubmit() {
-        binding.btnSubmit.isEnabled = isOptionSelected
+    private fun openExitConfirmationFragment() {
+        val fragment = ExitConfirmationFragment()
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.exit_fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 
-    private fun handleCorrectAnswer() {
-        updateOptionUI()
-        mQuizViewModel.handleCorrectAnswer()
-        mediaPlayerCorrectAnswer = playSoundEffect(mediaPlayerCorrectAnswer, R.raw.correct_answer)
-    }
-
-    private fun handleIncorrectAnswer() {
-        updateOptionUI()
-        mediaPlayerWrongAnswer = playSoundEffect(mediaPlayerWrongAnswer, R.raw.wrong_answer)
-    }
-
-    private fun updateOptionsAvailability(isClickable: Boolean) {
-        listOf(binding.rlOptionA, binding.rlOptionB, binding.rlOptionC, binding.rlOptionD).forEach {
-            it.isClickable = isClickable
+    private fun playSoundEffect(mediaPlayer: MediaPlayer?, soundResId: Int): MediaPlayer {
+        mediaPlayer?.release()
+        return MediaPlayer.create(applicationContext, soundResId).apply {
+            start()
         }
     }
 
-    private fun updateHelpBtnVisibility(isVisible: Boolean) {
-        binding.flBtnHelpContainer.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
+    private fun stopMediaPlayer(mediaPlayer: MediaPlayer?) {
+        mediaPlayer?.apply {
+            stop()
+            release()
+        }
     }
 
-    private fun resetOptions() {
-        listOf(binding.rlOptionA, binding.rlOptionB, binding.rlOptionC, binding.rlOptionD).forEach {
-            setupDefaultOptionUI(it)
-        }
+    private fun stopMediaPlayerTimer() {
+        stopMediaPlayer(mediaPlayerTimer)
+        mediaPlayerTimer = null
     }
 
     private fun setupDefaultOptionUI(option: RelativeLayout) = applyStyleToOption(
@@ -462,107 +629,6 @@ class QuizActivity : AppCompatActivity() {
                     setImageResource(icon)
                 }
             }
-        }
-    }
-
-    private fun updateCategory(category: String) {
-        val textResId = when (category) {
-            "film_and_tv" -> R.string.film_and_tv
-            "geography" -> R.string.geography
-            "society_and_culture" -> R.string.society_and_culture
-            "food_and_drink" -> R.string.food_and_drink
-            "arts_and_literature" -> R.string.arts_and_literature
-            "general_knowledge" -> R.string.general_knowledge
-            "history" -> R.string.history
-            "science" -> R.string.science
-            "sport_and_leisure" -> R.string.sport_and_leisure
-            "music" -> R.string.music
-            else -> R.string.general_knowledge
-        }
-        binding.tvCategoryName.text = getText(textResId)
-
-        val drawableResId = when (category) {
-            "film_and_tv" -> R.drawable.ic_cat_film_tv
-            "geography" -> R.drawable.ic_cat_geography
-            "society_and_culture" -> R.drawable.ic_cat_society_culture
-            "food_and_drink" -> R.drawable.ic_cat_food_drink
-            "arts_and_literature" -> R.drawable.ic_cat_art_literature
-            "general_knowledge" -> R.drawable.ic_cat_general_knowlegde
-            "history" -> R.drawable.ic_cat_history
-            "science" -> R.drawable.ic_cat_science
-            "sport_and_leisure" -> R.drawable.ic_cat_sport_leisure
-            "music" -> R.drawable.ic_cat_music
-            else -> R.drawable.ic_cat_general_knowlegde
-        }
-        binding.ivCategoryIcon.setImageResource(drawableResId)
-    }
-
-    private fun updateDifficulty(difficulty: String) {
-        val textResId = when (difficulty) {
-            "easy" -> R.string.level_easy
-            "medium" -> R.string.level_medium
-            "hard" -> R.string.level_hard
-            else -> R.string.level_unknown
-        }
-        binding.tvDifficulty.text = getText(textResId)
-    }
-
-    private fun updateQuizProgress(currentQuestionIndex: Int) {
-        val currentQuestion = currentQuestionIndex + 1
-
-        binding.apply {
-            pbQuizProgress.progress = currentQuestion * 10
-            tvQuizProgress.text = getString(R.string.quiz_progress, currentQuestion)
-        }
-    }
-
-    @SuppressLint("DiscouragedApi")
-    private fun updateAvatar(avatar: String) {
-        val drawableResourceId = resources.getIdentifier(avatar, "drawable", packageName)
-        if (drawableResourceId != 0) {
-            binding.ivQuizAvatar.ivAvatar.setImageResource(drawableResourceId)
-        }
-    }
-
-    private fun updateOptions(options: List<String>) {
-        if (options.size == 4) {
-            binding.apply {
-                tvTextOptionA.text = options[0]
-                tvTextOptionB.text = options[1]
-                tvTextOptionC.text = options[2]
-                tvTextOptionD.text = options[3]
-            }
-        }
-    }
-
-    private fun handleCountdown(countdown: Int) {
-        binding.tvCountdown.text = countdown.toString()
-
-        if (countdown == 0) {
-            binding.flQuizIntroScreen.visibility = View.GONE
-            binding.clQuizMain.visibility = View.VISIBLE
-            mQuizViewModel.startTimerForCurrentDifficulty()
-
-            mediaPlayerIntro?.release()
-            mediaPlayerIntro = null
-        } else if (mediaPlayerIntro == null) {
-            mediaPlayerIntro = MediaPlayer.create(applicationContext, R.raw.countdown).apply {
-                start()
-            }
-        }
-    }
-
-    private fun playSoundEffect(mediaPlayer: MediaPlayer?, soundResId: Int): MediaPlayer {
-        mediaPlayer?.release()
-        return MediaPlayer.create(applicationContext, soundResId).apply {
-            start()
-        }
-    }
-
-    private fun stopMediaPlayer(mediaPlayer: MediaPlayer?) {
-        mediaPlayer?.apply {
-            stop()
-            release()
         }
     }
 
