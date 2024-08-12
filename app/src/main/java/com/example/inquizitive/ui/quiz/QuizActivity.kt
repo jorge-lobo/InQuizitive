@@ -274,10 +274,6 @@ class QuizActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateHelpBtnVisibility(isVisible: Boolean) {
-        binding.flBtnHelpContainer.visibility = if (isVisible) View.VISIBLE else View.INVISIBLE
-    }
-
     private fun resetOptions() {
         listOf(binding.rlOptionA, binding.rlOptionB, binding.rlOptionC, binding.rlOptionD).forEach {
             setupDefaultOptionUI(it)
@@ -336,7 +332,7 @@ class QuizActivity : AppCompatActivity() {
             isAnswerSubmitted = true
             updateOptionsAvailability(false)
             updateTimerVisibility(false)
-            updateHelpBtnVisibility(false)
+            mQuizViewModel.updateBtnHelpVisibility(false)
             stopMediaPlayerTimer()
 
             btnSubmit.text = if (isQuizFinished) {
@@ -490,11 +486,9 @@ class QuizActivity : AppCompatActivity() {
         mQuizViewModel.apply {
             proceedToNextQuestion()
             startTimerForCurrentDifficulty()
-            updateBtnHelpVisibility(true)
         }
         updateOptionsAvailability(true)
         updateTimerVisibility(true)
-        updateHelpBtnVisibility(true)
         disabledOptions.clear()
     }
 

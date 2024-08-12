@@ -187,8 +187,9 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
     }
 
     private fun checkHelpAvailability(user: User) {
-        _isHelpAvailable.value = (user.actualCoins ?: 0) > 79
-        _isHelpCardTwoOptionsAvailable.value = (user.actualCoins ?: 0) > 199
+        val coins = user.actualCoins ?: 0
+        _isHelpAvailable.value = coins > 79
+        _isHelpCardTwoOptionsAvailable.value = coins > 199
     }
 
     private fun startIntro() {
@@ -240,27 +241,29 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
         updatePoints()
         updateCoins()
         incrementCorrectAnswers()
+        _loggedInUser.value?.let { user ->
+            user.actualCoins = _userCoins.value
+        }
     }
 
     private fun updatePoints() {
         _difficulty.value?.let { difficulty ->
             _secondsLeft.value?.let { timeLeft ->
                 _totalPoints.value?.let { totalPoints ->
-                    val value = when (difficulty) {
+                    val pointsPerDifficulty = when (difficulty) {
                         "easy" -> 1
                         "medium" -> 3
                         "hard" -> 9
                         else -> 0
                     }
-                    val points = value * timeLeft
-                    val result = totalPoints + points
-                    if (_isHelpOneOptionUsed.value == true) {
-                        _totalPoints.value = (result * 0.75).toInt()
-                    } else if (_isHelpTwoOptionsUsed.value == true) {
-                        _totalPoints.value = (result * 0.75).toInt()
-                    } else {
-                        _totalPoints.value = result
+                    val points = pointsPerDifficulty * timeLeft
+                    val pointsEarned = when {
+                        _isHelpOneOptionUsed.value == true -> (points * 0.75).toInt()
+                        _isHelpTwoOptionsUsed.value == true -> (points * 0.50).toInt()
+                        else -> points
                     }
+                    val updatedTotalPoints = totalPoints + pointsEarned
+                    _totalPoints.value = updatedTotalPoints
                 }
             }
         }
@@ -269,19 +272,23 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
     private fun updateCoins() {
         _difficulty.value?.let { difficulty ->
             _totalCoins.value?.let { totalCoins ->
-                val coins = when (difficulty) {
+                val coinsPerDifficulty = when (difficulty) {
                     "easy" -> 10
                     "medium" -> 30
                     "hard" -> 90
                     else -> 0
                 }
-                val result = totalCoins + coins
-                if (_isHelpOneOptionUsed.value == true) {
-                    _totalCoins.value = (result * 0.50).toInt()
-                } else if (_isHelpTwoOptionsUsed.value == true) {
-                    _totalCoins.value = (result * 0.20).toInt()
-                } else {
-                    _totalCoins.value = result
+                val coinsEarned = when {
+                    _isHelpOneOptionUsed.value == true -> (coinsPerDifficulty * 0.50).toInt()
+                    _isHelpTwoOptionsUsed.value == true -> (coinsPerDifficulty * 0.20).toInt()
+                    else -> coinsPerDifficulty
+                }
+                val updatedTotalCoins = totalCoins + coinsEarned
+                _totalCoins.value = updatedTotalCoins
+
+                _loggedInUser.value?.let { user ->
+                    val updatedCoins = (user.actualCoins ?: 0) + coinsEarned
+                    saveUserCoins(updatedCoins)
                 }
             }
         }
@@ -290,13 +297,29 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
     fun updateUserCoins(amount: Int) {
         _userCoins.value?.let { currentCoins ->
             val updatedCoins = currentCoins - amount
-            _userCoins.value = updatedCoins
-            _userCoinsFormatted.value = Utils.formatNumberWithThousandSeparator(updatedCoins)
+            saveUserCoins(updatedCoins)
         }
+
+        _loggedInUser.value?.let { user ->
+            user.actualCoins = _userCoins.value
+            checkHelpAvailability(user)
+        }
+
         if (amount == 80) {
             _isHelpOneOptionUsed.value = true
         } else if (amount == 200) {
             _isHelpTwoOptionsUsed.value = true
+        }
+    }
+
+    private fun saveUserCoins(updatedCoins: Int) {
+        val userId = getLoggedInUserId() ?: return
+        userRepository.updateUserActualCoins(userId, updatedCoins)
+        _userCoins.value = updatedCoins
+        _userCoinsFormatted.value = Utils.formatNumberWithThousandSeparator(updatedCoins)
+
+        _loggedInUser.value?.let { user ->
+            user.actualCoins = updatedCoins
         }
     }
 

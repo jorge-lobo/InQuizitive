@@ -48,10 +48,6 @@ class UserRepository(private val context: Context) {
         }
     }
 
-    fun getUsers(): List<User> {
-        return users.toList()
-    }
-
     fun getNextUserId(): Int {
         return users.size + 1
     }
@@ -71,19 +67,18 @@ class UserRepository(private val context: Context) {
         }
     }
 
-    private fun getCurrentUserId(): Int {
-        return sharedPreferences.getInt(AppConstants.KEY_CURRENT_USER_ID, -1)
-    }
-
-    fun getCurrentUser(): User? {
-        val currentUserId = getCurrentUserId()
-        return users.find { it.id == currentUserId }
-    }
-
     fun updateUserAvatar(userId: Int, newAvatar: String) {
         val user = getUserById(userId)
         user?.avatar = newAvatar
         saveUser(user!!)
+    }
+
+    fun updateUserActualCoins(userId: Int, updatedCoins: Int) {
+        val user = getUserById(userId)
+        user?.let {
+            it.actualCoins = updatedCoins
+            saveUser(it)
+        }
     }
 
     fun saveUser(updatedUser: User) {
