@@ -1,6 +1,7 @@
 package com.example.inquizitive.ui.quiz
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.View
@@ -15,6 +16,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.inquizitive.R
 import com.example.inquizitive.databinding.ActivityQuizBinding
 import com.example.inquizitive.ui.quiz.exitConfirmation.ExitConfirmationFragment
+import com.example.inquizitive.ui.quiz.results.ResultsActivity
+import com.example.inquizitive.utils.AppConstants
 import com.example.inquizitive.utils.Utils
 
 class QuizActivity : AppCompatActivity() {
@@ -355,7 +358,7 @@ class QuizActivity : AppCompatActivity() {
             resetQuizState()
 
             if (isQuizFinished) {
-                showQuizResult()
+                navigateToResultsActivity()
             } else {
                 proceedToNextQuestion()
             }
@@ -464,24 +467,6 @@ class QuizActivity : AppCompatActivity() {
         resetOptions()
     }
 
-    private fun showQuizResult() {
-        mQuizViewModel.apply {
-            val resultMap = mapOf(
-                "Total Coins" to totalCoins,
-                "Total Points" to totalPoints,
-                "Total Correct Answers" to totalCorrectAnswers,
-                "Total Time Spent" to totalTimeSpent,
-                "Total Time" to totalTime
-            )
-
-            resultMap.forEach { (name, liveData) ->
-                liveData.observe(this@QuizActivity) {
-                    Utils.showToast(this@QuizActivity, "$name: $it")
-                }
-            }
-        }
-    }
-
     private fun proceedToNextQuestion() {
         mQuizViewModel.apply {
             proceedToNextQuestion()
@@ -498,6 +483,21 @@ class QuizActivity : AppCompatActivity() {
             .replace(R.id.exit_fragment_container, fragment)
             .addToBackStack(null)
             .commit()
+    }
+
+    private fun navigateToResultsActivity() {
+        val intent = Intent(this, ResultsActivity::class.java)
+
+        intent.apply {
+            putExtra(AppConstants.KEY_TOTAL_POINTS, mQuizViewModel.totalPoints.value)
+            putExtra(AppConstants.KEY_TOTAL_COINS, mQuizViewModel.totalCoins.value)
+            putExtra(AppConstants.KEY_TOTAL_CORRECT_ANSWERS, mQuizViewModel.totalCorrectAnswers.value)
+            putExtra(AppConstants.KEY_TOTAL_TIME, mQuizViewModel.totalTime.value)
+            putExtra(AppConstants.KEY_TOTAL_TIME_SPENT, mQuizViewModel.totalTimeSpent.value)
+        }
+
+        startActivity(intent)
+        finish()
     }
 
     private fun playSoundEffect(mediaPlayer: MediaPlayer?, soundResId: Int): MediaPlayer {

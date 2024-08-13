@@ -120,6 +120,10 @@
     <string name="results_label_time">Time spent:</string>
     <string name="results_label_coins">Coins earned:</string>
     <string name="results_label_points">Points earned:</string>
+    <string name="results_answers">%1$d / 10</string>
+    <string name="results_time">%1$d seconds</string>
+    <string name="results_coins">%1$d coins</string>
+    <string name="results_points">%1$d points</string>
 
     <!-- Correct Answers Messages -->
     <string name="correct_answers_message_0_1">Oops! Not a single one right. It can only get better from here!</string>

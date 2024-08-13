@@ -179,6 +179,7 @@
                 android:layout_marginStart="192dp"
                 android:layout_marginTop="@dimen/margin_small"
                 android:gravity="end"
+                android:text="@{viewModel.userTimeRateFormatted}"
                 android:textSize="@dimen/txt_secondary_text"
                 tools:text="45 %" />
 
@@ -262,32 +263,32 @@
         </RelativeLayout>
 
         <RelativeLayout
+            android:id="@+id/rl_new_record_message_container"
             android:layout_width="match_parent"
             android:layout_height="@dimen/height_primary"
-            android:background="@drawable/background_common_rectangular_record"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/ll_buttons_container"
-            android:layout_marginBottom="@dimen/margin_huge"
-            android:visibility="invisible"
-            tools:visibility="visible"
-            android:gravity="center"
             android:layout_marginHorizontal="@dimen/margin_medium"
-            android:id="@+id/rl_record_new_message_container">
+            android:layout_marginBottom="@dimen/margin_huge"
+            android:background="@drawable/background_common_rectangular_record"
+            android:gravity="center"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@id/ll_buttons_container"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:visibility="visible">
 
             <TextView
                 android:id="@+id/tv_results_new_record_message"
                 style="@style/textPrimaryNewRecord"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                tools:text="@string/results_new_record"
-                android:gravity="center"
                 android:layout_alignParentStart="true"
-                android:layout_alignParentEnd="true"
                 android:layout_alignParentTop="true"
+                android:layout_alignParentEnd="true"
                 android:layout_alignParentBottom="true"
+                android:gravity="center"
                 android:textAllCaps="true"
-                android:textSize="@dimen/txt_new_record"/>
+                android:textSize="@dimen/txt_new_record"
+                tools:text="@string/results_new_record" />
 
         </RelativeLayout>
 
