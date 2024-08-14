@@ -194,6 +194,95 @@
     <string name="correct_answers_message_10_6">Perfect score – You\'re the guru of quizzes!</string>
     <string name="correct_answers_message_error">Error: Invalid number of correct answers</string>
 
+    <string-array name="correct_answers_message_0">
+        <item>@string/correct_answers_message_0_1</item>
+        <item>@string/correct_answers_message_0_2</item>
+        <item>@string/correct_answers_message_0_3</item>
+        <item>@string/correct_answers_message_0_4</item>
+        <item>@string/correct_answers_message_0_5</item>
+        <item>@string/correct_answers_message_0_6</item>
+    </string-array>
+    <string-array name="correct_answers_message_1">
+        <item>@string/correct_answers_message_1_1</item>
+        <item>@string/correct_answers_message_1_2</item>
+        <item>@string/correct_answers_message_1_3</item>
+        <item>@string/correct_answers_message_1_4</item>
+        <item>@string/correct_answers_message_1_5</item>
+        <item>@string/correct_answers_message_1_6</item>
+    </string-array>
+    <string-array name="correct_answers_message_2">
+        <item>@string/correct_answers_message_2_1</item>
+        <item>@string/correct_answers_message_2_2</item>
+        <item>@string/correct_answers_message_2_3</item>
+        <item>@string/correct_answers_message_2_4</item>
+        <item>@string/correct_answers_message_2_5</item>
+        <item>@string/correct_answers_message_2_6</item>
+    </string-array>
+    <string-array name="correct_answers_message_3">
+        <item>@string/correct_answers_message_3_1</item>
+        <item>@string/correct_answers_message_3_2</item>
+        <item>@string/correct_answers_message_3_3</item>
+        <item>@string/correct_answers_message_3_4</item>
+        <item>@string/correct_answers_message_3_5</item>
+        <item>@string/correct_answers_message_3_6</item>
+    </string-array>
+    <string-array name="correct_answers_message_4">
+        <item>@string/correct_answers_message_4_1</item>
+        <item>@string/correct_answers_message_4_2</item>
+        <item>@string/correct_answers_message_4_3</item>
+        <item>@string/correct_answers_message_4_4</item>
+        <item>@string/correct_answers_message_4_5</item>
+        <item>@string/correct_answers_message_4_6</item>
+    </string-array>
+    <string-array name="correct_answers_message_5">
+        <item>@string/correct_answers_message_5_1</item>
+        <item>@string/correct_answers_message_5_2</item>
+        <item>@string/correct_answers_message_5_3</item>
+        <item>@string/correct_answers_message_5_4</item>
+        <item>@string/correct_answers_message_5_5</item>
+        <item>@string/correct_answers_message_5_6</item>
+    </string-array>
+    <string-array name="correct_answers_message_6">
+        <item>@string/correct_answers_message_6_1</item>
+        <item>@string/correct_answers_message_6_2</item>
+        <item>@string/correct_answers_message_6_3</item>
+        <item>@string/correct_answers_message_6_4</item>
+        <item>@string/correct_answers_message_6_5</item>
+        <item>@string/correct_answers_message_6_6</item>
+    </string-array>
+    <string-array name="correct_answers_message_7">
+        <item>@string/correct_answers_message_7_1</item>
+        <item>@string/correct_answers_message_7_2</item>
+        <item>@string/correct_answers_message_7_3</item>
+        <item>@string/correct_answers_message_7_4</item>
+        <item>@string/correct_answers_message_7_5</item>
+        <item>@string/correct_answers_message_7_6</item>
+    </string-array>
+    <string-array name="correct_answers_message_8">
+        <item>@string/correct_answers_message_8_1</item>
+        <item>@string/correct_answers_message_8_2</item>
+        <item>@string/correct_answers_message_8_3</item>
+        <item>@string/correct_answers_message_8_4</item>
+        <item>@string/correct_answers_message_8_5</item>
+        <item>@string/correct_answers_message_8_6</item>
+    </string-array>
+    <string-array name="correct_answers_message_9">
+        <item>@string/correct_answers_message_9_1</item>
+        <item>@string/correct_answers_message_9_2</item>
+        <item>@string/correct_answers_message_9_3</item>
+        <item>@string/correct_answers_message_9_4</item>
+        <item>@string/correct_answers_message_9_5</item>
+        <item>@string/correct_answers_message_9_6</item>
+    </string-array>
+    <string-array name="correct_answers_message_10">
+        <item>@string/correct_answers_message_10_1</item>
+        <item>@string/correct_answers_message_10_2</item>
+        <item>@string/correct_answers_message_10_3</item>
+        <item>@string/correct_answers_message_10_4</item>
+        <item>@string/correct_answers_message_10_5</item>
+        <item>@string/correct_answers_message_10_6</item>
+    </string-array>
+
     <!-- Time Spent Messages -->
     <string name="time_response_message_1_20_1">Blazing fast! Did you have the answers before the questions?</string>
     <string name="time_response_message_1_20_2">Speedy Gonzalez would be proud!</string>
@@ -221,6 +310,42 @@
     <string name="time_response_message_81_100_4">Slow and steady wins… eventually! Are you sure the clock wasn\'t broken?</string>
     <string name="time_response_message_81_100_5">Just made it! Did you age a bit while pondering those answers?</string>
     <string name="time_response_message_error">Error: Invalid time percentage used</string>
+
+    <string-array name="time_response_message_1_20">
+        <item>@string/time_response_message_1_20_1</item>
+        <item>@string/time_response_message_1_20_2</item>
+        <item>@string/time_response_message_1_20_3</item>
+        <item>@string/time_response_message_1_20_4</item>
+        <item>@string/time_response_message_1_20_5</item>
+    </string-array>
+    <string-array name="time_response_message_21_40">
+        <item>@string/time_response_message_21_40_1</item>
+        <item>@string/time_response_message_21_40_2</item>
+        <item>@string/time_response_message_21_40_3</item>
+        <item>@string/time_response_message_21_40_4</item>
+        <item>@string/time_response_message_21_40_5</item>
+    </string-array>
+    <string-array name="time_response_message_41_60">
+        <item>@string/time_response_message_41_60_1</item>
+        <item>@string/time_response_message_41_60_2</item>
+        <item>@string/time_response_message_41_60_3</item>
+        <item>@string/time_response_message_41_60_4</item>
+        <item>@string/time_response_message_41_60_5</item>
+    </string-array>
+    <string-array name="time_response_message_61_80">
+        <item>@string/time_response_message_61_80_1</item>
+        <item>@string/time_response_message_61_80_2</item>
+        <item>@string/time_response_message_61_80_3</item>
+        <item>@string/time_response_message_61_80_4</item>
+        <item>@string/time_response_message_61_80_5</item>
+    </string-array>
+    <string-array name="time_response_message_81_100">
+        <item>@string/time_response_message_81_100_1</item>
+        <item>@string/time_response_message_81_100_2</item>
+        <item>@string/time_response_message_81_100_3</item>
+        <item>@string/time_response_message_81_100_4</item>
+        <item>@string/time_response_message_81_100_5</item>
+    </string-array>
 
     <!-- Description Images -->
     <string name="description_logo">App Logo</string>

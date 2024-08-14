@@ -50,10 +50,12 @@ class ResultsActivity : AppCompatActivity() {
 
             userTimeRate.observe(this@ResultsActivity) { rate ->
                 binding.pbResultsTimeRate.progress = rate.toInt()
+                getRandomTimeMessage(rate)
             }
 
             quizCorrectAnswers.observe(this@ResultsActivity) { correctAnswers ->
                 binding.tvResultsAnswers.text = getString(R.string.results_answers, correctAnswers)
+                getRandomCorrectAnswersMessage(correctAnswers)
             }
 
             quizTimeSpent.observe(this@ResultsActivity) { timeSpent ->
@@ -89,6 +91,59 @@ class ResultsActivity : AppCompatActivity() {
         if (drawableResourceId != 0) {
             binding.ivResultsAvatar.ivAvatar.setImageResource(drawableResourceId)
         }
+    }
+
+    private fun getRandomCorrectAnswersMessage(correctAnswers: Int) {
+        val messageArrays = arrayOf(
+            R.array.correct_answers_message_0,
+            R.array.correct_answers_message_1,
+            R.array.correct_answers_message_2,
+            R.array.correct_answers_message_3,
+            R.array.correct_answers_message_4,
+            R.array.correct_answers_message_5,
+            R.array.correct_answers_message_6,
+            R.array.correct_answers_message_7,
+            R.array.correct_answers_message_8,
+            R.array.correct_answers_message_9,
+            R.array.correct_answers_message_10
+        )
+
+        val messages = if (correctAnswers in 0..10) {
+            resources.getStringArray(messageArrays[correctAnswers])
+        } else {
+            arrayOf(getString(R.string.correct_answers_message_error))
+        }
+
+        val randomMessage = messages.random()
+        binding.tvResultsAnswersMessage.text = randomMessage
+    }
+
+    private fun getRandomTimeMessage(timeRate: Double) {
+        val messageArrays = arrayOf(
+            R.array.time_response_message_1_20,
+            R.array.time_response_message_21_40,
+            R.array.time_response_message_41_60,
+            R.array.time_response_message_61_80,
+            R.array.time_response_message_81_100
+        )
+
+        val arrayIndex = when (timeRate) {
+            in 1.0..20.0 -> 0
+            in 20.1..40.0 -> 1
+            in 40.1..60.0 -> 2
+            in 60.1..80.0 -> 3
+            in 80.1..100.0 -> 4
+            else -> -1
+        }
+
+        val messages = if (arrayIndex != -1) {
+            resources.getStringArray(messageArrays[arrayIndex])
+        } else {
+            arrayOf(getString(R.string.time_response_message_error))
+        }
+
+        val randomMessage = messages.random()
+        binding.tvResultsTimeMessage.text = randomMessage
     }
 
     private fun openActivity(activityClass: Class<*>) {
