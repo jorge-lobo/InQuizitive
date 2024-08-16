@@ -54,22 +54,16 @@ class ResultsActivity : AppCompatActivity() {
                 getRandomTimeMessage(rate)
             }
 
-            quizCorrectAnswers.observe(this@ResultsActivity) { correctAnswers ->
-                binding.tvResultsAnswers.text = getString(R.string.results_answers, correctAnswers)
-                getRandomCorrectAnswersMessage(correctAnswers)
-            }
-
-            quizTimeSpent.observe(this@ResultsActivity) { timeSpent ->
-                binding.tvResultsTime.text = getString(R.string.results_time, timeSpent)
-            }
-
-            quizCoins.observe(this@ResultsActivity) { coinsEarned ->
-                binding.tvResultsCoinsEarned.text = getString(R.string.results_coins, coinsEarned)
-            }
-
-            quizPoints.observe(this@ResultsActivity) { pointsEarned ->
-                binding.tvResultsPointsEarned.text =
-                    getString(R.string.results_points, pointsEarned)
+            quizData.observe(this@ResultsActivity) { quizData ->
+                quizData?.let { data ->
+                    binding.apply {
+                        tvResultsTime.text = getString(R.string.results_time, data.timeSpent)
+                        tvResultsCoinsEarned.text = getString(R.string.results_coins, data.coins)
+                        tvResultsPointsEarned.text = getString(R.string.results_points, data.points)
+                        tvResultsAnswers.text = getString(R.string.results_answers, data.correctAnswers)
+                        getRandomCorrectAnswersMessage(data.correctAnswers)
+                    }
+                }
             }
 
             isNewRecord.observe(this@ResultsActivity) {
@@ -164,6 +158,7 @@ class ResultsActivity : AppCompatActivity() {
     }
 
     private fun openActivity(activityClass: Class<*>) {
+        mResultsViewModel.saveData()
         Utils.startActivity(this, activityClass)
         finish()
     }

@@ -51,10 +51,6 @@ class ResultRepository(private val context: Context) {
         return results.size + 1
     }
 
-    fun getResultByScore(score: Int): Result? {
-        return results.find { it.score == score }?.copy()
-    }
-
     fun saveResult(newResult: Result) {
         val resultIndex = results.indexOfFirst { it.id == newResult.id }
         if (resultIndex != -1) {

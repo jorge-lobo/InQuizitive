@@ -81,6 +81,29 @@ class UserRepository(private val context: Context) {
         }
     }
 
+    fun updateUser(
+        userId: Int,
+        updatedQuizzesPlayed: Int,
+        updatedTotalPoints: Int,
+        updatedBestResult: Int,
+        updatedTotalTime: Int,
+        updatedSpentTime: Int,
+        updatedTotalAnswers: Int,
+        updatedCorrectAnswers: Int
+    ) {
+        val user = getUserById(userId)
+        user?.let {
+            it.quizzesPlayed = updatedQuizzesPlayed
+            it.totalPoints = updatedTotalPoints
+            it.bestResult = updatedBestResult
+            it.totalTime = updatedTotalTime
+            it.spentTime = updatedSpentTime
+            it.totalAnswers = updatedTotalAnswers
+            it.correctAnswers = updatedCorrectAnswers
+            saveUser(it)
+        }
+    }
+
     fun saveUser(updatedUser: User) {
         val userIndex = users.indexOfFirst { it.id == updatedUser.id }
         if (userIndex != -1) {
