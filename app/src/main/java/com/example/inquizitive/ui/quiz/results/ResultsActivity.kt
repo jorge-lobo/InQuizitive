@@ -2,6 +2,7 @@ package com.example.inquizitive.ui.quiz.results
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProvider
@@ -67,7 +68,16 @@ class ResultsActivity : AppCompatActivity() {
             }
 
             quizPoints.observe(this@ResultsActivity) { pointsEarned ->
-                binding.tvResultsPointsEarned.text = getString(R.string.results_points, pointsEarned)
+                binding.tvResultsPointsEarned.text =
+                    getString(R.string.results_points, pointsEarned)
+            }
+
+            isNewRecord.observe(this@ResultsActivity) {
+                if (it) updateRecordUI(R.string.results_new_record)
+            }
+
+            isNewPersonalBest.observe(this@ResultsActivity) {
+                if (it) updateRecordUI(R.string.results_new_personal_best)
             }
         }
     }
@@ -90,6 +100,13 @@ class ResultsActivity : AppCompatActivity() {
         val drawableResourceId = resources.getIdentifier(avatar, "drawable", packageName)
         if (drawableResourceId != 0) {
             binding.ivResultsAvatar.ivAvatar.setImageResource(drawableResourceId)
+        }
+    }
+
+    private fun updateRecordUI(textResourceId: Int) {
+        binding.apply {
+            rlNewRecordMessageContainer.visibility = View.VISIBLE
+            tvResultsNewRecordMessage.text = getString(textResourceId)
         }
     }
 

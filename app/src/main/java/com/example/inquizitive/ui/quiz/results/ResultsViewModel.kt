@@ -6,6 +6,8 @@ import androidx.lifecycle.LifecycleObserver
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.inquizitive.data.result.Result
+import com.example.inquizitive.data.result.ResultRepository
 import com.example.inquizitive.data.user.User
 import com.example.inquizitive.data.user.UserRepository
 import com.example.inquizitive.ui.common.BaseViewModel
@@ -15,6 +17,7 @@ import kotlinx.coroutines.launch
 class ResultsViewModel(application: Application) : BaseViewModel(application), LifecycleObserver {
 
     private val userRepository = UserRepository(application)
+    private val resultRepository = ResultRepository(application)
     private val prefs =
         application.getSharedPreferences(AppConstants.PREFS_KEY, Context.MODE_PRIVATE)
 
@@ -29,6 +32,10 @@ class ResultsViewModel(application: Application) : BaseViewModel(application), L
     private val _userCorrectAnswersRate = MutableLiveData<Double>()
     private val _userTimeRate = MutableLiveData<Double>()
     private val _userTimeRateFormatted = MutableLiveData<String>()
+    private val _globalBestScore = MutableLiveData<Int>()
+    private val _userBestScore = MutableLiveData<Int>()
+    private val _isNewRecord = MutableLiveData<Boolean>().apply { value = false }
+    private val _isNewPersonalBest = MutableLiveData<Boolean>().apply { value = false }
 
     val username: LiveData<String> get() = _username
     val avatar: LiveData<String> get() = _userAvatar
@@ -36,16 +43,18 @@ class ResultsViewModel(application: Application) : BaseViewModel(application), L
     val quizPoints: LiveData<Int> get() = _quizPoints
     val quizCorrectAnswers: LiveData<Int> get() = _quizCorrectAnswers
     val quizTimeSpent: LiveData<Int> get() = _quizTimeSpent
-    val quizTotalTime: LiveData<Int> get() = _quizTotalTime
     val userCorrectAnswerRate: LiveData<Double> get() = _userCorrectAnswersRate
     val userTimeRate: LiveData<Double> get() = _userTimeRate
     val userTimeRateFormatted: LiveData<String> get() = _userTimeRateFormatted
+    val isNewRecord: LiveData<Boolean> get() = _isNewRecord
+    val isNewPersonalBest: LiveData<Boolean> get() = _isNewPersonalBest
 
     fun initialize(points: Int, coins: Int, correctAnswers: Int, totalTime: Int, timeSpent: Int) {
         loadLoggedInUser()
-        getCorrectAnswerRate(correctAnswers)
-        getTimeRate(totalTime, timeSpent)
         updateQuizLiveData(points, coins, correctAnswers, totalTime, timeSpent)
+        updateCorrectAnswerRate(correctAnswers)
+        updateTimeRate(totalTime, timeSpent)
+        loadResults()
     }
 
     fun getLoggedInUserId(): Int? {
@@ -72,9 +81,33 @@ class ResultsViewModel(application: Application) : BaseViewModel(application), L
         }
     }
 
+    private fun loadResults() {
+        viewModelScope.launch {
+            isLoading.value = true
+            noDataAvailable.value = false
+            try {
+                val results = resultRepository.getResults()
+                updateBestScore(results)
+            } catch (e: Exception) {
+                onError(e.message)
+            } finally {
+                isLoading.value = false
+                isRefreshing.value = false
+            }
+        }
+    }
+
+    private fun updateBestScore(results: List<Result>) {
+        val bestResult = results.maxByOrNull { it.score ?: 0 }
+        _globalBestScore.value = bestResult?.score ?: 0
+
+        checkNewRecord()
+    }
+
     private fun updateUserLiveData(user: User) {
         _username.value = user.username.orEmpty()
         _userAvatar.value = user.avatar.orEmpty()
+        _userBestScore.value = user.bestResult ?: 0
     }
 
     private fun updateQuizLiveData(
@@ -91,11 +124,11 @@ class ResultsViewModel(application: Application) : BaseViewModel(application), L
         _quizTotalTime.value = totalTime
     }
 
-    private fun getCorrectAnswerRate(correctAnswers: Int) {
+    private fun updateCorrectAnswerRate(correctAnswers: Int) {
         _userCorrectAnswersRate.value = calculateRate(10, correctAnswers)
     }
 
-    private fun getTimeRate(totalTime: Int, timeSpent: Int) {
+    private fun updateTimeRate(totalTime: Int, timeSpent: Int) {
         val timeRate = calculateRate(totalTime, timeSpent)
         _userTimeRate.value = timeRate
         _userTimeRateFormatted.value = String.format("%.0f %%", timeRate)
@@ -104,6 +137,21 @@ class ResultsViewModel(application: Application) : BaseViewModel(application), L
     private fun calculateRate(total: Int, value: Int): Double {
         if (total == 0) return 0.0
         return (value.toDouble() / total) * 100
+    }
+
+    private fun checkNewRecord() {
+        val score = _quizPoints.value ?: 0
+        val personalBest = _userBestScore.value ?: 0
+        val bestScore = _globalBestScore.value ?: 0
+
+        when {
+            score > bestScore -> _isNewRecord.value = true
+            score in (personalBest + 1)..<bestScore -> _isNewPersonalBest.value = true
+            else -> {
+                _isNewRecord.value = false
+                _isNewPersonalBest.value = false
+            }
+        }
     }
 
     override fun onError(message: String?, validationErrors: Map<String, ArrayList<String>>?) {
