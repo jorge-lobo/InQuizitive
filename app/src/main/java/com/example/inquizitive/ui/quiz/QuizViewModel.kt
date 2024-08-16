@@ -30,6 +30,7 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
     private val _userCoins = MutableLiveData<Int?>()
     private val _userCoinsFormatted = MutableLiveData<String>()
     private val _userAvatar = MutableLiveData<String>()
+    private val _userCoinsSpent = MutableLiveData<Int>()
     private val _isHelpAvailable = MutableLiveData<Boolean>()
     private val _isHelpCardTwoOptionsAvailable = MutableLiveData<Boolean>()
     private val _questions = MutableLiveData<List<Question>>()
@@ -122,6 +123,7 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
         _userCoins.value = user.actualCoins ?: 0
         _userCoinsFormatted.value = Utils.formatNumberWithThousandSeparator(user.actualCoins ?: 0)
         _userAvatar.value = user.avatar.orEmpty()
+        _userCoinsSpent.value = user.spentCoins ?: 0
     }
 
     private fun getQuestionsFromAPI() {
@@ -299,6 +301,7 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
             val updatedCoins = currentCoins - amount
             saveUserCoins(updatedCoins)
         }
+        saveUserSpentCoins(amount)
 
         _loggedInUser.value?.let { user ->
             user.actualCoins = _userCoins.value
@@ -320,6 +323,15 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
 
         _loggedInUser.value?.let { user ->
             user.actualCoins = updatedCoins
+        }
+    }
+
+    private fun saveUserSpentCoins(amount: Int) {
+        val userId = getLoggedInUserId() ?: return
+        _userCoinsSpent.value?.let { spentCoins ->
+            val updatedSpentCoins = spentCoins + amount
+            userRepository.updateUserSpentCoins(userId, updatedSpentCoins)
+            _userCoinsSpent.value = updatedSpentCoins
         }
     }
 

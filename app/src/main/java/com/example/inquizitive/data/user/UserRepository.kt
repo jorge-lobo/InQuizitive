@@ -81,6 +81,14 @@ class UserRepository(private val context: Context) {
         }
     }
 
+    fun updateUserSpentCoins(userId: Int, updatedSpentCoins: Int) {
+        val user = getUserById(userId)
+        user?.let {
+            it.spentCoins = updatedSpentCoins
+            saveUser(it)
+        }
+    }
+
     fun updateUser(
         userId: Int,
         updatedQuizzesPlayed: Int,
