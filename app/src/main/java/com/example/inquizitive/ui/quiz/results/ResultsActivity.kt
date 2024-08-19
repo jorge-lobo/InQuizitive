@@ -1,6 +1,7 @@
 package com.example.inquizitive.ui.quiz.results
 
 import android.annotation.SuppressLint
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +18,8 @@ class ResultsActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityResultsBinding
     private val mResultsViewModel by lazy { ViewModelProvider(this)[ResultsViewModel::class.java] }
+
+    private var mediaPlayerNewRecord: MediaPlayer? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -102,6 +105,7 @@ class ResultsActivity : AppCompatActivity() {
             rlNewRecordMessageContainer.visibility = View.VISIBLE
             tvResultsNewRecordMessage.text = getString(textResourceId)
         }
+        mediaPlayerNewRecord = playSoundEffect(mediaPlayerNewRecord, R.raw.new_record)
     }
 
     private fun getRandomCorrectAnswersMessage(correctAnswers: Int) {
@@ -161,5 +165,12 @@ class ResultsActivity : AppCompatActivity() {
         mResultsViewModel.saveData()
         Utils.startActivity(this, activityClass)
         finish()
+    }
+
+    private fun playSoundEffect(mediaPlayer: MediaPlayer?, soundResId: Int): MediaPlayer {
+        mediaPlayer?.release()
+        return MediaPlayer.create(applicationContext, soundResId).apply {
+            start()
+        }
     }
 }
