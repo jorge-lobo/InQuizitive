@@ -72,8 +72,8 @@
 
     <color name="check_box_unchecked_bg">@color/transparent</color>
     <color name="check_box_unchecked_stroke">@color/white</color>
-    <color name="check_box_checked_bg">@color/azure</color>
-    <color name="check_box_checked_stroke">@color/dodgerBlue</color>
+    <color name="check_box_checked_bg">@color/white</color>
+    <color name="check_box_checked_stroke">@color/white</color>
 
     <!-- Quiz Options -->
     <color name="option_default_bg">@color/white</color>
