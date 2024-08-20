@@ -66,6 +66,7 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
     val questionText: LiveData<String?> get() = _questionText
     val category: LiveData<String?> get() = _category
     val difficulty: LiveData<String?> get() = _difficulty
+    val isLoadComplete: LiveData<Boolean> get() = _isLoadComplete
     val timeLeft: LiveData<String> get() = _timeLeft
     val correctAnswer: LiveData<String?> get() = _correctAnswer
     val options: LiveData<List<String>> get() = _options
@@ -81,7 +82,6 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
     private var job: Job? = null
 
     fun initialize() {
-        startIntro()
         loadLoggedInUser()
     }
 
@@ -194,7 +194,7 @@ class QuizViewModel(application: Application) : BaseViewModel(application), Life
         _isHelpCardTwoOptionsAvailable.value = coins > 199
     }
 
-    private fun startIntro() {
+    fun startCountdown() {
         job = CoroutineScope(Dispatchers.Main).launch {
             for (i in 3 downTo 0) {
                 _countdown.value = i

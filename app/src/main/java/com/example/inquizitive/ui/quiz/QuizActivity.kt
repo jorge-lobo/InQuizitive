@@ -18,7 +18,6 @@ import com.example.inquizitive.databinding.ActivityQuizBinding
 import com.example.inquizitive.ui.quiz.exitConfirmation.ExitConfirmationFragment
 import com.example.inquizitive.ui.quiz.results.ResultsActivity
 import com.example.inquizitive.utils.AppConstants
-import com.example.inquizitive.utils.Utils
 
 class QuizActivity : AppCompatActivity() {
 
@@ -93,6 +92,8 @@ class QuizActivity : AppCompatActivity() {
             isTimeRunningOut.observe(this@QuizActivity) { updateTimerUI(it) }
 
             isTimeOver.observe(this@QuizActivity) { handleTimeOver(it) }
+
+            isLoadComplete.observe(this@QuizActivity) { handleLoadComplete(it) }
         }
     }
 
@@ -325,6 +326,12 @@ class QuizActivity : AppCompatActivity() {
         }
     }
 
+    private fun handleLoadComplete(isLoadComplete: Boolean) {
+        if (isLoadComplete) {
+            mQuizViewModel.startCountdown()
+        }
+    }
+
     private fun handleBtnSubmitClick() {
         val btnSubmit = binding.btnSubmit
         val currentQuestionIndex = mQuizViewModel.currentQuestionIndex.value ?: 0
@@ -491,7 +498,10 @@ class QuizActivity : AppCompatActivity() {
         intent.apply {
             putExtra(AppConstants.KEY_TOTAL_POINTS, mQuizViewModel.totalPoints.value)
             putExtra(AppConstants.KEY_TOTAL_COINS, mQuizViewModel.totalCoins.value)
-            putExtra(AppConstants.KEY_TOTAL_CORRECT_ANSWERS, mQuizViewModel.totalCorrectAnswers.value)
+            putExtra(
+                AppConstants.KEY_TOTAL_CORRECT_ANSWERS,
+                mQuizViewModel.totalCorrectAnswers.value
+            )
             putExtra(AppConstants.KEY_TOTAL_TIME, mQuizViewModel.totalTime.value)
             putExtra(AppConstants.KEY_TOTAL_TIME_SPENT, mQuizViewModel.totalTimeSpent.value)
         }

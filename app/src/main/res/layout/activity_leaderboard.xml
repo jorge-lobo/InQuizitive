@@ -112,7 +112,6 @@
             android:layout_marginHorizontal="@dimen/margin_medium"
             android:layout_marginVertical="@dimen/margin_big"
             android:foregroundGravity="top|center_horizontal"
-            app:layout_constraintBottom_toTopOf="@id/btn_leaderboard_home"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/rl_leaderboard_header" />
