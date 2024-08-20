@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="@dimen/help_card_width"
+    android:layout_height="@dimen/help_card_height">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cv_help_card"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:backgroundTint="@color/help_card_bg"
+        app:cardCornerRadius="@dimen/corner_medium"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/margin_extra_small">
+
+            <ImageView
+                android:id="@+id/iv_icon_help_card"
+                android:layout_width="@dimen/icon_help_card"
+                android:layout_height="@dimen/icon_help_card"
+                android:contentDescription="@string/description_icon"
+                android:src="@drawable/ic_svg_default"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/icon_primary" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cv_display_coins_help_card"
+                android:layout_width="@dimen/help_card_display_width"
+                android:layout_height="@dimen/help_card_display_height"
+                android:background="@color/display_primary_bg"
+                app:cardCornerRadius="@dimen/corner_small"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/tv_coins_help_card"
+                    style="@style/textSecondaryDark"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|end"
+                    android:layout_marginEnd="@dimen/margin_extra_small"
+                    android:textAlignment="textEnd"
+                    android:textSize="@dimen/txt_coins"
+                    tools:text="200" />
+
+                <ImageView
+                    android:id="@+id/iv_coins"
+                    android:layout_width="@dimen/pic_coins"
+                    android:layout_height="@dimen/pic_coins"
+                    android:layout_gravity="start|center_vertical"
+                    android:layout_marginStart="@dimen/margin_extra_small"
+                    android:contentDescription="@string/description_image_coins"
+                    android:src="@drawable/ic_pic_coins" />
+
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/tv_name_help_card"
+                style="@style/textSecondaryLight"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/margin_extra_small"
+                android:textAlignment="center"
+                android:textSize="@dimen/txt_secondary_text"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:text="-1 option" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

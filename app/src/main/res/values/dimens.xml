@@ -31,11 +31,13 @@
 
     <!-- Dialog -->
     <dimen name="dialog_height">208dp</dimen>
+    <dimen name="dialog_height_large">256dp</dimen>
     <dimen name="dialog_icon_box">64dp</dimen>
 
     <!-- Display -->
     <dimen name="display_width">80dp</dimen>
     <dimen name="display_height">32dp</dimen>
+    <dimen name="timer_height">64dp</dimen>
 
     <!-- Help Card -->
     <dimen name="help_card_width">96dp</dimen>
@@ -45,7 +47,8 @@
 
     <!-- Buttons -->
     <dimen name="button_back_width">64dp</dimen>
-    <dimen name="button_help_width">80dp</dimen>
+    <dimen name="button_close_help_height">64dp</dimen>
+    <dimen name="button_help_width">160dp</dimen>
     <dimen name="switch_button_width">96dp</dimen>
     <dimen name="check_box">16dp</dimen>
 
@@ -72,7 +75,7 @@
     <!-- Text -->
     <dimen name="txt_title">48sp</dimen>
     <dimen name="txt_char">32sp</dimen>
-    <dimen name="txt_category">32sp</dimen>
+    <dimen name="txt_category">28sp</dimen>
     <dimen name="txt_new_record">32sp</dimen>
     <dimen name="txt_primary_text">24sp</dimen>
     <dimen name="txt_small_button">20sp</dimen>

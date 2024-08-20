@@ -48,10 +48,6 @@ class UserRepository(private val context: Context) {
         }
     }
 
-    fun getUsers(): List<User> {
-        return users.toList()
-    }
-
     fun getNextUserId(): Int {
         return users.size + 1
     }
@@ -71,19 +67,49 @@ class UserRepository(private val context: Context) {
         }
     }
 
-    private fun getCurrentUserId(): Int {
-        return sharedPreferences.getInt(AppConstants.KEY_CURRENT_USER_ID, -1)
-    }
-
-    fun getCurrentUser(): User? {
-        val currentUserId = getCurrentUserId()
-        return users.find { it.id == currentUserId }
-    }
-
     fun updateUserAvatar(userId: Int, newAvatar: String) {
         val user = getUserById(userId)
         user?.avatar = newAvatar
         saveUser(user!!)
+    }
+
+    fun updateUserActualCoins(userId: Int, updatedCoins: Int) {
+        val user = getUserById(userId)
+        user?.let {
+            it.actualCoins = updatedCoins
+            saveUser(it)
+        }
+    }
+
+    fun updateUserSpentCoins(userId: Int, updatedSpentCoins: Int) {
+        val user = getUserById(userId)
+        user?.let {
+            it.spentCoins = updatedSpentCoins
+            saveUser(it)
+        }
+    }
+
+    fun updateUser(
+        userId: Int,
+        updatedQuizzesPlayed: Int,
+        updatedTotalPoints: Int,
+        updatedBestResult: Int,
+        updatedTotalTime: Int,
+        updatedSpentTime: Int,
+        updatedTotalAnswers: Int,
+        updatedCorrectAnswers: Int
+    ) {
+        val user = getUserById(userId)
+        user?.let {
+            it.quizzesPlayed = updatedQuizzesPlayed
+            it.totalPoints = updatedTotalPoints
+            it.bestResult = updatedBestResult
+            it.totalTime = updatedTotalTime
+            it.spentTime = updatedSpentTime
+            it.totalAnswers = updatedTotalAnswers
+            it.correctAnswers = updatedCorrectAnswers
+            saveUser(it)
+        }
     }
 
     fun saveUser(updatedUser: User) {

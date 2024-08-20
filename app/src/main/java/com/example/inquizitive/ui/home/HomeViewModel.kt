@@ -13,6 +13,9 @@ import com.example.inquizitive.utils.AppConstants
 
 class HomeViewModel(application: Application) : BaseViewModel(application), LifecycleObserver {
 
+    private val prefs =
+        application.getSharedPreferences(AppConstants.PREFS_KEY, Context.MODE_PRIVATE)
+
     val internetConnection = MutableLiveData<Boolean>()
     var isNetworkCallbackRegistered = false
 
@@ -29,6 +32,10 @@ class HomeViewModel(application: Application) : BaseViewModel(application), Life
 
     init {
         registerNetworkCallback()
+    }
+
+    fun getLoggedInUserId(): Int? {
+        return prefs.getInt(AppConstants.KEY_CURRENT_USER_ID, -1).takeIf { it != -1 }
     }
 
     private fun registerNetworkCallback() {
@@ -49,7 +56,8 @@ class HomeViewModel(application: Application) : BaseViewModel(application), Life
     fun checkInternetConnectivity() {
         val network = connectivityManager.activeNetwork
         val networkCapabilities = connectivityManager.getNetworkCapabilities(network)
-        val isConnected = networkCapabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
+        val isConnected =
+            networkCapabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) == true
         internetConnection.postValue(isConnected)
     }
 

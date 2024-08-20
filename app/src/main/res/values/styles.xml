@@ -72,6 +72,11 @@
         <item name="android:textColor">@color/text_warning</item>
     </style>
 
+    <style name="textPrimaryNewRecord">
+        <item name="android:fontFamily">@font/agency_fb_bold</item>
+        <item name="android:textColor">@color/new_record_txt</item>
+    </style>
+
     <style name="textSecondaryLight">
         <item name="android:fontFamily">@font/roboto_cn_bold</item>
         <item name="android:textColor">@color/text_primary</item>

@@ -12,5 +12,9 @@ object AppConstants {
     const val KEY_NEW_PASSWORD = "KeyNewPassword"
     const val KEY_NEW_CONFIRMATION = "KeyNewConfirmation"
     const val KEY_SELECTED_AVATAR = "KeySelectedAvatar"
-    const val REQUEST_CODE_AVATAR = 1001
+    const val KEY_TOTAL_POINTS = "KeyTotalPoints"
+    const val KEY_TOTAL_COINS= "KeyTotalCoins"
+    const val KEY_TOTAL_CORRECT_ANSWERS = "KeyTotalCorrectAnswers"
+    const val KEY_TOTAL_TIME = "KeyTotalTime"
+    const val KEY_TOTAL_TIME_SPENT = "KeyTotalTimeSpent"
 }

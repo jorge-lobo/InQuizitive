@@ -12,6 +12,7 @@
     <string name="button_play">Play Quiz</string>
     <string name="button_connect">Enable Wi-Fi</string>
     <string name="button_play_again">Play Again</string>
+    <string name="button_submit_answer">Submit Answer</string>
     <string name="button_next">Next</string>
     <string name="button_finish">Finish</string>
     <string name="button_enter">Enter</string>
@@ -39,6 +40,13 @@
     <string name="level_easy">Easy</string>
     <string name="level_medium">Medium</string>
     <string name="level_hard">Hard</string>
+    <string name="level_unknown">Unknown</string>
+
+    <!-- Options -->
+    <string name="option_a">A</string>
+    <string name="option_b">B</string>
+    <string name="option_c">C</string>
+    <string name="option_d">D</string>
 
     <!-- Headers -->
     <string name="header_label_total_quizzes">Quizzes Played</string>
@@ -58,7 +66,9 @@
     <string name="dialog_success_message">New user created successfully!</string>
     <string name="dialog_failure_message">Oops! Something wrong happened.</string>
     <string name="dialog_logout_title">Logout</string>
+    <string name="dialog_exit_title">Leaving the game</string>
     <string name="dialog_logout_message">Are you sure you want to logout?</string>
+    <string name="dialog_exit_message">Are you sure you want to abandon the game? You will lose actual achievements!</string>
 
     <!-- Home -->
     <string name="home_message">Test your knowledge in this fast-paced challenge, answering each question correctly before time run over.</string>
@@ -96,6 +106,11 @@
     <!-- Help Cards -->
     <string name="help_card_dismiss_one">- 1 option</string>
     <string name="help_card_dismiss_two">50/50</string>
+    <string name="help_card_80">80</string>
+    <string name="help_card_200">200</string>
+
+    <!-- Quiz -->
+    <string name="quiz_progress">%1$d / 10</string>
 
     <!-- Results -->
     <string name="results_title">Results</string>
@@ -105,6 +120,10 @@
     <string name="results_label_time">Time spent:</string>
     <string name="results_label_coins">Coins earned:</string>
     <string name="results_label_points">Points earned:</string>
+    <string name="results_answers">%1$d / 10</string>
+    <string name="results_time">%1$d seconds</string>
+    <string name="results_coins">%1$d coins</string>
+    <string name="results_points">%1$d points</string>
 
     <!-- Correct Answers Messages -->
     <string name="correct_answers_message_0_1">Oops! Not a single one right. It can only get better from here!</string>
@@ -175,6 +194,95 @@
     <string name="correct_answers_message_10_6">Perfect score – You\'re the guru of quizzes!</string>
     <string name="correct_answers_message_error">Error: Invalid number of correct answers</string>
 
+    <string-array name="correct_answers_message_0">
+        <item>@string/correct_answers_message_0_1</item>
+        <item>@string/correct_answers_message_0_2</item>
+        <item>@string/correct_answers_message_0_3</item>
+        <item>@string/correct_answers_message_0_4</item>
+        <item>@string/correct_answers_message_0_5</item>
+        <item>@string/correct_answers_message_0_6</item>
+    </string-array>
+    <string-array name="correct_answers_message_1">
+        <item>@string/correct_answers_message_1_1</item>
+        <item>@string/correct_answers_message_1_2</item>
+        <item>@string/correct_answers_message_1_3</item>
+        <item>@string/correct_answers_message_1_4</item>
+        <item>@string/correct_answers_message_1_5</item>
+        <item>@string/correct_answers_message_1_6</item>
+    </string-array>
+    <string-array name="correct_answers_message_2">
+        <item>@string/correct_answers_message_2_1</item>
+        <item>@string/correct_answers_message_2_2</item>
+        <item>@string/correct_answers_message_2_3</item>
+        <item>@string/correct_answers_message_2_4</item>
+        <item>@string/correct_answers_message_2_5</item>
+        <item>@string/correct_answers_message_2_6</item>
+    </string-array>
+    <string-array name="correct_answers_message_3">
+        <item>@string/correct_answers_message_3_1</item>
+        <item>@string/correct_answers_message_3_2</item>
+        <item>@string/correct_answers_message_3_3</item>
+        <item>@string/correct_answers_message_3_4</item>
+        <item>@string/correct_answers_message_3_5</item>
+        <item>@string/correct_answers_message_3_6</item>
+    </string-array>
+    <string-array name="correct_answers_message_4">
+        <item>@string/correct_answers_message_4_1</item>
+        <item>@string/correct_answers_message_4_2</item>
+        <item>@string/correct_answers_message_4_3</item>
+        <item>@string/correct_answers_message_4_4</item>
+        <item>@string/correct_answers_message_4_5</item>
+        <item>@string/correct_answers_message_4_6</item>
+    </string-array>
+    <string-array name="correct_answers_message_5">
+        <item>@string/correct_answers_message_5_1</item>
+        <item>@string/correct_answers_message_5_2</item>
+        <item>@string/correct_answers_message_5_3</item>
+        <item>@string/correct_answers_message_5_4</item>
+        <item>@string/correct_answers_message_5_5</item>
+        <item>@string/correct_answers_message_5_6</item>
+    </string-array>
+    <string-array name="correct_answers_message_6">
+        <item>@string/correct_answers_message_6_1</item>
+        <item>@string/correct_answers_message_6_2</item>
+        <item>@string/correct_answers_message_6_3</item>
+        <item>@string/correct_answers_message_6_4</item>
+        <item>@string/correct_answers_message_6_5</item>
+        <item>@string/correct_answers_message_6_6</item>
+    </string-array>
+    <string-array name="correct_answers_message_7">
+        <item>@string/correct_answers_message_7_1</item>
+        <item>@string/correct_answers_message_7_2</item>
+        <item>@string/correct_answers_message_7_3</item>
+        <item>@string/correct_answers_message_7_4</item>
+        <item>@string/correct_answers_message_7_5</item>
+        <item>@string/correct_answers_message_7_6</item>
+    </string-array>
+    <string-array name="correct_answers_message_8">
+        <item>@string/correct_answers_message_8_1</item>
+        <item>@string/correct_answers_message_8_2</item>
+        <item>@string/correct_answers_message_8_3</item>
+        <item>@string/correct_answers_message_8_4</item>
+        <item>@string/correct_answers_message_8_5</item>
+        <item>@string/correct_answers_message_8_6</item>
+    </string-array>
+    <string-array name="correct_answers_message_9">
+        <item>@string/correct_answers_message_9_1</item>
+        <item>@string/correct_answers_message_9_2</item>
+        <item>@string/correct_answers_message_9_3</item>
+        <item>@string/correct_answers_message_9_4</item>
+        <item>@string/correct_answers_message_9_5</item>
+        <item>@string/correct_answers_message_9_6</item>
+    </string-array>
+    <string-array name="correct_answers_message_10">
+        <item>@string/correct_answers_message_10_1</item>
+        <item>@string/correct_answers_message_10_2</item>
+        <item>@string/correct_answers_message_10_3</item>
+        <item>@string/correct_answers_message_10_4</item>
+        <item>@string/correct_answers_message_10_5</item>
+        <item>@string/correct_answers_message_10_6</item>
+    </string-array>
+
     <!-- Time Spent Messages -->
     <string name="time_response_message_1_20_1">Blazing fast! Did you have the answers before the questions?</string>
     <string name="time_response_message_1_20_2">Speedy Gonzalez would be proud!</string>
@@ -203,6 +311,42 @@
     <string name="time_response_message_81_100_5">Just made it! Did you age a bit while pondering those answers?</string>
     <string name="time_response_message_error">Error: Invalid time percentage used</string>
 
+    <string-array name="time_response_message_1_20">
+        <item>@string/time_response_message_1_20_1</item>
+        <item>@string/time_response_message_1_20_2</item>
+        <item>@string/time_response_message_1_20_3</item>
+        <item>@string/time_response_message_1_20_4</item>
+        <item>@string/time_response_message_1_20_5</item>
+    </string-array>
+    <string-array name="time_response_message_21_40">
+        <item>@string/time_response_message_21_40_1</item>
+        <item>@string/time_response_message_21_40_2</item>
+        <item>@string/time_response_message_21_40_3</item>
+        <item>@string/time_response_message_21_40_4</item>
+        <item>@string/time_response_message_21_40_5</item>
+    </string-array>
+    <string-array name="time_response_message_41_60">
+        <item>@string/time_response_message_41_60_1</item>
+        <item>@string/time_response_message_41_60_2</item>
+        <item>@string/time_response_message_41_60_3</item>
+        <item>@string/time_response_message_41_60_4</item>
+        <item>@string/time_response_message_41_60_5</item>
+    </string-array>
+    <string-array name="time_response_message_61_80">
+        <item>@string/time_response_message_61_80_1</item>
+        <item>@string/time_response_message_61_80_2</item>
+        <item>@string/time_response_message_61_80_3</item>
+        <item>@string/time_response_message_61_80_4</item>
+        <item>@string/time_response_message_61_80_5</item>
+    </string-array>
+    <string-array name="time_response_message_81_100">
+        <item>@string/time_response_message_81_100_1</item>
+        <item>@string/time_response_message_81_100_2</item>
+        <item>@string/time_response_message_81_100_3</item>
+        <item>@string/time_response_message_81_100_4</item>
+        <item>@string/time_response_message_81_100_5</item>
+    </string-array>
+
     <!-- Description Images -->
     <string name="description_logo">App Logo</string>
     <string name="description_avatar">Avatar</string>
@@ -228,7 +372,6 @@
     <string name="error_generic">An error has occurred, contact the administrator.</string>
     <string name="error_internal_server">An internal server error has occurred, contact the administrator.</string>
     <string name="error_session_timed_out">Your session has expired, please start a new one.</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
